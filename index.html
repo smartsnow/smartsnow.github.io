@@ -178,7 +178,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-12-06 22:22:17 / 修改时间：22:36:56" itemprop="dateCreated datePublished" datetime="2020-12-06T22:22:17+08:00">2020-12-06</time>
+              <time title="创建时间：2020-12-06 22:22:17 / 修改时间：22:48:00" itemprop="dateCreated datePublished" datetime="2020-12-06T22:22:17+08:00">2020-12-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -221,6 +221,78 @@
 
 <p>使能此选项后, 一个资源文件会被自动的转换为为对应的路径。比如<br><code>![](image.jpg)</code> 会被自动的转换为 <code>&lt;img src=&quot;/2020/01/02/foo/image.jpg&quot;&gt;</code>.</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/asset-folders.html">https://hexo.io/zh-cn/docs/asset-folders.html</a></p>
+<h3 id="使能了-post-asset-folder-但是无法显示图片？"><a href="#使能了-post-asset-folder-但是无法显示图片？" class="headerlink" title="使能了 post_asset_folder 但是无法显示图片？"></a>使能了 post_asset_folder 但是无法显示图片？</h3><p>不能安装 “hexo-asset-image”: “^1.0.0” 和 “hexo-asset-link”: “^2.0.1”。</p>
+<h2 id="部署到-git-pages-上"><a href="#部署到-git-pages-上" class="headerlink" title="部署到 git pages 上"></a>部署到 git pages 上</h2><p>Hexo 提供了快速方便的一键部署功能，让您只需一条命令就能将网站部署到服务器上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>在开始之前，您必须先在 <code>_config.yml</code> 中修改参数，一个正确的部署配置中至少要有 <code>type</code> 参数，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br></pre></td></tr></table></figure>
+
+<p>您可同时使用多个 deployer，Hexo 会依照顺序执行每个 deployer。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">- type: git</span><br><span class="line">  repo:</span><br><span class="line">- type: heroku</span><br><span class="line">  repo:</span><br></pre></td></tr></table></figure>
+
+<p>Refer to the <a target="_blank" rel="noopener" href="https://hexo.io/plugins/">Plugins</a> list for more deployment plugins.</p>
+<blockquote>
+<p>缩进</p>
+<p>YAML依靠缩进来确定元素间的从属关系。因此，请确保每个deployer的缩进长度相同，并且使用空格缩进。</p>
+</blockquote>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><ol>
+<li>安装 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-deployer-git">hexo-deployer-git</a>。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>修改配置。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;repository url&gt; #https:&#x2F;&#x2F;bitbucket.org&#x2F;JohnSmith&#x2F;johnsmith.bitbucket.io</span><br><span class="line">  branch: [branch]</span><br><span class="line">  message: [message]</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+<th align="left">默认</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>repo</code></td>
+<td align="left">库（Repository）地址</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>branch</code></td>
+<td align="left">分支名称</td>
+<td align="left"><code>gh-pages</code> (GitHub) <code>coding-pages</code> (Coding.net) <code>master</code> (others)</td>
+</tr>
+<tr>
+<td align="left"><code>message</code></td>
+<td align="left">自定义提交信息</td>
+<td align="left"><code>Site updated: &#123;&#123; now('YYYY-MM-DD HH:mm:ss') &#125;&#125;</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>token</code></td>
+<td align="left">Optional token value to authenticate with the repo. Prefix with <code>$</code> to read token from environment variable</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ol>
+<li>生成站点文件并推送至远程库。执行</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>You will be prompted with username and password of the target repository, unless you authenticate with a token or ssh key.</li>
+<li>hexo-deployer-git does not store your username and password. Use <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-cache">git-credential-cache</a> to store them temporarily.</li>
+</ul>
+<ol start="2">
+<li>登入 Github/BitBucket/Gitlab，请在库设置（Repository Settings）中将默认分支设置为<code>_config.yml</code>配置中的分支名称。稍等片刻，您的站点就会显示在您的Github Pages中。</li>
+</ol>
+<h3 id="这一切是如何发生的？"><a href="#这一切是如何发生的？" class="headerlink" title="这一切是如何发生的？"></a>这一切是如何发生的？</h3><p>当执行 <code>hexo deploy</code> 时，Hexo 会将 <code>public</code> 目录中的文件和目录推送至 <code>_config.yml</code> 中指定的远端仓库和分支中，并且<strong>完全覆盖</strong>该分支下的已有内容。</p>
+<blockquote>
+<p>For 使用 Git 管理站点目录的用户</p>
+<p>由于 Hexo 的部署默认使用分支 <code>master</code>，所以如果你同时正在使用 Git 管理你的站点目录，你应当注意你的部署分支应当不同于写作分支。<br>一个好的实践是将站点目录和 Pages 分别存放在两个不同的 Git 仓库中，可以有效避免相互覆盖。<br>Hexo 在部署你的站点生成的文件时并不会更新你的站点目录。因此你应该手动提交并推送你的写作分支。</p>
+</blockquote>
+<p>此外，如果您的 Github Pages 需要使用 CNAME 文件<strong>自定义域名</strong>，请将 CNAME 文件置于 <code>source</code> 目录下，只有这样 <code>hexo deploy</code> 才能将 CNAME 文件一并推送至部署分支。</p>
 <p><img src="/2020/12/06/hexo-%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/tharu.jpg"></p>
 
       
