@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="TCP延迟确认192.168.3.6向192.168.3.10发送了一个数据报，192.168.3.10并没有马上回复 ACK，而是选择先等待一段时间… 捎带确认   刚好在 20 ms 后有数据报要发送给对方，于是就捎带上了这个 ACK。 累计确认">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP 协议抓包分析">
+<meta property="og:url" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="TCP延迟确认192.168.3.6向192.168.3.10发送了一个数据报，192.168.3.10并没有马上回复 ACK，而是选择先等待一段时间… 捎带确认   刚好在 20 ms 后有数据报要发送给对方，于是就捎带上了这个 ACK。 累计确认">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-piggybacking-client.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-piggybacking-server.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-delayedack-2seg.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-delayedack-timeout.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/fast_retransmit.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/retransmit_timeout.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/zero_window_probe.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/keep_alive.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/spurious_retransmission.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-request.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-reponse.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-gratuitous.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Bdhcp%5D-dhcp_flow.png">
+<meta property="og:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Bdhcp%5D-dhcp_timeout.png">
+<meta property="article:published_time" content="2020-12-08T15:21:30.980Z">
+<meta property="article:modified_time" content="2020-12-08T15:21:30.980Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-piggybacking-client.png">
+
+<link rel="canonical" href="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TCP 协议抓包分析 | 冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TCP 协议抓包分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:30" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:30+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TCPIP/" itemprop="url" rel="index"><span itemprop="name">TCPIP</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="延迟确认"><a href="#延迟确认" class="headerlink" title="延迟确认"></a>延迟确认</h3><p><code>192.168.3.6</code>向<code>192.168.3.10</code>发送了一个数据报，<code>192.168.3.10</code>并没有马上回复 ACK，而是选择先等待一段时间…</p>
+<p><strong>捎带确认</strong></p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-piggybacking-client.png" alt="tcp-piggybacking-client"></p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-piggybacking-server.png" alt="piggybacking-server"></p>
+<p>刚好在 20 ms 后有数据报要发送给对方，于是就捎带上了这个 ACK。</p>
+<p><strong>累计确认</strong></p>
+<a id="more"></a>
+
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-delayedack-2seg.png" alt="delayedack"></p>
+<p>很快它又收到了一个数据报，于是就回复了一个 ACK 来确认两个数据报。</p>
+<p><strong>超时之后</strong></p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Btcp%5D-delayedack-timeout.png" alt="delayedack"></p>
+<p>过了 300 ms 后，即没有待发的数据报，也没有收到新的数据报，于是就回复了一个 ACK。</p>
+<p><strong>总结</strong><br>一个 ACK 没有携带用户数据，却要发送至少 40 个字节长度的数据包，是对网络流量的浪费。不管捎带确认还是累计确认，目的都是尽量减少网络中的小包数量。</p>
+<h3 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h3><p><code>192.168.3.6</code>向<code>192.168.3.10</code>连续发送数据。</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/fast_retransmit.png" alt="fast_retransmit"></p>
+<p>其中序号<code>3241</code>的数据报丢失了，所以<code>192.168.3.10</code>对所有后续到来的数据报都立即回复<code>ACK=3241</code>，如<code>78``79</code>号包。TCP 协议规定在连续收到 3 个相同的 ACK 后要快速重传，此处只有 2 个相同的 ACK 所以<code>192.168.3.6</code>会继续发送数据报。</p>
+<p>在第 3 个相同的 ACK 后（<code>82</code>号包），<code>192.168.3.6</code>开始快速重传序号<code>3241</code>的数据报（<code>87</code>号包）。</p>
+<p><code>192.168.3.10</code>收到序号<code>3241</code>的数据报后，应该回复<code>ACK=3241+536=3777</code>，但是事实上回复的是<code>ACK=8065</code>（<code>88</code>号包），为什么呢？因为虽然序号<code>3241</code>的数据报丢失了，但是序号<code>3777</code>到<code>7529</code>的数据报被<code>192.168.3.10</code>收到并且缓存了起来。所以当收到重传的序号<code>3241</code>的数据报后，<code>192.168.3.10</code>回复的是<code>ACK=8065</code>。</p>
+<p>再往下看<code>94``95</code>号包又是两个重复<code>ACK=8065</code>，这是为什么呢？<strong>因为快速重传只会重传丢失的那一个数据报，而不会把后面所有未确认的包全部重传。</strong><code>192.168.3.6</code>只重传了序号<code>3241</code>的包，然后接着从序号<code>11817</code>的数据报开始发送了，但是<code>192.168.3.10</code>的期待接收的下个数据报序号是<code>8065</code>，所以回复了重复的 ACK。</p>
+<h3 id="超时重传"><a href="#超时重传" class="headerlink" title="超时重传"></a>超时重传</h3><p><code>192.168.3.6</code>向<code>192.168.3.10</code>连续发送数据。</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/retransmit_timeout.png" alt="retransmit_timeout"></p>
+<p>在发送完序号<code>13229</code>的数据报后等了 300ms 没有收到 ACK（<code>192.168.3.10</code>异常掉线），于是<code>192.168.3.6</code>开始超时重传。</p>
+<p>第一个重传间隔是<code>RTO</code>，后面的重传间隔都是前面的 2 倍，也就是说重传间隔是按 2 的指数方式增长（术语：backoff，退避算法），直到第 12 次重传仍然没有收到 ACK，于是<code>192.168.3.6</code>就认为<code>192.168.3.10</code>已经异常掉线，就向它发送了一个<code>RST</code>。</p>
+<h3 id="零窗口探测"><a href="#零窗口探测" class="headerlink" title="零窗口探测"></a>零窗口探测</h3><p><code>192.168.3.6</code>向<code>192.168.3.10</code>连续发送数据。</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/zero_window_probe.png" alt="zero_window_probe"></p>
+<p>发送完序号<code>22</code>包后，<code>192.168.3.10</code>向<code>192.168.3.6</code>回复了一个零窗口 ACK，表示自己的不能再接收数据了。然后<code>192.168.3.6</code>就会发送<code>TCP ZeroWindowProbe</code>。</p>
+<p>TCP 通过接收窗口来实现流量控制。发送方接到零窗口通告时，则会停止报文段的发送，直到接收方通告非零的窗口。非零窗口通告一般在一个不含任何数据的ACK报文中发送，但ACK的传输并不可靠（ACK报文段不会被确认和重传），假设一个非零窗口通告丢失了，接收方等待接收数据（因为它已通告了一个非零的窗口），而发送方在等待非零窗口更新，就会产生死锁。为了解决这个问题，发送方使用一个坚持定时器<code>persist timer</code>来周期性地向接收方窗口是否被非零，这样的报文段称为窗口探査报文<code>window probe</code>。 </p>
+<p>在 LwIP 中，<strong>窗口探测报本质是个长度为 1，序号为待确认报文段（如果没有，则是待发送报文段）的第 1 个字节的 TCP 数据报</strong>，对方一定会返回一个 ACK。协议栈收到一个零窗口通告后就开始窗口探查，收到非零窗口通告后就停止窗口探查。窗口探测的间隔时间会递增，但达到一个值后就不再改变。</p>
+<p>关于零窗口探测包的实现，<a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc793.txt">RFC 793-Section 3.7-Page 42</a>中描述如下：</p>
+<blockquote>
+<p>The sending TCP must be prepared to accept from the user and send at least one octet of new data even if the send window is zero.  The sending TCP must regularly retransmit to the receiving TCP even when the window is zero.  Two minutes is recommended for the retransmission interval when the window is zero.  This retransmission is essential to guarantee that when either TCP has a zero window the re-opening of the window will be reliably reported to the other.</p>
+<p>When the receiving TCP has a zero window and a segment arrives it must still send an acknowledgment showing its next expected sequence number and current window (zero).</p>
+</blockquote>
+<p>也就是说 TCP 发送方的零窗口探测报至少要包含一个字节的数据。但是在一些系统的实现中并没有严格遵守这个规范，比如吊吊的 Linux 中实际上发送的是长度为 0，序号为对方期望接收的序号减 1 的 TCP ACK 包（和 keep alive 报一毛一样）。</p>
+<p>关于 Linux 上零窗口探测报的实现，老外的提问和解答 (<a target="_blank" rel="noopener" href="http://linux.derkeiler.com/Newsgroups/comp.os.linux.networking/2004-04/0184.html">原文链接</a>):</p>
+<blockquote>
+<h4 id="Re-TCP-zero-window-probing"><a href="#Re-TCP-zero-window-probing" class="headerlink" title="Re: TCP zero window probing"></a>Re: TCP zero window probing</h4><p>From: Tauno Voipio (tauno.voipio_at_iki.fi.NOSPAM.invalid)<br>Date: 04/05/04</p>
+<p>Louis Laborde wrote: </p>
+<blockquote>
+<p>It seems that to probe a closed receive window,<br>linux TCP implementation sends an empty segment<br>with its sequence number set to SND.UNA-1.<br>I was wondering if this was compliant with RFC<br>793 which does not seem to describe precisely<br>what such a probe should contain. </p>
+<p>Thanks,<br>Louis. </p>
+</blockquote>
+<p>It is sensed as an extra retransmit/ACK for a byte<br>lready transferred. The peer should respond to<br>t with the current sequence &amp; acknowledgement<br>alues - which also carries the current window<br>nformation. </p>
+<p>This is, IMHO, easier to handle than the pure<br>FC version of sending one byte over the window<br>size.</p>
+<p>Tauno Voipio<br>tauno voipio @ iki fi </p>
+</blockquote>
+<p>还有一个(<a target="_blank" rel="noopener" href="http://www.linuxsa.org.au/pipermail/linuxsa/2004-April/068243.html">原文链接</a>)，这个没有解答，但是抓包可供参考:</p>
+<blockquote>
+<p>Hi,</p>
+<p>I am running a  client-server  program with client  running on a linux machine with 2.4.18-14 kernel installed.</p>
+<p>When the server  announces  zero-window  to the  client,  client starts  sending   zero-window   probes  which  are  nothing  but unacceptable segments.</p>
+<p>A short trace  obtained  using  tcpdump  and  interpreted  using ethereal is shown below:</p>
+<blockquote>
+<p>16:27:17.979349 e.f.g.h.33464 &gt; a.b.c.d.40000: P Seq=76441951 Ack=802335667 Win 5840 len=1080<br>27:18.040407 a.b.c.d.40000 &gt; e.f.g.h.33464: . Seq=802335667 Ack=764413031 Win 0 len=0<br>27:18.256213 e.f.g.h.33464 &gt; a.b.c.d.40000: . Seq=76443030 Ack=802335667 Win 5840 len=0</p>
+</blockquote>
+<p>This sequence continues as per retransmission algorithm.</p>
+<p>It can be seen above that unacceptable  zero-length packets with a  sequence  no.  already   unacknowledged   is  being  used  as zero-window probes.</p>
+<p>Zero  window  probes are defined in RFC 793 and  RFC1122 to be a data  segment  containing  atleast  one byte of data  beyond the window of the receiver who has closed the window.</p>
+<p>This  seems  to be a bug.  Has it been  already  fixed in  later kernel versions or is this how it is intended to remain?</p>
+<p>Regards,</p>
+<p>Praveen</p>
+</blockquote>
+<p>从 Linux 的观点来看，不管使用什么方法，只要能让对方返回 ACK 就行了。</p>
+<p>规范也是人定出来的，并不是真理，要不然也不会有那么多的修订版了，所以不要一昧迷信书本，须知尽信书不如无书，黑猫白猫抓到老鼠就是好猫。</p>
+<h3 id="保活机制"><a href="#保活机制" class="headerlink" title="保活机制"></a>保活机制</h3><p>客户端<code>192.168.3.6</code>连接服务器<code>192.168.3.10</code>。</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/keep_alive.png" alt="keep_alive"></p>
+<p>客户端发送序号<code>14</code>的数据报后，过了很久（一般是 2 个小时）也没有新的数据发送，服务器为了确认客户端是否仍然正常运行，开始周期性（一般是 75 秒）的发送<code>Keep-Alive</code>探测包，当发送了 N 次（一般为 9 次）探测包客户端仍然没有相应时，就认为客户端已经异常掉线了，发送一个 RST 包。</p>
+<p>在 LwIP 中，<strong>保活探查报本质上是长度为 0，序号为对方期望接收的序号减 1 的 TCP ACK 包</strong>，对方认为这是个失序的 TCP 报，就一定会返回一个 ACK。协议栈中 Keep alive 默认是关闭的，打开和配置代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">int optval;</span><br><span class="line"></span><br><span class="line">&#x2F;* Enable keep alive *&#x2F;</span><br><span class="line">optval &#x3D; 1;</span><br><span class="line">setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &amp;optval, sizeof(optval));</span><br><span class="line"></span><br><span class="line">&#x2F;* Idle time before first KEEPALIVE probe is sent *&#x2F;</span><br><span class="line">optval &#x3D; 10;</span><br><span class="line">setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &amp;optval, sizeof(optval));</span><br><span class="line"></span><br><span class="line">&#x2F;* Interval between probes *&#x2F;</span><br><span class="line">optval &#x3D; 5;</span><br><span class="line">setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &amp;optval, sizeof(optval));</span><br><span class="line"></span><br><span class="line">&#x2F;* Total number of probes sent *&#x2F;</span><br><span class="line">optval &#x3D; 5;</span><br><span class="line">setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &amp;optval, sizeof(optval));</span><br></pre></td></tr></table></figure>
+
+<h3 id="伪重传"><a href="#伪重传" class="headerlink" title="伪重传"></a>伪重传</h3><p>在 wireshark 抓去 Wi-Fi 包时经常遇到<code>spurious retransmission</code>的情况：</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/spurious_retransmission.png" alt="spurious_retransmission"></p>
+<p>三次重传的间隔只有几毫秒，远小于超时重传的间隔，事实上这是 Wi-Fi 层的重传，并不是<code>伪重传</code>，只是 wireshark 显示的问题。</p>
+<p>判断是 Wi-Fi 重传还是 TCP 重传的方法就是看 IP 包的 ID，如果一样那就是 Wi-Fi 重传，否则就是 TCP 重传，因为 TCP 重传包是新的 IP 包，所以 ID 也是不同。</p>
+<h2 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h2><h3 id="ARP-的本质"><a href="#ARP-的本质" class="headerlink" title="ARP 的本质"></a>ARP 的本质</h3><p>ARP 的本质是<code>IP 和 MAC 的映射</code>，核心是<code>ARP 缓存表</code>。</p>
+<h3 id="ARP-表更新的途径"><a href="#ARP-表更新的途径" class="headerlink" title="ARP 表更新的途径"></a>ARP 表更新的途径</h3><ul>
+<li>收到发给自己的 ARP 回复</li>
+<li>收到 ARP 请求</li>
+<li>收到 IP 包</li>
+</ul>
+<h3 id="Wireshark-抓包"><a href="#Wireshark-抓包" class="headerlink" title="Wireshark 抓包"></a>Wireshark 抓包</h3><ul>
+<li><p>Request</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-request.png" alt="arp-request"></p>
+</li>
+<li><p>Response</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-reponse.png" alt="arp-reponse"></p>
+</li>
+<li><p>Gratuitous</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Barp%5D-gratuitous.png" alt="arp-gratuitous"></p>
+</li>
+</ul>
+<h3 id="无回报-Gratuitous-ARP请求"><a href="#无回报-Gratuitous-ARP请求" class="headerlink" title="无回报 (Gratuitous) ARP请求"></a>无回报 (Gratuitous) ARP请求</h3><p>主机在刚启动后一般会向局域网广播一个自己的<code>&lt;IP : MAC&gt;</code>信息，称为<code>无回报(gratuitous)ARP请求</code>。<br>无回报 ARP 请求其实就是<strong>目的 IP 是自己的 ARP 请求</strong>。</p>
+<h3 id="ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包"><a href="#ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包" class="headerlink" title="ARP 欺骗：发送伪造的网关 Gratuitous ARP 包"></a>ARP 欺骗：发送伪造的网关 Gratuitous ARP 包</h3><p>比如一个局域网的网关地址是<code>192.168.31.1</code>，在此局域网内不停地发送伪造的 Gratuitous ARP 包，那么局域网内的所有的主机 ARP 表中的<code>192.168.31.1</code>就会被更新为伪造的 MAC 值，进而导致主机发送的数据包都到不了网关。</p>
+<h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><h3 id="频繁重连后DHCP无法获取地址或获取地址慢"><a href="#频繁重连后DHCP无法获取地址或获取地址慢" class="headerlink" title="频繁重连后DHCP无法获取地址或获取地址慢"></a>频繁重连后DHCP无法获取地址或获取地址慢</h3><p><strong>摘要：</strong>WIFI上网时，有时会出现无线用户接入后获取地址慢，而且经常无线网卡提示连接受限的现象。该情况将直接影响到用户的使用感受。本文主要分析了该问题发生的主要原因以及解决方案。</p>
+<p><strong>关键词：</strong>WIFI  连接受限  DHCP获取地址慢</p>
+<p><strong>正文：</strong></p>
+<p>在无锡市区的一些热点区域，经常会有用户反映出现无线接入后获取地址慢，而且有时会出现无线网卡提示受限连接的现象。该情况将直接影响到用户的使用感受。  </p>
+<p>针对上面的现象，我们进行了现场的分析和定位，确定了最终的原因：<strong>该现象的最终原因不是WLAN接入造成，而是DHCP server所引起的。</strong> </p>
+<p><strong>DHCP Server进行了一定的保护，也就是当DHCP server成功分配出一个地址以后，对于再次来自于客户端设备的DHCP请求将不作处理，只有原来的表项老化以后，才可能继续重新为客户端设备分配地址。</strong></p>
+<p>由于无线的特殊性，网卡在信号不稳的时候会出现重新连接，或者最终用户在使用过程中可能直接拔插网卡的情况，这样相当于链路异常断开，最终导致DHCP server不知道用户已经下线。<strong>而当用户再次申请地址的时候，DHCP server可能认为报文非法而不进行处理，最终出现了获取地址慢的现象。</strong></p>
+<p>通过有线进行测试也验证同样存在该问题。先使用有线网卡连接，保证成功获取地址，之后直接将网卡禁用后在使能，可以发现该网卡同样无法在短时间内获取地址。  </p>
+<p>下面是用户DHCP申请地址的流程：</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Bdhcp%5D-dhcp_flow.png" alt="dhcp-dhcp_flow"></p>
+<p>造成获取地址慢的原因：当DHCP server成功发送DHCP ACK报文之后，DHCP server将认为它已经成功为Client分配了一个IP地址，在没有接收到Release报文之前，或者自己的表项没有老化之前，再次收到来自于Client的报文，DHCP server将作为非法报文处理。  </p>
+<ul>
+<li><strong>获取地址慢的出现情况一：</strong>  </li>
+</ul>
+<p>如果客户端出现异常断开（也就是客户端虽然断开连接，但是没有发送DHCP Release报文），当该客户端再次连接的时候会出现无法获取地址，只有等待足够的一段时间后，才可以获取地址的问题。</p>
+<p>能够造成该种情况的操作：  </p>
+<ol>
+<li>直接将有线网卡禁用；</li>
+<li>直接将无线网卡禁用；</li>
+<li>直接拔插无线网卡； </li>
+</ol>
+<ul>
+<li><strong>获取地址慢的出现情况二：</strong></li>
+</ul>
+<p>由于客户端和服务器经过了大量的有线网络，所以在获取地址的瞬间，有可能出现报文延时的问题，特别当DHCP server回复的DHCP ACK报文延时到达客户端的时候，此时客户端会认为它已经发送的DHCP request报文超时，状态机回到初始位置，重新发送DHCP discovery报文。但是由于DHCP服务器已经发送了ACK，所以认为已经成功给客户端分配了地址，所以会忽略掉客户端的新的DHCP discovery请求。造成客户端获取不到地址或者需要经过一段时间后才可以获取地址。</p>
+<p>下面是在AP上行端口抓包，第110条报文，AP将客户端的DHCP request报文成功发送出去，但是等待了10ms之后没有收到服务器的DHCP ACK报文，所以重新发送DHCP discovery报文申请地址；但是此时服务器实际上已经发送了一个DHCP ACK报文（只是该报文在60ms之后到达）。这样就造成了客户端和服务器的状态机不一致，服务器不再处理新的DHCP Discovery请求。</p>
+<p><img src="/2020/12/08/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/%5Bdhcp%5D-dhcp_timeout.png" alt="dhcp-dhcp_timeout"></p>
+<p>这个现象只能通过DHCP server上面的优化，目前该现象与WLAN网络和有线网络都没有关系，WLAN设备没有问题。由于DHCP服务器管理了很多的接入服务，需要仔细考虑如何进行优化。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Network/MQTT/mosquitto/" rel="prev" title="mosquitto">
+      <i class="fa fa-chevron-left"></i> mosquitto
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Network/TCPIP/PPP/" rel="next" title="PPP">
+      PPP <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E7%A1%AE%E8%AE%A4"><span class="nav-number">1.1.</span> <span class="nav-text">延迟确认</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0"><span class="nav-number">1.2.</span> <span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0"><span class="nav-number">1.3.</span> <span class="nav-text">超时重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%B6%E7%AA%97%E5%8F%A3%E6%8E%A2%E6%B5%8B"><span class="nav-number">1.4.</span> <span class="nav-text">零窗口探测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Re-TCP-zero-window-probing"><span class="nav-number">1.4.1.</span> <span class="nav-text">Re: TCP zero window probing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%B4%BB%E6%9C%BA%E5%88%B6"><span class="nav-number">1.5.</span> <span class="nav-text">保活机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E9%87%8D%E4%BC%A0"><span class="nav-number">1.6.</span> <span class="nav-text">伪重传</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP"><span class="nav-number">2.</span> <span class="nav-text">ARP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP-%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">2.1.</span> <span class="nav-text">ARP 的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP-%E8%A1%A8%E6%9B%B4%E6%96%B0%E7%9A%84%E9%80%94%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">ARP 表更新的途径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wireshark-%E6%8A%93%E5%8C%85"><span class="nav-number">2.3.</span> <span class="nav-text">Wireshark 抓包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E5%9B%9E%E6%8A%A5-Gratuitous-ARP%E8%AF%B7%E6%B1%82"><span class="nav-number">2.4.</span> <span class="nav-text">无回报 (Gratuitous) ARP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP-%E6%AC%BA%E9%AA%97%EF%BC%9A%E5%8F%91%E9%80%81%E4%BC%AA%E9%80%A0%E7%9A%84%E7%BD%91%E5%85%B3-Gratuitous-ARP-%E5%8C%85"><span class="nav-number">2.5.</span> <span class="nav-text">ARP 欺骗：发送伪造的网关 Gratuitous ARP 包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">3.</span> <span class="nav-text">DHCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%91%E7%B9%81%E9%87%8D%E8%BF%9E%E5%90%8EDHCP%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80%E6%88%96%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80%E6%85%A2"><span class="nav-number">3.1.</span> <span class="nav-text">频繁重连后DHCP无法获取地址或获取地址慢</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

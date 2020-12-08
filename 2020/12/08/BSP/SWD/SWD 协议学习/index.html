@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SWD 协议学习https:&#x2F;&#x2F;blog.csdn.net&#x2F;u010066882&#x2F;article&#x2F;details&#x2F;56030473 主要参考 ARM 官方文档：ARM Debug Interface Architecture Specification ADIv5.0 to ADIv5.2  ADI 是 ARM Debug Interface，目前是 ADIv5，即 version 5。 在 AD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SWD 协议学习">
+<meta property="og:url" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="SWD 协议学习https:&#x2F;&#x2F;blog.csdn.net&#x2F;u010066882&#x2F;article&#x2F;details&#x2F;56030473 主要参考 ARM 官方文档：ARM Debug Interface Architecture Specification ADIv5.0 to ADIv5.2  ADI 是 ARM Debug Interface，目前是 ADIv5，即 version 5。 在 AD">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233156760.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233221700.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233240741.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233312354.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233339963.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233413784.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233441709.png">
+<meta property="og:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233502195.png">
+<meta property="article:published_time" content="2020-12-08T15:21:31.075Z">
+<meta property="article:modified_time" content="2020-12-08T15:21:31.075Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233156760.png">
+
+<link rel="canonical" href="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SWD 协议学习 | 冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SWD 协议学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SWD/" itemprop="url" rel="index"><span itemprop="name">SWD</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="SWD-协议学习"><a href="#SWD-协议学习" class="headerlink" title="SWD 协议学习"></a>SWD 协议学习</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010066882/article/details/56030473">https://blog.csdn.net/u010066882/article/details/56030473</a></p>
+<p>主要参考 ARM 官方文档：ARM Debug Interface Architecture Specification ADIv5.0 to ADIv5.2 </p>
+<p>ADI 是 ARM Debug Interface，目前是 ADIv5，即 version 5。</p>
+<p>在 ADIv5 之前都是基于 IEEE 1149.1 JTAG interface 的实现，从 ADIv5 开始有了一个新的接口 SWD - Serial Wire Debug interface，所以 JTAG 是 SWD 是完全不同的两种接口。</p>
+<p>ADIv5 分为两大部分：DP - Debug Port 和 AP - Access Port。</p>
+<p>Debug Port 有两种： JTAG-DP 和 SW-DP</p>
+<p>Access Port 也有两种：</p>
+<a id="more"></a>
+
+<p>​    JTAG-AP, for accessing legacy JTAG components.</p>
+<p>​    MEM-AP, for accessing memory and components with memory-mapped interfaces.</p>
+<p>DAP 是 Debug Access Port，是对 ADI 的具体实现，其实就是 DP + AP。</p>
+<p>关于 SWD 接口的文档和翻译（个人理解）：</p>
+<p>The SWD protocol uses a synchronous serial interface, which comprises a single bidirectional data signal, and a clock signal. </p>
+<p>SWD 协议使用的是同步串行接口，包含一个双向数据信号线和一个时钟线。</p>
+<p>When the target samples SWDIO, sampling is performed on the rising edge of SWCLK. When the target drives SWDIO, or stops driving it, signal changes are performed on the rising edge of SWCLK.</p>
+<p><strong>当 MCU 在接收时，在时钟的上升沿采集数据，当 MCU 在发送时，在时钟的上升沿改变数据（也就意味着主机在时钟的下降沿采集数据）。</strong></p>
+<p>The clock can be sourced from the target and exported, or provided by the host. This clock is then used by the host as a reference for generation and sampling of data so that the target is not required to perform any over-sampling.</p>
+<p>Both the target and host can drive the bus HIGH and LOW or tristate it. The ports must be able to tolerate short periods of contention that might occur because of a loss of synchronization.</p>
+<p>时钟可以由主机提供，也可以由 MCU 提供（没想到吧），由 MCU 来提供的好处是 MCU 不需要过采样了（此处不解，SWD 不是同步串行接口吗，为什么要过采样？）</p>
+<p>由于主机和 MCU 都可以驱动总线，所以接口要能容忍因不同步造成的短暂电平竞争。</p>
+<p>To make sure that the line is in a known state when neither host nor target is driving the line, a 100KΩ pull-up is required at the target. This pull-up can only be relied on to maintain the state of the wire. If the wire is driven LOW and released, the pull-up resistor eventually returns the line to the HIGH state, but this process takes many clock periods.</p>
+<p>The pull-up is intended to prevent false detection of signals when no host is connected, and must be of a suitably high value to reduce current consumption from the target when the host actively pulls down the line.</p>
+<p>为了让 SWD 接口悬空时能有一个确定的状态，MCU 上需要有一个 100K 的上拉电阻（所以说 MCU 芯片内部就已经有 100K 上拉了？）</p>
+<p>A debugger must use a line reset sequence to ensure that hot-plugging the serial connection does not result in unintentional transfers. The line reset sequence ensures that the SW-DP is synchronized correctly to the header that signals a connection.</p>
+<p>The SWD interface does not include a reset signal. A line reset is achieved by holding the data signal HIGH for at least 50 clock cycles, followed by at least two idle cycles. Figure B4-8 on page B4-123 shows the interface timing for a line reset followed by a DP DPIDR register read.</p>
+<p>主机在连接 MCU 后首先要复位 SW-DP（注意，只是 Debug Port），然后才能后续的通信。以防止 SW-DP 处于不确定的状态。</p>
+<p>由于 SWD 接口没有定义复位信号线，所以是通过一个特定的序列来实现复位的，具体是就是，保持数据线为高时发送至少 50 个时钟，然后再发送 2 个空闲周期。</p>
+<p>Idle cycles，The host clocks the SWD interface with the line LOW to insert idle cycles.</p>
+<p>空闲周期就是保持数据线为低时发送时钟。</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233156760.png"></p>
+<p><strong>Basic operation</strong></p>
+<p>The ARM SWD interface uses a single bidirectional data connection and a separate clock to transfer data synchronously. An operation on the wire consists of two or three phases:</p>
+<p><strong>Packet request</strong></p>
+<p>​    The external host debugger issues a request to the DP. The DP is the target of the request.</p>
+<p><strong>Acknowledge response</strong></p>
+<p>​    The target sends an acknowledge response to the host.</p>
+<p><strong>Data transfer phase</strong></p>
+<p>​    This phase is only present when either: </p>
+<p>​        A data read or data write request is followed by a valid (OK) acknowledge response. </p>
+<p>​        The CTRL/STAT.ORUNDETECT flag is 0b1. </p>
+<p>​    The data transfer is one of: </p>
+<p>​        Target to host, following a read request (RDATA).</p>
+<p>​        Host to target, following a write request (WDATA).</p>
+<p>每个 SWD <strong>基本操作</strong>由 3 步组成：请求 - 响应 - 数据（可选）</p>
+<p>When the SW-DP receives a packet request from the debug host, it must respond immediately by entering the acknowledge phase. There is a turnaround period between these phases, as they are in different directions. If a data phase is required, it follows immediately after the acknowledge phase.</p>
+<p>SW-DP 在收到主机的请求后，必须立即发出响应，然后才是可选的数据传输。这点和其他常见协议不同。</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233221700.png" alt="image-20201123233221700"></p>
+<p><strong>Line turnaround</strong></p>
+<p>To prevent contention, a turnaround period is required when the device driving the wire changes. For the turnaround period, neither the host nor the target drives the wire, and the state of the wire is undefined. See also Line pull-up on page B4-122.</p>
+<p>Note</p>
+<p>The line turnaround period can provide for pad delays when using a high sample clock frequency.</p>
+<p>The length of the turnaround period is controlled by DLCR.TURNROUND. The default setting is a turnaround period of one clock cycle.</p>
+<p>在 2 步之间，若数据线需要改变方向，那么会插入一个 turnaround 周期，用来给双方改变 IO 方向的时间，防止电平竞争。默认的 turnaround 时间是一个时钟。</p>
+<p>![屏幕快照 2018-05-30 下午1.47.26](../resources/屏幕快照 2018-05-30 下午1.47.26.png)</p>
+<p><strong>SELECT 和 Bandk</strong></p>
+<p>主要参考章节：Using the Debug Port to access Access Ports</p>
+<p>DPACC 用以访问 Debug Port 寄存器，APACC 用以访问 Access Port 寄存器。他们是一个<strong>基本操作</strong>，这个操作中指定的 RnW 位用以配置读/写操作，A[3:2] 域用以选择寄存器地址，Data[31:0] 是具体写的数据。</p>
+<p>DP 只有 4 个寄存器（DPv0），A[3:2]  4 个地址刚好够用，但是 AP 可以有多个，并且每个 AP 也包含了多个寄存器，A[3:2]  地址完全不够用，怎么办呢？</p>
+<p>于是每个 AP 中的寄存器被分为了多个 Bank，每个 Bank 内都有 4 个寄存器。使用 DP 中的 SELECT 寄存器的 APSEL 和 APBANKSEL 域分别选择一个 AP 和其中的一个 Bank。然后再用 APACC 的 A[3:2] 来选择 Bank 中 4 个寄存器其中的一个。</p>
+<p>同样地，最新版本的 DP 扩展多个寄存器，以 DPv2 为例，其 0x4 地址被 5 个寄存器复用，要通过 SELECT 内的 DPBANKSEL 来选择使用哪一个。</p>
+<p>文档中也给出了一个例子：</p>
+<p>For example, to access the register at address 0x14 in the AP that is selected when SELECT.APSEL is 0x00, the debugger must: </p>
+<p>• Use a DP register write to set: </p>
+<p>​    — SELECT.APSEL to 0x00. </p>
+<p>​    — SELECT.APBANKSEL to 0x1. </p>
+<p>• Use an AP register access with A[3:2] = 0b01.</p>
+<p>The DAP combines A[3:2] with SELECT.APBANKSEL to generate the AP register address, 0x14. The debugger can access any of the four registers from 0x10 to 0x1C without changing SELECT.</p>
+<p>注意：SELECT，顾名思义，是用来选择的，若已经通过配置此寄存器选择好了 AP 和 Bank，那么接下来访问相同 AP 内相同 Bank 内的任意寄存器前就不用再次写 SELECT 寄存器了。可以把 SELECT 寄存器看作是总线复用器/多路选择器，只有在需要访问其他 AP 或 Bank 时才需要更新对应的域值。</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233240741.png"></p>
+<p><strong>具体到 SWD 上的 APACC 和 DPACC</strong></p>
+<p>举个写 CFG 寄存器的例子：</p>
+<p>CFG 是属于 AP 的一个寄存器，地址为 0xF4。</p>
+<p>第一步：通过 Packet Request 内 APnDP 置 0 来选择 DPACC，Rnw 置 1 来选择写操作，A[3:2] 置 0x8 来选择写 DP 内的 SELECT 寄存器，然后在 Data transfer phase 时把 CFG 寄存器所属于的 AP（0x0） 和 Bank（0xF）分别写入 SELECT 的 APSEL 和 APBANKSEL 域内。</p>
+<p>第二步：通过 Packet Request 内 APnDP 置 1 来选择 DPACC，Rnw 置 1 来选择写操作，A[3:2] 置 0x4 来选择写 AP （0x）内 Bank（0xF）内的第一个寄存器。然后在 Data transfer phase 时把数据写入 CFG 寄存器。</p>
+<p>逻辑分析仪抓包（注意：SWD 协议是 LSB）：</p>
+<p>整个流程：</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233312354.png" alt="image-20201123233312354"></p>
+<p>写 SELECT：</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233339963.png" alt="image-20201123233339963"></p>
+<p><strong>DP 和 AP 的功能和关系</strong></p>
+<p>Access Port (AP)</p>
+<p>An AP uses a resource-specific transport mechanism to access debug information in the system to be debugged, and passes the information to the DP using the AP Access mechanism that is specified in this document.</p>
+<p>A DAP must contain at least one AP, but if needed an ADI can implement multiple APs.</p>
+<p>Debug Port (DP)</p>
+<p>The DP provides a debugger with a common interface to access the information that is held in the APs.</p>
+<p>可以类比分层协议，DP 实现了标准通用的 JTAG/SWD 协议收发功能，AP 实现了具体的资源读写功能，然后 DP 和 AP 之间再交互。</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233413784.png"></p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233441709.png"></p>
+<h2 id="SWD-中的数据校验"><a href="#SWD-中的数据校验" class="headerlink" title="SWD 中的数据校验"></a>SWD 中的数据校验</h2><p>A simple parity check is applied to all packet request and data transfer phases. Even parity is used.</p>
+<p>SWD 使用简单的奇偶校验位来对传输的数据进行校验（除 ACK 外），具体来说，是计算 packet request 或者 data transfer 中为 1 的 bit 个数，若是奇数则奇偶校验位为1，否则为 0。</p>
+<p>同时虽然双位同时发生错误的概率相当低，但奇偶校验却无法检测出双位错误。SWD 自带的校验不能完全保证数据传输无误，必须用户层加 CRC 才能保证数据无误。</p>
+<p>2018-06-03 更新</p>
+<p>根据资料，奇偶校验位失败的概率（把错误的当成正确的）是：</p>
+<p><img src="/2020/12/08/BSP/SWD/SWD%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/image-20201123233502195.png" alt="image-20201123233502195"></p>
+<p>根据文档 <a target="_blank" rel="noopener" href="https://faraday.physics.utoronto.ca/PVB/Drummond/Micro/ln_comm1.pdf%EF%BC%8C%E6%A6%82%E7%8E%87%E6%98%AF%EF%BC%9A">https://faraday.physics.utoronto.ca/PVB/Drummond/Micro/ln_comm1.pdf，概率是：</a></p>
+<p>The length of pattern which each parity bit “guards” should be as long as possible so that the parity bit takes up the least amount of extra storage, but not so long that a double error becomes likely. Thus if the probability of a single bit being is error is 10-6, then the probability of an error in an 8-bit pattern (7 + parity) is about 8 x 10-6 and the probability of a double error is about 3 x 10-11 which is quite small. </p>
+<p>有个矛盾之处：data bits 少，会造成 parity bit 占用多，data bits 多，又会导致误差概率变大，比如 32 bits 的情况下，误差概率就变大到 5 x 10^-10^了。</p>
+<p>但是文档中也指出，有些特殊的情况下，bit 错误是成堆出现的，相临的 2 个 bit 会同时发生错误，此时未检测到的概率就是接近于每个 bit 的错误概率了。</p>
+<p>An additional issue is that in some circumstances when an error does occur, it occurs in a clump - ie groups of bits may get corrupted together. Thus if the probability of one bit being currupted is P (small) then the probability of two successive bits being corrupted is not P2, but something much larger, maybe even approaching P.</p>
+<h2 id="线序干扰问题"><a href="#线序干扰问题" class="headerlink" title="线序干扰问题"></a>线序干扰问题</h2><p>SWDIO 和 SWCLK 两条线是不能挨在一起的，否则会互相干扰导致错误。</p>
+<p>JTAG 排线中这两根线之间是间隔了一根地线的，事实上 JTAG 的定义中所有的信号线之间有间隔有一根地线。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Network/TCPIP/LwIP/LwIP%20inside/" rel="prev" title="LwIP inside">
+      <i class="fa fa-chevron-left"></i> LwIP inside
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Software/VSCode/20%20VS%20Code%20Shortcuts%20for%20Faster%20Coding/" rel="next" title="20 VS Code Shortcuts for Faster Coding">
+      20 VS Code Shortcuts for Faster Coding <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SWD-%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">SWD 协议学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SWD-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C"><span class="nav-number">2.</span> <span class="nav-text">SWD 中的数据校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E5%BA%8F%E5%B9%B2%E6%89%B0%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">线序干扰问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

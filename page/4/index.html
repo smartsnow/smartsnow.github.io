@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="IoT">
+<meta property="og:type" content="website">
+<meta property="og:title" content="冷香小筑">
+<meta property="og:url" content="http://example.com/page/4/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="IoT">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/page/4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/" class="post-title-link" itemprop="url">BLE 最大化吞吐量</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Slave 通过 notification 发送 293 字节数据，ATT_MTU 为 247 字节，所以分为两次发送。</p>
+<p>抓包看有三次 connection event，其中第二次 connection event 没有数据传输，这是为什么呢？</p>
+<img src=".最大化吞吐量.assets/image-20201130210148848.png" alt="image-20201130210148848" style="zoom:90%;" />
+
+<p>因为 slave 代码中调用发送 notification API 之后，要等待发送成功事件再发送下一个 notification。</p>
+<p>而发送成功事件是在收到的下个 master 数据包的 NESN 后产生，此时 slave 看到 queue 中没有数据，就回复了 Empty PDU。</p>
+<p>所以第三次 connection event 才将剩下的数据发送出去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">0.000000	Master	Slave		35	12	-50 dBm	Sent Write Command, Handle: 0x0049 (Unknown: Unknown)</span><br><span class="line">0.000998	Slave	Master		26	12	-45 dBm	Empty PDU</span><br><span class="line">0.007012	Master	Slave		26	12	-48 dBm	Empty PDU</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">0.007999	Slave	Master		26	12	-44 dBm	Empty PDU</span><br><span class="line">0.014914	Master	Slave		26	21	-49 dBm	Empty PDU</span><br><span class="line">0.015960	Slave	Master		35	21	-45 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.021647	Master	Slave		26	32	-50 dBm	Empty PDU</span><br><span class="line">0.022649	Slave	Master		26	32	-46 dBm	Empty PDU</span><br><span class="line">0.029649	Master	Slave		26	34	-52 dBm	Empty PDU</span><br><span class="line">0.030667	Slave	Master		26	34	-53 dBm	Empty PDU</span><br><span class="line">0.036895	Master	Slave		26	12	-49 dBm	Empty PDU</span><br><span class="line">0.045277	Slave	Master		277	12	-44 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.046275	Master	Slave		26	21	-49 dBm	Empty PDU</span><br><span class="line">0.047276	Slave	Master		26	21	-44 dBm	Empty PDU</span><br><span class="line">0.051274	Master	Slave		26	19	-49 dBm	Empty PDU</span><br><span class="line">0.053273	Slave	Master		82	19	-44 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.060110	Master	Slave		26	17	-48 dBm	Empty PDU</span><br><span class="line">0.060110	Slave	Master		26	17	-44 dBm	Empty PDU</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="url">BLE spec 全部版本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最新版本下载：<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/bluetooth-core-specification/">https://www.bluetooth.com/specifications/bluetooth-core-specification/</a></p>
+<p>历史版本下载：<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/archived-specifications/">https://www.bluetooth.com/specifications/archived-specifications/</a></p>
+<p>PDF 列表：</p>
+<ul>
+<li><a href="Core_v4.0.pdf">4.0</a></li>
+<li><a href="Core_v4.1.pdf">4.1</a></li>
+<li><a href="Core_v4.2.pdf">4.2</a></li>
+<li><a href="Core_v5.0.pdf">5.0</a></li>
+<li><a href="Core_v5.1.pdf">5.1</a></li>
+<li><a href="Core_v5.2.pdf">5.2</a></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/Ruby/Ruby%20Install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/Ruby/Ruby%20Install/" class="post-title-link" itemprop="url">Ruby Install</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index"><span itemprop="name">Ruby</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><p>macOS 自带 ruby，但是千万不要用，因为自带的 ruby 是给系统用，搞乱了会出问题。</p>
+<p>所以需要自己另外安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install ruby</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">$ brew reinstall ruby</span><br><span class="line">&#x3D;&#x3D;&gt; Reinstalling ruby </span><br><span class="line">&#x3D;&#x3D;&gt; Downloading https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;homebrew-bottles&#x2F;bottles&#x2F;ru</span><br><span class="line">Already downloaded: &#x2F;Users&#x2F;snowyang&#x2F;Library&#x2F;Caches&#x2F;Homebrew&#x2F;downloads&#x2F;ce913df96139a56c9bc1ad301492f882a83f160400516538c5d4737f6c6d5e51--ruby-2.7.0.high_sierra.bottle.tar.gz</span><br><span class="line">&#x3D;&#x3D;&gt; Pouring ruby-2.7.0.high_sierra.bottle.tar.gz</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&gt; Caveats</span><br><span class="line">By default, binaries installed by gem will be placed into:</span><br><span class="line">  &#x2F;usr&#x2F;local&#x2F;lib&#x2F;ruby&#x2F;gems&#x2F;2.7.0&#x2F;bin</span><br><span class="line"></span><br><span class="line">You may want to add this to your PATH.</span><br><span class="line"></span><br><span class="line">ruby is keg-only, which means it was not symlinked into &#x2F;usr&#x2F;local,</span><br><span class="line">because macOS already provides this software and installing another version in</span><br><span class="line">parallel can cause all kinds of trouble.</span><br><span class="line"></span><br><span class="line">If you need to have ruby first in your PATH run:</span><br><span class="line">  echo &#39;export PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;bin:$PATH&quot;&#39; &gt;&gt; ~&#x2F;.bash_profile</span><br><span class="line"></span><br><span class="line">For compilers to find ruby you may need to set:</span><br><span class="line">  export LDFLAGS&#x3D;&quot;-L&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;lib&quot;</span><br><span class="line">  export CPPFLAGS&#x3D;&quot;-I&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;include&quot;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&gt; Summary</span><br><span class="line">🍺  &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;ruby&#x2F;2.7.0: 20,346 files, 32.8MB</span><br></pre></td></tr></table></figure>
+
+<p>添加到 PATH 中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;bin:$PATH&quot;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C 整型转换</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int8_t a &#x3D; -1;</span><br><span class="line">uint32_t b &#x3D; a;</span><br><span class="line">b &#x3D; ?</span><br></pre></td></tr></table></figure>
+
+<p>这要用到整型转换规则， <strong>C Programming Language(K &amp; R)</strong> (A.6.2)上这样解释：</p>
+<blockquote>
+<p>将任何整数转换为某种指定的无符号数类型数的方法是：以该无符号数类型能够表示的最大值加1为模，找出与此整数同余的最小的非负值。<br>在对二的补码表示中，如果该无符号类型的位模式较窄，这就相当于左截取；如果该符号类型的位模式较宽，这就相当于对带符号的值进行符号扩展和对无符号的值进行0填充。</p>
+</blockquote>
+<p>将任何整数转换为带符号类型时，如果它可以在新的类型中表示出来，则其值保持不变，否则它的值同具体的实现有关。</p>
+<p>其中<code>以该无符号数类型能够表示的最大值加1为模，找出与此整数同余的最小的非负值</code>，我觉得太拗口，下面那段才比较好理解<code>在对二的补码表示中，如果该无符号类型的位模式较窄，这就相当于左截取；如果该符号类型的位模式较宽，这就相当于对带符号的值进行符号扩展和对无符号的值进行0填充。</code></p>
+<p>比如把 0x1234 放到一个 uint8_t 类型变量 x 中，那么高 8 位就被截掉，低 8 位被放到变量中，最终 x 的值为 0x34。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/strtol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/strtol/" class="post-title-link" itemprop="url">strtol</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="strtol"><a href="#strtol" class="headerlink" title="strtol"></a>strtol</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">long int strtol(const char *nptr, char **endptr, int base);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>字符串无法解析，例如出现了非数字字符等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">If endptr is not NULL, strtol() stores the address of the first invalid</span><br><span class="line">character  in *endptr.  If there were no digits at all, strtol() stores</span><br><span class="line">the original value of nptr in *endptr (and returns 0).  In  particular,</span><br><span class="line">if  *nptr is not &#39;\0&#39; but **endptr is &#39;\0&#39; on return, the entire string</span><br><span class="line">is valid.</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/C/strtol/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">C 入口函数分析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
+<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/" class="post-title-link" itemprop="url">C 整形提升</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>摘自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%B4%E5%9E%8B%E6%8F%90%E5%8D%87">维基百科</a>：</p>
+<p>整型提升是C程序设计语言中的一项规定：在表达式计算时，各种整形首先要提升为int类型，如果int类型不足以表示则要提升为unsigned int类型；然后执行表达式的运算。[1]</p>
+<p>这一规则是由C语言的发明人丹尼斯·里奇与肯·汤普逊创设的：[2]</p>
+<blockquote>
+<p>A character, a short integer, or an integer bit-field, all either signed or not, or an object of enumeration type, may be used in an expression wherever an integer maybe used. If an int can represent all the values of the original type, then the value is converted to int; otherwise the value is converted to unsigned int. This process is called integral promotion.</p>
+</blockquote>
+<p>这段话的大意是：表达式中可以使用整数的地方，就可以使用枚举类型，或有符号或无符号的字符、短整数、整数位域。如果一个int可以表示上述类型，则该值被转化为int类型的值；否则，该值被转化为unsigned int类型的值。这一过程被称作integral promotion。</p>
+<p>整型提升的意义在于：表达式的整型运算要在CPU的相应运算器件内执行，CPU内整型运算器(ALU)的操作数的字节长度一般就是int的字节长度，同时也是CPU的通用寄存器的长度。因此，即使两个char类型的相加，在CPU执行时实际上也要先转换为CPU内整型操作数的标准长度。通用CPU（general-purpose CPU）是难以直接实现两个8比特字节直接相加运算（虽然机器指令中可能有这种字节相加指令）。所以，表达式中各种长度可能小于int长度的整型值，都必须先转换为int或unsigned int，然后才能送入CPU去执行运算。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C 隐式类型转换</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在项目中遇到一个奇怪的问题，伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int8_t  a &#x3D; 0x8F;</span><br><span class="line">uint8_t b &#x3D; 0x8F；</span><br><span class="line"></span><br><span class="line">if( a &#x3D;&#x3D; b )</span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;a &#x3D; b\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;a !&#x3D; b, a &#x3D; %02x, b &#x3D; %02x\n&quot;, a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">newlib 中的 crt0 流程分析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近对 newlib 中的启动代码 crt0 产生了兴趣，于是就分析了下其代码。crt0 的源码位于 libgloss/arm/crt0.S，为了兼容各种 ARM 架构，crt0.S 中有大量的条件判断宏定义，对于只关心 ARMv7e-M 的我来说很是痛苦。刚好手上有个基于 STM32F412 的 mbed 工程用的是 crt0 的启动方式，参考 crt0.o 的反汇编我可以提炼出 crt0.S 中和 ARMv7e-M 相关的部分代码。</p>
+<p>crt0.o 的反汇编如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">08008220 &lt;_mainCRTStartup&gt;:</span><br><span class="line"> 8008220:    4b15          ldr    r3, [pc, #84]    ; (8008278 &lt;_mainCRTStartup+0x58&gt;)</span><br><span class="line"> 8008222:    2b00          cmp    r3, #0</span><br><span class="line"> 8008224:    bf08          it    eq</span><br><span class="line"> 8008226:    4b13          ldreq    r3, [pc, #76]    ; (8008274 &lt;_mainCRTStartup+0x54&gt;)</span><br><span class="line"> 8008228:    469d          mov    sp, r3</span><br><span class="line"> 800822a:    f5a3 3a80     sub.w    sl, r3, #65536    ; 0x10000</span><br><span class="line"> 800822e:    2100          movs    r1, #0</span><br><span class="line"> 8008230:    468b          mov    fp, r1</span><br><span class="line"> 8008232:    460f          mov    r7, r1</span><br><span class="line"> 8008234:    4813          ldr    r0, [pc, #76]    ; (8008284 &lt;_mainCRTStartup+0x64&gt;)</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line"> 8008236:    4a14          ldr    r2, [pc, #80]    ; (8008288 &lt;_mainCRTStartup+0x68&gt;)</span><br><span class="line"> 8008238:    1a12          subs    r2, r2, r0</span><br><span class="line"> 800823a:    f01c fcd7     bl    8024bec &lt;memset&gt;</span><br><span class="line"> 800823e:    4b0f          ldr    r3, [pc, #60]    ; (800827c &lt;_mainCRTStartup+0x5c&gt;)</span><br><span class="line"> 8008240:    2b00          cmp    r3, #0</span><br><span class="line"> 8008242:    d000          beq.n    8008246 &lt;_mainCRTStartup+0x26&gt;</span><br><span class="line"> 8008244:    4798          blx    r3</span><br><span class="line"> 8008246:    4b0e          ldr    r3, [pc, #56]    ; (8008280 &lt;_mainCRTStartup+0x60&gt;)</span><br><span class="line"> 8008248:    2b00          cmp    r3, #0</span><br><span class="line"> 800824a:    d000          beq.n    800824e &lt;_mainCRTStartup+0x2e&gt;</span><br><span class="line"> 800824c:    4798          blx    r3</span><br><span class="line"> 800824e:    2000          movs    r0, #0</span><br><span class="line"> 8008250:    2100          movs    r1, #0</span><br><span class="line"> 8008252:    0004          movs    r4, r0</span><br><span class="line"> 8008254:    000d          movs    r5, r1</span><br><span class="line"> 8008256:    480d          ldr    r0, [pc, #52]    ; (800828c &lt;_mainCRTStartup+0x6c&gt;)</span><br><span class="line"> 8008258:    2800          cmp    r0, #0</span><br><span class="line"> 800825a:    d002          beq.n    8008262 &lt;_mainCRTStartup+0x42&gt;</span><br><span class="line"> 800825c:    480c          ldr    r0, [pc, #48]    ; (8008290 &lt;_mainCRTStartup+0x70&gt;)</span><br><span class="line"> 800825e:    f00f f868     bl    8017332 &lt;__wrap_atexit&gt;</span><br><span class="line"> 8008262:    f01c f805     bl    8024270 &lt;__libc_init_array&gt;</span><br><span class="line"> 8008266:    0020          movs    r0, r4</span><br><span class="line"> 8008268:    0029          movs    r1, r5</span><br><span class="line"> 800826a:    f00f f821     bl    80172b0 &lt;__wrap_main&gt;</span><br><span class="line"> 800826e:    f00f f85d     bl    801732c &lt;__wrap_exit&gt;</span><br><span class="line"> 8008272:    bf00          nop</span><br><span class="line"> 8008274:    00080000     .word    0x00080000</span><br><span class="line"> 8008278:    20040000     .word    0x20040000</span><br><span class="line"> 800827c:    00000000     .word    0x00000000</span><br><span class="line"> 8008280:    080172a3     .word    0x080172a3</span><br><span class="line"> 8008284:    20000c00     .word    0x20000c00</span><br><span class="line"> 8008288:    2000ac58     .word    0x2000ac58</span><br><span class="line"> 800828c:    08017333     .word    0x08017333</span><br><span class="line"> 8008290:    00000000     .word    0x00000000</span><br></pre></td></tr></table></figure>
+
+<p>提炼后的 crt0.S 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">    FUNC_START  _mainCRTStartup</span><br><span class="line">    FUNC_START  _start</span><br><span class="line">&#x2F;* Start by setting up a stack *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;*  Set up the stack pointer to a fixed value *&#x2F;</span><br><span class="line">    &#x2F;*  Changes by toralf:</span><br><span class="line">        - Allow linker script to provide stack via __stack symbol - see</span><br><span class="line">          defintion of .Lstack</span><br><span class="line">        - Provide &quot;hooks&quot; that may be used by the application to add</span><br><span class="line">          custom init code - see .Lhwinit and .Lswinit  </span><br><span class="line">        - Go through all execution modes and set up stack for each of them.</span><br><span class="line">          Loosely based on init.s from ARM&#x2F;Motorola example code.</span><br><span class="line">              Note: Mode switch via CPSR is not allowed once in non-privileged</span><br><span class="line">            mode, so we take care not to enter &quot;User&quot; to set up its sp,</span><br><span class="line">            and also skip most operations if already in that mode. *&#x2F;</span><br><span class="line"></span><br><span class="line">    ldr r3, .Lstack</span><br><span class="line">    cmp r3, #0</span><br><span class="line"></span><br><span class="line">    it  eq</span><br><span class="line"></span><br><span class="line">    ldreq   r3, .LC0</span><br><span class="line">    &#x2F;* Note: This &#39;mov&#39; is essential when starting in User, and ensures we</span><br><span class="line">         always get *some* sp value for the initial mode, even if we </span><br><span class="line">         have somehow missed it below (in which case it gets the same</span><br><span class="line">         value as FIQ - not ideal, but better than nothing.) *&#x2F;</span><br><span class="line">    mov sp, r3</span><br><span class="line"></span><br><span class="line">.LC23:</span><br><span class="line">    &#x2F;* Setup a default stack-limit in-case the code has been</span><br><span class="line">       compiled with &quot;-mapcs-stack-check&quot;.  Hard-wiring this value</span><br><span class="line">       is not ideal, since there is currently no support for</span><br><span class="line">       checking that the heap and stack have not collided, or that</span><br><span class="line">       this default 64k is enough for the program being executed.</span><br><span class="line">       However, it ensures that this simple crt0 world will not</span><br><span class="line">       immediately cause an overflow event:  *&#x2F;</span><br><span class="line">    sub sl, r3, #64 &lt;&lt; 10   &#x2F;* Still assumes 256bytes below sl *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Zero the memory in the .bss section.  *&#x2F;</span><br><span class="line">    movs    a2, #0          &#x2F;* Second arg: fill value *&#x2F;</span><br><span class="line">    mov fp, a2          &#x2F;* Null frame pointer *&#x2F;</span><br><span class="line">    mov r7, a2          &#x2F;* Null frame pointer for Thumb *&#x2F;</span><br><span class="line">    </span><br><span class="line">    ldr a1, .LC1        &#x2F;* First arg: start of memory block *&#x2F;</span><br><span class="line">    ldr a3, .LC2    </span><br><span class="line">    subs    a3, a3, a1      &#x2F;* Third arg: length of block *&#x2F;</span><br><span class="line">    </span><br><span class="line">    bl  memset</span><br><span class="line"></span><br><span class="line">&#x2F;* Changes by toralf: Taken from libgloss&#x2F;m68k&#x2F;crt0.S</span><br><span class="line"> * initialize target specific stuff. Only execute these</span><br><span class="line"> * functions it they exist.</span><br><span class="line"> *&#x2F;</span><br><span class="line">    ldr r3, .Lhwinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC24</span><br><span class="line">    indirect_call r3</span><br><span class="line">.LC24:  </span><br><span class="line">    ldr r3, .Lswinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC25</span><br><span class="line">    indirect_call r3</span><br><span class="line"></span><br><span class="line">.LC25:  </span><br><span class="line">    movs    r0, #0      &#x2F;*  no arguments  *&#x2F;</span><br><span class="line">    movs    r1, #0      &#x2F;*  no argv either *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Some arm&#x2F;elf targets use the .init and .fini sections</span><br><span class="line">       to create constructors and destructors, and for these</span><br><span class="line">       targets we need to call the _init function and arrange</span><br><span class="line">       for _fini to be called at program exit.  *&#x2F;</span><br><span class="line">    movs    r4, r0</span><br><span class="line">    movs    r5, r1e</span><br><span class="line"></span><br><span class="line">    &#x2F;* Make reference to atexit weak to avoid unconditionally pulling in</span><br><span class="line">       support code.  Refer to comments in __atexit.c for more details.  *&#x2F;</span><br><span class="line">    ldr r0, .Latexit</span><br><span class="line">    cmp r0, #0</span><br><span class="line">    beq .Lweak_atexit</span><br><span class="line"></span><br><span class="line">    ldr r0, .Lfini</span><br><span class="line">    bl  atexit</span><br><span class="line">.Lweak_atexit:</span><br><span class="line">    bl  _init</span><br><span class="line">    movs    r0, r4</span><br><span class="line">    movs    r1, r5</span><br><span class="line"></span><br><span class="line">    bl  main</span><br><span class="line"></span><br><span class="line">    bl  exit        &#x2F;* Should not return.  *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;* For Thumb, constants must be after the code since only </span><br><span class="line">       positive offsets are supported for PC relative addresses.  *&#x2F;</span><br><span class="line">.LC0:</span><br><span class="line">    .word   0x80000         &#x2F;* Top of RAM on the PIE board.  *&#x2F;</span><br><span class="line">.Lstack:    </span><br><span class="line">    .word   __stack</span><br><span class="line">.Lhwinit:   </span><br><span class="line">    .word   ardware_init_hook</span><br><span class="line">.Lswinit:</span><br><span class="line">    .word   software_init_hook</span><br><span class="line"></span><br><span class="line">    &#x2F;* Set up defaults for the above variables in the form of weak symbols</span><br><span class="line">       - so that application will link correctly, and get value 0 in</span><br><span class="line">       runtime (meaning &quot;ignore setting&quot;) for the variables, when the user</span><br><span class="line">       does not provide the symbols. (The linker uses a weak symbol if,</span><br><span class="line">       and only if, a normal version of the same symbol isn&#39;t provided</span><br><span class="line">       e.g. by a linker script or another object file.) *&#x2F;  </span><br><span class="line"></span><br><span class="line">    .weak __stack</span><br><span class="line">    .weak hardware_init_hook</span><br><span class="line">    .weak software_init_hook</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">  .word __bss_start__</span><br><span class="line">.LC2:</span><br><span class="line">  .word __bss_end__</span><br><span class="line"></span><br><span class="line">  .weak atexit</span><br><span class="line">.Latexit:</span><br><span class="line">  .word atexit</span><br><span class="line"></span><br><span class="line">  &#x2F;* Weak reference _fini in case of lite exit.  *&#x2F;</span><br><span class="line">  .weak _fini</span><br><span class="line">.Lfini:</span><br><span class="line">  .word _fini</span><br></pre></td></tr></table></figure>
+
+<p>crt0 启动流程如下：</p>
+<ol>
+<li>设置 SP 为 __stack，若 __stack 未被用户定义，则使用默认的值（0x80000处的值）。</li>
+<li>清空 .bss 段，起始地址为 <strong>bss_start__，结束地址为 __bss_end</strong> 。</li>
+<li>若用户定义了 hardware_init_hook 和 software_init_hook ，则调用它们。</li>
+<li>若用户定义了 atexit，则调用它，并将传递参数 _fini（_fini 被宏定义为 __libc_fini_array）。</li>
+<li>调用 _init（_ini 被宏定义为 __libc_ini_array）。</li>
+<li>调用 main（argc 和 argv 都等于 0）。</li>
+<li>调用 exit。</li>
+</ol>
+<p>其中 <strong>stack，__bss_start__ 和 __bss_end</strong> 必须被定义。</p>
+<p>hardware_init_hook 和 software_init_hook 可以实现一些需要在 main 之前的功能。</p>
+<p>aiexit，exit，_init 和 _fini 一般是和 C++ 的全局构造和析构有关，这个放在下一节来分析。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/" class="post-title-link" itemprop="url">Mermaid 画图</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Markdown/" itemprop="url" rel="index"><span itemprop="name">Markdown</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a>（美人鱼）通过代码来表示画图。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

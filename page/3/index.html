@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="IoT">
+<meta property="og:type" content="website">
+<meta property="og:title" content="冷香小筑">
+<meta property="og:url" content="http://example.com/page/3/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="IoT">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/page/3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/Wi-Fi/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/Wi-Fi/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">负载均衡</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wi-Fi/" itemprop="url" rel="index"><span itemprop="name">Wi-Fi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>阿里魔笔的项目，华三提出一个要求，现场可能有多个相同SSID的AP，每个AP下面挂多个 Station。希望模组能够连接 Station 较少的那个 AP。</p>
+<p>这个是对3080B的一个需求，对周围多个同名SSID的AP，根据扫描到的AP下面已经连接的Station number来排序，优先连接AP下面Station number少的AP。</p>
+<p>AP的beacon和probe response里面都有这个IE项。要完成这个功能，需要找Realtek提供扫描返回的所有IE信息，或者让Realtek增加返回Staion count的接口。我想我们应该新增一个API，让用户选择是否使用这个station count来选择AP连接。</p>
+<p><img src="/2020/12/08/Wireless/Wi-Fi/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/image-20201111225138431.png">
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/Wi-Fi/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%AD%98%E5%82%A8%E5%A4%9A%E7%BB%84%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%AD%98%E5%82%A8%E5%A4%9A%E7%BB%84%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF/" class="post-title-link" itemprop="url">Wi-Fi 存储多组路由信息</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wi-Fi/" itemprop="url" rel="index"><span itemprop="name">Wi-Fi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>比如点读笔和故事机这类移动式设备，有可能不止在家里使用，若只存储一个路由器连接信息，那么每次换个地方都要重新配网，比较麻烦。</p>
+<p>所以 Wi-Fi 模组应该存储多个路由器的连接信息，上电后自动去连接其中信号强度最好的那一个路由器。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%AD%98%E5%82%A8%E5%A4%9A%E7%BB%84%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%BF%AB%E8%BF%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%BF%AB%E8%BF%9E/" class="post-title-link" itemprop="url">Wi-Fi 快连</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wi-Fi/" itemprop="url" rel="index"><span itemprop="name">Wi-Fi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一般的 WiFi 连接过程：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>时间（秒）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>扫描，获得路由器信息（安全，信道等）</td>
+<td>1</td>
+</tr>
+<tr>
+<td>计算 PSK</td>
+<td>2</td>
+</tr>
+<tr>
+<td>连接</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>若已知路由器的安全和信道信息，那么可以省去扫描步骤。</p>
+<p>若已知 PSK，那么可以省去计算 PSK 步骤。</p>
+<p>这样就可以省去 3 秒，连接路由器只需 1 秒钟，称之为快连。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/Wi-Fi/Wi-Fi%20%E5%BF%AB%E8%BF%9E/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">a,b,g,n,ac,ax 协议</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wi-Fi/" itemprop="url" rel="index"><span itemprop="name">Wi-Fi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/2020/12/08/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/image-20201119224849711.png" alt="image-20201119224849711"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5G    | a --------+--- ac --+</span><br><span class="line">Mixed |           n --------+--- ax</span><br><span class="line">2.4G  | b -- g ---+</span><br></pre></td></tr></table></figure>
+
+<p>参考：<a target="_blank" rel="noopener" href="https://www.semiconductorstore.com/blog/2014/WiFi-standards-802-11a-b-g-n-vs-802-11ac-Which-is-Best/806/">WiFi Standards 802.11a/b/g/n vs. 802.11ac: Which is Best?</a></p>
+<p><strong>802.11</strong></p>
+<p>1997年，电气和电子工程师协会（IEEE）创建了第一个WLAN标准。他们以监督该组织发展的组织名称命名为802.11。不幸的是，<a target="_blank" rel="noopener" href="https://www.semiconductorstore.com/Wi-Fi-80211/C/39/?cmlink=2">802.11</a>仅支持最大2 Mbps的网络带宽，对于大多数应用而言太慢了。</p>
+<p><strong>802.11b</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/MTU%20exchange/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/MTU%20exchange/" class="post-title-link" itemprop="url">MTU exchange</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="MTU-exchange"><a href="#MTU-exchange" class="headerlink" title="MTU exchange"></a>MTU exchange</h2><p>根据<em>Core_5.2 | Vol 3, Part G, 4.3.1</em></p>
+<p>Client 通过此 sub-procedure 来发起 ATT_MTU 协商，最终选择两个设备 ATT_MTU 中较小的那个作为本次连接的 ATT_MTU。 <strong>MTU exchange 一次连接中只能启动一次</strong>。</p>
+<p><img src="/2020/12/08/Wireless/BLE/MTU%20exchange/image-20201130002648285.png"></p>
+<p>Client 向 server 发送<code>ATT_EXCHANGE_MTU_REQ</code>，包含自己的 MTU</p>
+<p><img src="/2020/12/08/Wireless/BLE/MTU%20exchange/image-20201130002813940.png"></p>
+<p>Server 会回复<code>ATT_EXCHANGE_MTU_RSP</code>，包含自己的 MTU</p>
+<p><img src="/2020/12/08/Wireless/BLE/MTU%20exchange/image-20201130002908077.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/MTU%20exchange/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/" class="post-title-link" itemprop="url">最大包长的变化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <table>
+<thead>
+<tr>
+<th>版本</th>
+<th>ATT MTU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4.0 - 4.1</td>
+<td>23</td>
+</tr>
+<tr>
+<td>4.2 - 5.0</td>
+<td>247</td>
+</tr>
+<tr>
+<td>5.1 - 5.2</td>
+<td>248</td>
+</tr>
+</tbody></table>
+<p>为什么不一开始就定义更大的 ATT MTU 呢，因为数据包越长则射频电路发热越严重进而导致频偏，ATT MTU 是根据当时的芯片工艺和成本来制定的。</p>
+<p>以 4.2 为例，其 Linker Layer packet 格式如下：</p>
+<p><img src="/2020/12/08/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/image-20201201231940316.png"></p>
+<p>其中 PDU 格式如下：</p>
+<p><img src="/2020/12/08/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/image-20201201232003913.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Wireshark 抓包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="如何判断漏抓包"><a href="#如何判断漏抓包" class="headerlink" title="如何判断漏抓包"></a>如何判断漏抓包</h2><p>判断是否丢包有几种方式：</p>
+<ul>
+<li>看 channel。一次 connection event 只在一个 channel 上，包的数量是偶数的。</li>
+<li>看 master 和 slave。master 和 slave 轮流发包。</li>
+<li>看 more data。more data 后面一定还跟有数据。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/Connection%20Update/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/Connection%20Update/" class="post-title-link" itemprop="url">Connection Update</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Connection-Update-Procedure"><a href="#Connection-Update-Procedure" class="headerlink" title="Connection Update Procedure"></a>Connection Update Procedure</h2><p>根据<em>Core_4.0 | Vol 6, Part B, 5.1.1 Connection Update procedure</em></p>
+<blockquote>
+<p>The Link Layer parameters for a connection (<em>connInterval</em>, <em>connSlaveLatency</em> and <em>connSupervisionTimeout</em>) may be updated after entering the Connection State. The master can update the connection parameters by sending an LL_CONNECTION_UPDATE_REQ PDU. The slave shall not send this PDU; the slave may request a change to the connection parameters using the L2CAP LE signaling channel.</p>
+</blockquote>
+<h2 id="Connection-Parameters-Request-procedure"><a href="#Connection-Parameters-Request-procedure" class="headerlink" title="Connection Parameters Request procedure"></a>Connection Parameters Request procedure</h2><p>根据<em>Core_5.2 | Vol 6, Part B, 5.1.7 Connection Parameters Request procedure</em></p>
+<blockquote>
+<p>The master or slave may initiate a Connection Parameters Request procedure to request the remote device to have the Link Layer parameters for the connection (connInterval, connSlaveLatency and connSupervisionTimeout) updated any time after entering the Connection State.</p>
+</blockquote>
+<p>Master 和 Slave 都可以发起 Connection Parameters Request procedure。</p>
+<p>发起者发送<code>LL_CONNECTION_PARAM_REQ</code>，包含 Interval_Min 和 Interval_Max。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/Connection%20Update/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/" class="post-title-link" itemprop="url">bluepy - Python 版的 BLE 利器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>无意间发现了一个 python 版的 BLE 利器 - <a target="_blank" rel="noopener" href="https://github.com/IanHarvey/bluepy">bluepy</a>。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>bluepy 是 github 上的一个开源项目，它用 python 封装了 linux 上的 BLE 接口。</p>
+<p>作者主要基于树莓派开发，也可以运行在 x86 Debian Linux 上。</p>
+<p>bluepy 其实是 BlueZ 的 python 封装。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于 Windows 和 macOS 用户，可以用虚拟机安装 Ubuntu（基于 Debian 系统）。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/CLI%20on%20GATT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Wireless/BLE/CLI%20on%20GATT/" class="post-title-link" itemprop="url">CLI on GATT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>利用 GATT 作为通道以实现 Command Line Interface 功能。</p>
+<h2 id="回显延迟"><a href="#回显延迟" class="headerlink" title="回显延迟"></a>回显延迟</h2><p>设备收到一个字符后要回送此字符，称之为回显。回显速度影响和用户体验，太慢会造成卡顿的感觉。</p>
+<p>根据 Core_5.2 | Vol 6, Part B, 4.5.1 Connection events，BLE connection interval 最小为 7.5ms，也即一个字符来回需要 15ms，不会造成延迟感。</p>
+<blockquote>
+<p>The connInterval shall be a multiple of 1.25 ms in the range 7.5 ms to 4.0 s. </p>
+</blockquote>
+<h2 id="Nagle-算法"><a href="#Nagle-算法" class="headerlink" title="Nagle 算法"></a>Nagle 算法</h2><p>由于 connection interval 和包头包尾的开销，payload 越长则速率越高，但让应用层来去考虑这个显然是不友好且不现实的。</p>
+<p>比如要将 buf 中数据以 hex 方式输出：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Wireless/BLE/CLI%20on%20GATT/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

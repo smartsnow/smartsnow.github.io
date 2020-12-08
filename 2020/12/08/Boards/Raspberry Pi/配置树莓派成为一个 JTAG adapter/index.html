@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="配置树莓派成为一个 JTAG adapterhttp:&#x2F;&#x2F;blog.sina.com.cn&#x2F;s&#x2F;blog_7cedb56d0102v141.html OpenOCD 支持通过树莓派的 GPIO 作为一个 JTAG 调试器。 在树莓派上编译 openocd：  下载 openocd 源码 基于提交： 1756f393e45c2a23dd29ff8bc85d188b547624f9 1$ git cl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置树莓派成为一个 JTAG adapter">
+<meta property="og:url" content="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="配置树莓派成为一个 JTAG adapterhttp:&#x2F;&#x2F;blog.sina.com.cn&#x2F;s&#x2F;blog_7cedb56d0102v141.html OpenOCD 支持通过树莓派的 GPIO 作为一个 JTAG 调试器。 在树莓派上编译 openocd：  下载 openocd 源码 基于提交： 1756f393e45c2a23dd29ff8bc85d188b547624f9 1$ git cl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/image-20201208213734757.png">
+<meta property="article:published_time" content="2020-12-08T15:21:31.684Z">
+<meta property="article:modified_time" content="2020-12-08T15:21:31.684Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/image-20201208213734757.png">
+
+<link rel="canonical" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>配置树莓派成为一个 JTAG adapter | 冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          配置树莓派成为一个 JTAG adapter
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="配置树莓派成为一个-JTAG-adapter"><a href="#配置树莓派成为一个-JTAG-adapter" class="headerlink" title="配置树莓派成为一个 JTAG adapter"></a>配置树莓派成为一个 JTAG adapter</h2><p><a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html">http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html</a></p>
+<p>OpenOCD 支持通过树莓派的 GPIO 作为一个 JTAG 调试器。</p>
+<p>在树莓派上编译 openocd：</p>
+<ol>
+<li><p>下载 openocd 源码</p>
+<p>基于提交： 1756f393e45c2a23dd29ff8bc85d188b547624f9</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git:&#x2F;&#x2F;repo.or.cz&#x2F;openocd.git</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<a id="more"></a>
+
+<ol start="2">
+<li><p>按照 README 安装依赖库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install libtool pkg-config autoconf automake texinfo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cd openocd</span><br><span class="line">$ git checkout 1756f393e45c2a23dd29ff8bc85d188b547624f9</span><br><span class="line">$ .&#x2F;bootstrap</span><br><span class="line">$ .&#x2F;configure --enable-bcm2835gpio</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<p>按 BCM 编码，SWCLK 是 11 脚（排针23），SWDIO 是 25 脚（排针22），连接到 STM32F410 的 SWD 脚上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ cd tcl</span><br><span class="line">$ sudo openocd -f interface&#x2F;raspberrypi2-native.cfg -c &quot;transport select swd&quot; -f target&#x2F;stm32f4x.cfg -c init -c &quot;dump_image ram.bin 0x8000000 0x10000&quot;</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-28-14:26)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">adapter speed: 20000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config sysresetreq</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">Info : clock speed 4061 kHz</span><br><span class="line">Info : SWD DPIDR 0x2ba01477</span><br><span class="line">Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints</span><br><span class="line">Info : Listening on port 3333 for gdb connections</span><br><span class="line">dumped 65536 bytes in 0.123247s (519.282 KiB&#x2F;s)</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br></pre></td></tr></table></figure>
+
+<p>速度达到可怕的 519 KiB/s，J-Link 是 103KiB/s，是 J-Link 的 5 倍多！！！</p>
+<p><img src="/2020/12/08/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/image-20201208213734757.png" alt="image-20201208213734757"></p>
+<p><strong>为什么会比 J-Link 要快？</strong></p>
+<p>JTAG 通信速度由 GPIO 和 CPU 速度共同决定，J-Link v9 使用的是 STM32F205，GPIO 速度 60MHz，树莓派3B 的 BCM2837 的 GPIO 速度应该也是这个量级，并且从 log 可以看出，事实上树莓派的 JTAG clock speed 最大是 4MHz，而 J-Link 是 10MHz，这说明了影响 JTAG 速度的主要是 CPU 速度。STM32F205 最大 150 DMIPS，而树莓派是 11040 DMIPS，完全不是一个量级的，这就导致了树莓派虽然 JTAG 频率低，但是超快的协议处理速度还是让其通信速度碾压了 J-Link</p>
+<p><strong>修改 JTAG 引脚</strong></p>
+<p>在 raspberrypi2-native.cfg 内用 bcm2835gpio_swd_nums 来设置 SWD 使用的 GPIO，注意是 BCM 编码</p>
+<p><strong>bit-bang</strong></p>
+<blockquote>
+<p>什么是SPI的bitbang / bit bang / bit-bang / bitbanging</p>
+<p>在了解了基本的SPI之后，在Linux内核源码里面，发现关于SPI来说，有个叫做bitbang的东西，所以有点迷惑，想搞清楚bitbang是啥意思。</p>
+<p>找了点资料，大概看明白了：</p>
+<p>首先，对于多数情况来说，我们所用的SPI，都是有对应的SPI的控制器的，其负责和外部SPI设备进行通信，负责两者通信时候的信号之间的同步，保证信号的timing都符合SPI协议，保证可以正常进行SPI通信。</p>
+<p>但是有些时候，没有此对应的硬件上的SPI控制器，而还想要和SPI设备通信，那么就只能用GPIO端口去模拟对应的SPI接口的对应的pin：片选CS，数据输入Data In，数据输出Data Out，始终Clock，去模拟SPI协议，和对应spi设备进行通信。所以，此时你对每个端口的操作，作为编程者，你自己要去负责信号的同步，保证timing符合协议规定，才能正常进行SPI通信。</p>
+<p>这样的SPI的bit-bang，优点是不需要SPI的控制器了，但是缺点很明显，除了要用户自己负责同步，timing等事情之外，相对来说，即使本身SPI设备支持以很高的频率运行，可以实现很好的性能，但是以bit-bang的方式去使用的话，实际性能往往很差。</p>
+<p>最后，可以用一句话来解释，什么是SPI的bitbang/bit-bang：</p>
+<p>Use software to control serial communication at general-purpose I/O pins</p>
+<p>通过GPIO引脚，用软件来模拟串行通信（SPI/I2C 。。。）。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="树莓派作-JTAG-的-OpenOCD-权限问题"><a href="#树莓派作-JTAG-的-OpenOCD-权限问题" class="headerlink" title="树莓派作 JTAG 的 OpenOCD 权限问题"></a>树莓派作 JTAG 的 OpenOCD 权限问题</h2><p>pi 用户提示<code>open: Permission denied</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ openocd -s rtl8710_openocd&#x2F; -f rtl8710_openocd&#x2F;interface&#x2F;raspberrypi2-native.cfg -f rtl8710_openocd&#x2F;rtl8710&#x2F;rtl8710.cfg</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-30-05:45)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">Warn : Transport &quot;swd&quot; was already selected</span><br><span class="line">adapter speed: 10000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config vectreset</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>打开 -d 查看 debug log：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Info : 261 78 bcm2835gpio.c:438 bcm2835gpio_init(): JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br><span class="line">Debug: 262 79 command.c:642 run_command(): Command failed with error code -100</span><br></pre></td></tr></table></figure>
+
+<p>到源代码内查看，原来是写 /dev/mem 的权限问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if (bcm2835gpio_jtag_mode_possible()) &#123;</span><br><span class="line">	if (bcm2835gpio_swd_mode_possible())</span><br><span class="line">		LOG_INFO(&quot;JTAG and SWD modes enabled&quot;);</span><br><span class="line">	else</span><br><span class="line">		LOG_INFO(&quot;JTAG only mode enabled (specify swclk and swdio gpio to add SWD mode)&quot;);</span><br><span class="line">&#125; else if (bcm2835gpio_swd_mode_possible()) &#123;</span><br><span class="line">	LOG_INFO(&quot;SWD only mode enabled (specify tck, tms, tdi and tdo gpios to add JTAG mode)&quot;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">	LOG_ERROR(&quot;Require tck, tms, tdi and tdo gpios for JTAG mode and&#x2F;or swclk and swdio gpio for SWD mode&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dev_mem_fd &#x3D; open(&quot;&#x2F;dev&#x2F;mem&quot;, O_RDWR | O_SYNC);</span><br><span class="line">if (dev_mem_fd &lt; 0) &#123;</span><br><span class="line">	perror(&quot;open&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>/dev/mem 是 CPU 的内存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -l &#x2F;dev&#x2F;mem</span><br><span class="line">crw-r----- 1 root kmem 1, 1 Apr  3 03:39 &#x2F;dev&#x2F;mem</span><br></pre></td></tr></table></figure>
+
+<p>把 /dev/mem 换成 /dev/gpiomem，更安全，并且不需要 root 权限</p>
+<h2 id="树莓派上多个-openocd（不同-io）并行运行时的问题"><a href="#树莓派上多个-openocd（不同-io）并行运行时的问题" class="headerlink" title="树莓派上多个 openocd（不同 io）并行运行时的问题"></a>树莓派上多个 openocd（不同 io）并行运行时的问题</h2><p>比如，使用 2,3 脚作为一组 SWD，使用 4,5 脚作为另一组 SWD，那么两组 SWD 同时跑起来时就会互相影响，导致同时只有一组能用，但是，2,3 脚的 SWD 和 10,11 脚的 SWD 就不会冲突。</p>
+<p>原因是：SWDIO 是双向通信口，所以 openocd 要在通信时频繁地切换其方向（输入/输出），配置方向的寄存器是 10 个 io 共用一个寄存器（参考 BCM2835-ARM-Peripherals.pdf），总共有 0 -9 或者 10- 19 或者 20-27 三个寄存器。openocd 内配置某个 io 方向是对寄存器内位或/与来实现的，也就是（读出 - 与/或 - 写回），所以在不同进程内会有临界区风险发生。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define INP_GPIO(g) do &#123; *(pio_base+((g)&#x2F;10)) &amp;&#x3D; ~(7&lt;&lt;(((g)%10)*3)); &#125; while (0)</span><br></pre></td></tr></table></figure>
+
+<p>即使是不属于同一个 io 方向配置寄存器，如 2,3 和 11,12，在频繁的启动 - 退出 openocd 时也会互相影响，原因是 bcm2835gpio.c 内有个 bug：bcm2835gpio.c 内使用 -1 来表示无效/不用的 io，但是它只对 trst 和 srst 作有效性判断，若使用 SWD 模式，那么 tdo, tdi 和 tck 也是不用的，此时代码内仍会去操作这些 io，就可能会写到其他 io，因为 -1%10 是 -1, -1 &lt;&lt; m 是不确定的。</p>
+<h2 id="ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题"><a href="#ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题" class="headerlink" title="ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题"></a>ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题</h2><p>树莓派默认是 ondemand 模式，此模式下 CPU 会动态调整频率。由于 openocd 内是 bitbang 模拟协议，靠 while 循环来延时，所以 SWCLK 频率随之变化，导致了 SWD 连接不稳定。</p>
+<p>修改为 powersave 模式，锁定 CPU 使用最低的 600MHz 频率就好了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Boards/Raspberry%20Pi/OS%20X%20%E5%92%8C%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9/" rel="prev" title="OS X 和树莓派共享文件夹">
+      <i class="fa fa-chevron-left"></i> OS X 和树莓派共享文件夹
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Boards/Raspberry%20Pi/Raspbian%20%E9%95%9C%E5%83%8F%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/" rel="next" title="Raspbian 镜像使用帮助">
+      Raspbian 镜像使用帮助 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA-JTAG-adapter"><span class="nav-number">1.</span> <span class="nav-text">配置树莓派成为一个 JTAG adapter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E4%BD%9C-JTAG-%E7%9A%84-OpenOCD-%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">树莓派作 JTAG 的 OpenOCD 权限问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E5%A4%9A%E4%B8%AA-openocd%EF%BC%88%E4%B8%8D%E5%90%8C-io%EF%BC%89%E5%B9%B6%E8%A1%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">树莓派上多个 openocd（不同 io）并行运行时的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ondemand-%E6%A8%A1%E5%BC%8F%E4%B8%8B-CPU-%E9%A2%91%E7%8E%87%E5%8F%98%E5%8C%96%E5%AF%BC%E8%87%B4%E7%9A%84-SWCLK-%E5%8F%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

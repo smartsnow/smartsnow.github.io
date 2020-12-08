@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="access_send 用以发送 mesh access 层消息，返回值为发送结果。 强制分片access_send 参数为mesh_msg_t结构体变量，若将其中seg设为 1，则强制分片发送。 1234567typedef struct _mesh_msg_t&amp;#123;	...    uint8_t seg: 1; &#x2F;&#x2F;!&lt; Transport Segment Flag    ...&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="access_send">
+<meta property="og:url" content="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="access_send 用以发送 mesh access 层消息，返回值为发送结果。 强制分片access_send 参数为mesh_msg_t结构体变量，若将其中seg设为 1，则强制分片发送。 1234567typedef struct _mesh_msg_t&amp;#123;	...    uint8_t seg: 1; &#x2F;&#x2F;!&lt; Transport Segment Flag    ...&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/image-20201120141825120.png">
+<meta property="og:image" content="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/image-20201124103729555.png">
+<meta property="article:published_time" content="2020-12-08T15:21:30.970Z">
+<meta property="article:modified_time" content="2020-12-08T15:21:30.971Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/image-20201120141825120.png">
+
+<link rel="canonical" href="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>access_send | 冷香小筑</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/SoC/Realtek/RTL8762C/access_send/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          access_send
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:30" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:30+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RTL8762C/" itemprop="url" rel="index"><span itemprop="name">RTL8762C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>access_send 用以发送 mesh access 层消息，返回值为发送结果。</p>
+<h2 id="强制分片"><a href="#强制分片" class="headerlink" title="强制分片"></a>强制分片</h2><p>access_send 参数为<code>mesh_msg_t</code>结构体变量，若将其中<code>seg</code>设为 1，则强制分片发送。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">mesh_msg_t</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	...</span><br><span class="line">    <span class="keyword">uint8_t</span> seg: <span class="number">1</span>; <span class="comment">//!&lt; Transport Segment Flag</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">mesh_msg_t</span>;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p> 设置为强制分片后，即使短包也会用分片机制来发送，下面是抓包：</p>
+<ul>
+<li>只有一个 fragment 0</li>
+<li>SEG 标志置 1</li>
+<li>SegO = SegN = 0</li>
+</ul>
+<p><img src="/2020/12/08/SoC/Realtek/RTL8762C/access_send/image-20201120141825120.png"></p>
+<h2 id="异步发送"><a href="#异步发送" class="headerlink" title="异步发送"></a>异步发送</h2><p>access_send 是异步的，它将消息 push 进发送队列。若队列已满，则返回<code>MESH_MSG_SEND_CAUSE_TRANS_TX_BUSY</code>错误。</p>
+<h2 id="协程处理"><a href="#协程处理" class="headerlink" title="协程处理"></a>协程处理</h2><p>在 mesh thread 中调用 access_send 后不能阻塞此线程，因为后面会从队列中取消息发送出去。</p>
+<p><img src="/2020/12/08/SoC/Realtek/RTL8762C/access_send/image-20201124103729555.png"></p>
+<p>access_send 不能跨线程调用，否则会影响系统，体现在日志中是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00249  11-19#17:25:07.679  131  [APP] !**MM_GAP_SCHED gap_sched_task_get: fail, task is run out!</span><br></pre></td></tr></table></figure>
+
+<h2 id="发送结果回调"><a href="#发送结果回调" class="headerlink" title="发送结果回调"></a>发送结果回调</h2><p>使用<code>mesh_model_reg</code>注册一个 model</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">mesh_model_reg</span><span class="params">(<span class="keyword">uint8_t</span> element_index, mesh_model_info_p pmodel_info)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>其参数<code>pmodel_info</code>中包含<code>model_send_cb</code>回调函数指针，指示了消息发送结果</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">mesh_model_info_t</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="comment">/** provided by application */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> model_id; <span class="comment">//!&lt; being equal or greater than 0xffff0000 means that the model is a sig model.</span></span><br><span class="line">    <span class="comment">/** callback to receive related access msg</span></span><br><span class="line"><span class="comment">        If the model don&#x27;t recognise the access opcode, it should return false! */</span></span><br><span class="line">    model_receive_pf model_receive;</span><br><span class="line">    model_send_cb_pf model_send_cb; <span class="comment">//!&lt; indicates the msg transmitted state</span></span><br><span class="line">    model_pub_cb_pf model_pub_cb; <span class="comment">//!&lt; indicates it is time to publishing</span></span><br><span class="line">    model_data_cb_pf model_data_cb;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">mesh_model_info_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此回调函数会传递给上层三个参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*model_send_cb_pf)</span><span class="params">(mesh_model_info_p pmodel_info, <span class="keyword">mesh_msg_send_stat_t</span> stat, <span class="keyword">uint32_t</span> access_opcode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>stat</code>代表发送的结果</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** @brief asynchronized callback value after sending a mesh message */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> _<span class="title">mesh_msg_send_stat_t</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    MESH_MSG_SEND_STAT_FAIL,</span><br><span class="line">    MESH_MSG_SEND_STAT_SENT, <span class="comment">//!&lt; unseg access msg</span></span><br><span class="line">    MESH_MSG_SEND_STAT_ACKED, <span class="comment">//!&lt; seg access msg</span></span><br><span class="line">    MESH_MSG_SEND_STAT_ACKED_CANCEL,</span><br><span class="line">    MESH_MSG_SEND_STAT_ACKED_OBO, <span class="comment">//!&lt; seg access msg acked by fn</span></span><br><span class="line">    MESH_MSG_SEND_STAT_ACKED_OBO_CANCEL,</span><br><span class="line">    MESH_MSG_SEND_STAT_TIMEOUT, <span class="comment">//!&lt; seg access msg</span></span><br><span class="line">    MESH_MSG_SEND_STAT_CANCEL <span class="comment">//!&lt; seg msg canceled by myself due to some reasons like seq run out etc.</span></span><br><span class="line">&#125; <span class="keyword">mesh_msg_send_stat_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>所以我们可以通过注册 model 时的<code>model_send_cb</code>回调来同步发送结果。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Complie%20&%20Debug/GCC/GCC%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" rel="prev" title="GCC 实用技巧">
+      <i class="fa fa-chevron-left"></i> GCC 实用技巧
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/08/Network/MQTT/MQT%20%E5%AD%A6%E4%B9%A0/" rel="next" title="MQT 学习">
+      MQT 学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E5%88%86%E7%89%87"><span class="nav-number">1.</span> <span class="nav-text">强制分片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81"><span class="nav-number">2.</span> <span class="nav-text">异步发送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">协程处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E7%BB%93%E6%9E%9C%E5%9B%9E%E8%B0%83"><span class="nav-number">4.</span> <span class="nav-text">发送结果回调</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">IoT</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="IoT">
@@ -102,6 +102,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -126,11 +127,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -153,7 +181,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/06/hexo-%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -167,7 +195,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/06/hexo-%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">hexo 食用指南</a>
+            <a href="/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Git 实用技巧</a>
         </h2>
 
         <div class="post-meta">
@@ -176,9 +204,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-06 22:22:17 / 修改时间：22:48:00" itemprop="dateCreated datePublished" datetime="2020-12-06T22:22:17+08:00">2020-12-06</time>
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -186,7 +213,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
                 </span>
             </span>
 
@@ -201,99 +228,742 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <a id="more"></a>
+          <h2 id="git-clean-删除未追踪的文件和目录"><a href="#git-clean-删除未追踪的文件和目录" class="headerlink" title="git clean - 删除未追踪的文件和目录"></a>git clean - 删除未追踪的文件和目录</h2><p>删除一些没有git add的文件；</p>
+<p>git clean 参数：<br>-n 显示将要删除的文件和目录<br>-f 删除文件，-df删除文件和目录</p>
+<h2 id="git-archive-打包"><a href="#git-archive-打包" class="headerlink" title="git archive - 打包"></a>git archive - 打包</h2><p>如果使用压缩工具（tar、7zip、winzip、rar等）将工作区文件归档，一不小心会把版本库（.git目录）包含其中，甚至将工作区中的忽略文件、临时文件也包含其中。  </p>
+<p>Git提供了一个归档命令：<code>gitarchive</code>，可以对任意提交对应的目录树建立归档。  </p>
+<p>如，基于最新提交建立归档文件 latest.zip。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<h2 id="插入图片等资源"><a href="#插入图片等资源" class="headerlink" title="插入图片等资源"></a>插入图片等资源</h2><p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的Hexo项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
-<h3 id="文章资源文件夹"><a href="#文章资源文件夹" class="headerlink" title="文章资源文件夹"></a>文章资源文件夹</h3><p>对于那些想要更有规律地提供图片和其他资源以及想要将他们的资源分布在各个文章上的人来说，Hexo也提供了更组织化的方式来管理资源。这个稍微有些复杂但是管理资源非常方便的功能可以通过将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_config.yml</span><br><span class="line"></span><br><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。将所有与你的文章有关的资源放在这个关联文件夹中之后，你可以通过相对路径来引用它们，这样你就得到了一个更简单而且方便得多的工作流。</p>
-<h3 id="相对路径引用的标签插件"><a href="#相对路径引用的标签插件" class="headerlink" title="相对路径引用的标签插件"></a>相对路径引用的标签插件</h3><p>通过常规的 markdown 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。在Hexo 2时代，社区创建了很多插件来解决这个问题。但是，随着Hexo 3 的发布，许多新的<a target="_blank" rel="noopener" href="https://hexo.io/docs/tag-plugins#Include-Assets">标签插件</a>被加入到了核心代码中。这使得你可以更简单地在文章中引用你的资源。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_path slug %&#125;</span><br><span class="line">&#123;% asset_img slug [title] %&#125;</span><br><span class="line">&#123;% asset_link slug [title] %&#125;</span><br></pre></td></tr></table></figure>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Zephyr/Zephyr%20Primer/">
 
-<p>比如说：当你打开文章资源文件夹功能后，你把一个 <code>example.jpg</code> 图片放在了你的资源文件夹中，如果通过使用相对路径的常规 markdown 语法 <code>![](example.jpg)</code> ，它将 <em>不会</em> 出现在首页上。（但是它会在文章中按你期待的方式工作）</p>
-<p>在 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-renderer-marked">hexo-renderer-marked</a> 3.1.0 之前，正确的引用图片方式是使用下列的标签插件而不是 markdown ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img example.jpg This is an example image %&#125;</span><br></pre></td></tr></table></figure>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
 
-<p>通过这种方式，图片将会同时出现在文章和主页以及归档页中。</p>
-<p>从 hexo-renderer-marked 3.1.0 后就不需要 <code>asset_img</code> 标签了，只需要在 <code>config.yml</code> 文件中使能 <code>marked</code> 的 <code>prependRoot</code> 和 <code>postAsset</code> 选项即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_config.ymlpost_asset_folder: true</span><br><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/Zephyr/Zephyr%20Primer/" class="post-title-link" itemprop="url">Zephyr Primer</a>
+        </h2>
 
-<p>使能此选项后, 一个资源文件会被自动的转换为为对应的路径。比如<br><code>![](image.jpg)</code> 会被自动的转换为 <code>&lt;img src=&quot;/2020/01/02/foo/image.jpg&quot;&gt;</code>.</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/asset-folders.html">https://hexo.io/zh-cn/docs/asset-folders.html</a></p>
-<h3 id="使能了-post-asset-folder-但是无法显示图片？"><a href="#使能了-post-asset-folder-但是无法显示图片？" class="headerlink" title="使能了 post_asset_folder 但是无法显示图片？"></a>使能了 post_asset_folder 但是无法显示图片？</h3><p>不能安装 “hexo-asset-image”: “^1.0.0” 和 “hexo-asset-link”: “^2.0.1”。</p>
-<h2 id="部署到-git-pages-上"><a href="#部署到-git-pages-上" class="headerlink" title="部署到 git pages 上"></a>部署到 git pages 上</h2><p>Hexo 提供了快速方便的一键部署功能，让您只需一条命令就能将网站部署到服务器上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<p>在开始之前，您必须先在 <code>_config.yml</code> 中修改参数，一个正确的部署配置中至少要有 <code>type</code> 参数，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br></pre></td></tr></table></figure>
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Zephyr/" itemprop="url" rel="index"><span itemprop="name">Zephyr</span></a>
+                </span>
+            </span>
 
-<p>您可同时使用多个 deployer，Hexo 会依照顺序执行每个 deployer。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">- type: git</span><br><span class="line">  repo:</span><br><span class="line">- type: heroku</span><br><span class="line">  repo:</span><br></pre></td></tr></table></figure>
+          
 
-<p>Refer to the <a target="_blank" rel="noopener" href="https://hexo.io/plugins/">Plugins</a> list for more deployment plugins.</p>
-<blockquote>
-<p>缩进</p>
-<p>YAML依靠缩进来确定元素间的从属关系。因此，请确保每个deployer的缩进长度相同，并且使用空格缩进。</p>
-</blockquote>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><ol>
-<li>安装 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-deployer-git">hexo-deployer-git</a>。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+        </div>
+      </header>
 
-<ol>
-<li>修改配置。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;repository url&gt; #https:&#x2F;&#x2F;bitbucket.org&#x2F;JohnSmith&#x2F;johnsmith.bitbucket.io</span><br><span class="line">  branch: [branch]</span><br><span class="line">  message: [message]</span><br></pre></td></tr></table></figure>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Zephyr 最初是<code>Wind River</code>公司在 2015 年推出的为 IoT 开发的<code>Rocket内核</code>，更早时称为<code>Microkernel Profile for VxWorks</code>。代码移植于2001年并购<code>Eonic Systems</code>得来的<code>Virtuoso DSP RTOS</code>。在2016年，它成为Linux基金会的项目而改称 zephyr。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Zephyr">Zephyr Wiki</a></p>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p><strong>官网</strong>：<a target="_blank" rel="noopener" href="https://zephyrproject.org/">https://zephyrproject.org</a></p>
+<p><strong>文档</strong>：<a target="_blank" rel="noopener" href="https://docs.zephyrproject.org/latest">https://docs.zephyrproject.org/latest</a></p>
+<p><strong>源代码</strong>：<a target="_blank" rel="noopener" href="https://github.com/zephyrproject-rtos/zephyr">https://github.com/zephyrproject-rtos/zephyr</a></p>
+<p><strong>Wiki</strong>：<a target="_blank" rel="noopener" href="https://github.com/zephyrproject-rtos/zephyr/wiki">https://github.com/zephyrproject-rtos/zephyr/wiki</a></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/OS/Zephyr/Zephyr%20Primer/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Zephyr/Zephyr%20UART/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/Zephyr/Zephyr%20UART/" class="post-title-link" itemprop="url">Zephyr UART</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Zephyr/" itemprop="url" rel="index"><span itemprop="name">Zephyr</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Demo</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;zephyr.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;drivers/uart.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cli_uart_isr</span><span class="params">(<span class="keyword">const</span> struct device *uart, <span class="keyword">void</span> *user_data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">int</span> rx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* get all of the data off UART as fast as we can */</span></span><br><span class="line">	<span class="keyword">while</span> (uart_irq_update(uart) &amp;&amp; uart_irq_rx_ready(uart)) &#123;</span><br><span class="line">		rx = uart_fifo_read(uart, &amp;c, <span class="keyword">sizeof</span>(c));</span><br><span class="line">		<span class="keyword">if</span> (rx &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		uart_poll_out(dev, c);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">uart_fifo_flush</span><span class="params">(<span class="keyword">const</span> struct device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">while</span> (uart_fifo_read(dev, &amp;c, <span class="number">1</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">continue</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">device</span> *<span class="title">uart_dev</span> =</span> device_get_binding(CONFIG_UART_CONSOLE_ON_DEV_NAME);    </span><br><span class="line">  </span><br><span class="line">  uart_irq_rx_disable(uart_dev);</span><br><span class="line">	uart_irq_tx_disable(uart_dev);</span><br><span class="line">	uart_fifo_flush(uart_dev);</span><br><span class="line">	uart_irq_callback_set(uart_dev, cli_uart_isr);</span><br><span class="line">	uart_irq_rx_enable(uart_dev);</span><br><span class="line">  </span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		k_sleep(K_SECONDS(<span class="number">1</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/" class="post-title-link" itemprop="url">AliOS-Things KV</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AliOS-Things/" itemprop="url" rel="index"><span itemprop="name">AliOS-Things</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>block 的头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Flash block header description *&#x2F;</span><br><span class="line">typedef struct _block_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of block *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of the block *&#x2F;</span><br><span class="line">    uint8_t     reserved[2];</span><br><span class="line">&#125; __attribute__((packed)) block_hdr_t;</span><br></pre></td></tr></table></figure>
 
 <table>
 <thead>
 <tr>
-<th align="left">参数</th>
-<th align="left">描述</th>
-<th align="left">默认</th>
+<th align="left">magic</th>
+<th align="left">state</th>
+<th align="left">reserved</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><code>repo</code></td>
-<td align="left">库（Repository）地址</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><code>branch</code></td>
-<td align="left">分支名称</td>
-<td align="left"><code>gh-pages</code> (GitHub) <code>coding-pages</code> (Coding.net) <code>master</code> (others)</td>
-</tr>
-<tr>
-<td align="left"><code>message</code></td>
-<td align="left">自定义提交信息</td>
-<td align="left"><code>Site updated: &#123;&#123; now('YYYY-MM-DD HH:mm:ss') &#125;&#125;</code>)</td>
-</tr>
-<tr>
-<td align="left"><code>token</code></td>
-<td align="left">Optional token value to authenticate with the repo. Prefix with <code>$</code> to read token from environment variable</td>
-<td align="left"></td>
+<td align="left">ASCII ‘K’</td>
+<td align="left">1B</td>
+<td align="left">2B</td>
 </tr>
 </tbody></table>
-<ol>
-<li>生成站点文件并推送至远程库。执行</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<ul>
-<li>You will be prompted with username and password of the target repository, unless you authenticate with a token or ssh key.</li>
-<li>hexo-deployer-git does not store your username and password. Use <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-cache">git-credential-cache</a> to store them temporarily.</li>
-</ul>
-<ol start="2">
-<li>登入 Github/BitBucket/Gitlab，请在库设置（Repository Settings）中将默认分支设置为<code>_config.yml</code>配置中的分支名称。稍等片刻，您的站点就会显示在您的Github Pages中。</li>
-</ol>
-<h3 id="这一切是如何发生的？"><a href="#这一切是如何发生的？" class="headerlink" title="这一切是如何发生的？"></a>这一切是如何发生的？</h3><p>当执行 <code>hexo deploy</code> 时，Hexo 会将 <code>public</code> 目录中的文件和目录推送至 <code>_config.yml</code> 中指定的远端仓库和分支中，并且<strong>完全覆盖</strong>该分支下的已有内容。</p>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/" class="post-title-link" itemprop="url">磁盘占用查看工具 - treesize</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有时候 C 盘红了，不知道哪些大文件吃了硬盘，可以用 treesize 来分析。</p>
+<p><img src="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/image-20201203110215721.png" alt="image-20201203110215721">
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Linux/sudo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/Linux/sudo/" class="post-title-link" itemprop="url">sudo</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>sudo</code>就是<code>su do</code>的意思。</p>
+<p><code>su</code>是<code>super user</code>的缩写。</p>
+<p>在 user 账号下 pip install 的库，sudo 是找不到的，必须 sudo pip install，因为 sudo 会切到 root 账号。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/OS/Linux/sudo/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/FreeRTOS/FreeRTOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/OS/FreeRTOS/FreeRTOS/" class="post-title-link" itemprop="url">FreeRTOS</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FreeRTOS/" itemprop="url" rel="index"><span itemprop="name">FreeRTOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><ul>
+<li><p>老版本的 FreeRTOS 如何下载？<br><a target="_blank" rel="noopener" href="https://sourceforge.net/p/freertos/code/HEAD/tree/%EF%BC%8C%E7%82%B9%E5%87%BB">https://sourceforge.net/p/freertos/code/HEAD/tree/，点击</a> tags 进入，选择版本然后点击<code>Download Snapshot</code>按钮即可启动下载。</p>
+</li>
+<li><p>FreeRTOS 配置选项<br>FreeRTOSConfig.h 的说明：<a target="_blank" rel="noopener" href="https://www.freertos.org/a00110.html">https://www.freertos.org/a00110.html</a></p>
+</li>
+<li><p>如何移植<br><a target="_blank" rel="noopener" href="https://www.freertos.org/FreeRTOS-porting-guide.html">https://www.freertos.org/FreeRTOS-porting-guide.html</a></p>
+</li>
+<li><p>中断优先级设置？</p>
+<p>在移植 5062 时遇到了 StartScheduler 函数内执行 SVC 0 指令后触发 Hardfault 的错误，调试发现是 SVC 中断被屏蔽所导致的。FreeRTOS 在 StartScheduler 前会 portDISABLE_INTERRUPTS，Cortex-M 是通过写 BASEPRI 来屏蔽中断的，5062 的BASRPRI 的值被写为 0x20，而 SVC 的优先级恰好也被设置成了 0x20，所以 SVC 中断被屏蔽了。在 SVC 中断被屏蔽时去触发它会产生一个用法错误 - Hardfaut。</p>
 <blockquote>
-<p>For 使用 Git 管理站点目录的用户</p>
-<p>由于 Hexo 的部署默认使用分支 <code>master</code>，所以如果你同时正在使用 Git 管理你的站点目录，你应当注意你的部署分支应当不同于写作分支。<br>一个好的实践是将站点目录和 Pages 分别存放在两个不同的 Git 仓库中，可以有效避免相互覆盖。<br>Hexo 在部署你的站点生成的文件时并不会更新你的站点目录。因此你应该手动提交并推送你的写作分支。</p>
+<p>configMAX_SYSCALL_INTERRUPT_PRIORITY needs to be a raw priority value as it is written to the NVIC priority registers in the Cortex-M3 device, as documented in the ARM manuals. The priorities of 0..15 are not real Cortex-M3 priorities, and are simplified priorities for use in some library calls (because the real priorities are so complex on Cortex-M devices).</p>
 </blockquote>
-<p>此外，如果您的 Github Pages 需要使用 CNAME 文件<strong>自定义域名</strong>，请将 CNAME 文件置于 <code>source</code> 目录下，只有这样 <code>hexo deploy</code> 才能将 CNAME 文件一并推送至部署分支。</p>
-<p><img src="/2020/12/06/hexo-%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/tharu.jpg"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/OS/FreeRTOS/FreeRTOS/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Qt 学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Qt/" itemprop="url" rel="index"><span itemprop="name">Qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><h3 id="Qt"><a href="#Qt" class="headerlink" title="Qt"></a>Qt</h3><p> <a target="_blank" rel="noopener" href="http://doc.qt.io/">http://doc.qt.io</a></p>
+<h3 id="PyQt"><a href="#PyQt" class="headerlink" title="PyQt"></a>PyQt</h3><p> <a target="_blank" rel="noopener" href="http://pyqt.sourceforge.net/Docs/PyQt5">http://pyqt.sourceforge.net/Docs/PyQt5</a></p>
+<h2 id="MainThread-QTimer-QThread-Signal-和-Slot"><a href="#MainThread-QTimer-QThread-Signal-和-Slot" class="headerlink" title="MainThread , QTimer, QThread, Signal 和 Slot"></a>MainThread , QTimer, QThread, Signal 和 Slot</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal</span><br><span class="line">from PyQt5.QtWidgets import QApplication, QWidget</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">from PyQt5.uic import loadUi</span><br><span class="line">from threading import current_thread, get_ident</span><br><span class="line"></span><br><span class="line">class MainForm(QWidget):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(MainForm, self).__init__()</span><br><span class="line">        loadUi(&#39;form.ui&#39;, self)</span><br><span class="line">        self.pushButton.clicked.connect(self.onButtonClicked)</span><br><span class="line">        self.timer &#x3D; QTimer(self)</span><br><span class="line">        self.timer.setInterval(1000)</span><br><span class="line">        self.timer.timeout.connect(self.onTimerExpire)</span><br><span class="line">        self.timer.start()</span><br><span class="line"></span><br><span class="line">    def onButtonClicked(self):</span><br><span class="line">        print(&#39;onButtonClicked:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">    def onTimerExpire(self):</span><br><span class="line">        self.timer.stop()</span><br><span class="line">        print(&#39;QTimer:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">class Worker(QThread):</span><br><span class="line"></span><br><span class="line">    labelSignal &#x3D; pyqtSignal(str)</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        print(&#39;QThread:&#39;,current_thread().getName(), get_ident())</span><br><span class="line">        self.labelSignal.connect(self.onSignalEmit)</span><br><span class="line">        self.labelSignal.emit(&#39;Hello signal&#39;)</span><br><span class="line"></span><br><span class="line">    def onSignalEmit(self):</span><br><span class="line">        print(&#39;Signal:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">app &#x3D; QApplication(sys.argv)</span><br><span class="line">mainForm &#x3D; MainForm()</span><br><span class="line">mainForm.show()</span><br><span class="line">print(&#39;Main:&#39;,current_thread().getName(), get_ident())</span><br><span class="line">worker &#x3D; Worker()</span><br><span class="line">worker.start()</span><br><span class="line">sys.exit(app.exec())</span><br></pre></td></tr></table></figure>
+
+<p>程序运行结果是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 form.py</span><br><span class="line">Main: MainThread 140735591891840</span><br><span class="line">QThread: Dummy-1 123145307324416</span><br><span class="line">Signal: MainThread 140735591891840</span><br><span class="line">QTimer: MainThread 140735591891840</span><br><span class="line">onButtonClicked: MainThread 140735591891840</span><br></pre></td></tr></table></figure>
+
+<h3 id="MainThread"><a href="#MainThread" class="headerlink" title="MainThread"></a>MainThread</h3><blockquote>
+<p>In normal conditions, the main thread is the thread from which the Python interpreter was started.</p>
+</blockquote>
+<p>MainThread 就是 Python 开始解释运行的一个线程，就 Qt 而言又叫 UI 线程，负责 UI 更新和事件响应。</p>
+<p>代码中的 app.exec() 本质上是个大循环，Qt 在里面更新 UI 和处理事件。</p>
+<h3 id="QTimer"><a href="#QTimer" class="headerlink" title="QTimer"></a>QTimer</h3><p>QTimer 本质上是运行在 MainThread 内的软件定时器，可以直接更新 UI，不能做耗时长的操作。</p>
+<h3 id="QThread"><a href="#QThread" class="headerlink" title="QThread"></a>QThread</h3><p>QThread 本质上是个 thread，但是可以定义 pyqtSignal 成员变量。</p>
+<h3 id="Signal-和-Slot"><a href="#Signal-和-Slot" class="headerlink" title="Signal 和 Slot"></a>Signal 和 Slot</h3><p>Signal 是 pyqtSignal 类的实例，其 emit 方法会向 MainThread 推送一个函数来执行，这个函数就是 slot，通过 signal 的 connect 方法来绑定。</p>
+<p>不准确的来讲，可以把 MainThread 看作 worker thread，signal 就是向 worker thread 内 push 函数来执行。</p>
+<p>所以 slot 函数是运行在 MainThread 内的，可以直接操作 UI。</p>
+<h2 id="错误以及处理"><a href="#错误以及处理" class="headerlink" title="错误以及处理"></a>错误以及处理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING **: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=196070">https://www.raspberrypi.org/forums/viewtopic.php?t=196070</a></p>
+<p><code>sudo apt-get install at-spi2-core</code></p>
+<h2 id="QSS"><a href="#QSS" class="headerlink" title="QSS"></a>QSS</h2><p>控件的 QSS 必须包含所有预期的样式，否则就会用默认的，比如想设置 QPushButton 圆角，若只在 QSS 内配置了 border-radius 是无效的，因为 border 的宽度和颜色默认都是无。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">树莓派外设开发</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="WiringPi"><a href="#WiringPi" class="headerlink" title="WiringPi"></a>WiringPi</h2><p><a target="_blank" rel="noopener" href="https://github.com/WiringPi">https://github.com/WiringPi</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11">https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.waveshare.net/study/article-742-1.html">http://www.waveshare.net/study/article-742-1.html</a></p>
+<p>RPi.GPIO目前还不支持I2C、SPI等接口，且缺乏高精度定时功能。wiringpi除了提供C语言接口之外，目前已经支持Python等语言的扩展。对于GPIO的操作非常强大</p>
+<p>安装 WiringPi Library：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install wiringpi</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/SSH%20%E7%99%BB%E9%99%86%E6%A0%91%E8%8E%93%E6%B4%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="IoT">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/Boards/Raspberry%20Pi/SSH%20%E7%99%BB%E9%99%86%E6%A0%91%E8%8E%93%E6%B4%BE/" class="post-title-link" itemprop="url">SSH 登陆树莓派</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="http://shumeipai.nxez.com/2017/09/13/raspberry-pi-network-configuration-before-boot.html">http://shumeipai.nxez.com/2017/09/13/raspberry-pi-network-configuration-before-boot.html</a></p>
+<p>自 2016-11 官方发布的 Raspbian 系统镜像，系统默认禁用了 SSH 服务。在 SD 卡的 boot 磁盘根目录新建一个 ssh 空白文件即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd &#x2F;Volumes&#x2F;boot&#x2F;</span><br><span class="line">$ touch ssh</span><br></pre></td></tr></table></figure>
+
+<p>然后用 arp 查找树莓派的 IP 地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ arp -a</span><br><span class="line">? (192.168.3.1) at 4:4f:4c:37:74:28 on en0 ifscope [ethernet]</span><br><span class="line">? (192.168.3.2) at 74:8d:8:c2:cd:84 on en0 ifscope [ethernet]</span><br><span class="line">? (192.168.3.33) at b8:27:eb:7e:b3:9e on en0 ifscope [ethernet]</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">? (224.0.0.251) at 1:0:5e:0:0:fb on en0 ifscope permanent [ethernet]</span><br></pre></td></tr></table></figure>
+
+<p>192.168.3.33 就是树莓派的地址，用 ssh 登陆之，用户名是 pi，密码是 raspberry：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh pi@192.168.3.33</span><br></pre></td></tr></table></figure>
+
+<h3 id="免密码登陆"><a href="#免密码登陆" class="headerlink" title="免密码登陆"></a>免密码登陆</h3><p><a target="_blank" rel="noopener" href="https://www.imooc.com/article/18859?block_id=tuijian_wz">https://www.imooc.com/article/18859?block_id=tuijian_wz</a></p>
+<p>生成公钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+
+<p>上传公钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub  pi@192.168.199.200</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -311,6 +981,9 @@
 
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -374,14 +1047,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -414,7 +1087,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Snow Yang</span>
 </div>
-  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
   -->
 
@@ -452,6 +1125,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 
