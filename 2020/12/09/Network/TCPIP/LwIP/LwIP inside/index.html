@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文使用的源码版本是 2.0.3 内存管理LwIP 自带两种内存管理机制：内存堆(heap)和内存池(pool)。 堆和池各自的优缺点不再阐述，其实就是效率和利用率之间的权衡。 内存池Pool 是个链表结构，LwIP 中每种类型的数据结构都对应着一种 pool，协议栈用 5 个属性来描述一种 pool：  名称字符 单个大小 总共个数 内存空间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LwIP inside">
+<meta property="og:url" content="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP%20inside/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="本文使用的源码版本是 2.0.3 内存管理LwIP 自带两种内存管理机制：内存堆(heap)和内存池(pool)。 堆和池各自的优缺点不再阐述，其实就是效率和利用率之间的权衡。 内存池Pool 是个链表结构，LwIP 中每种类型的数据结构都对应着一种 pool，协议栈用 5 个属性来描述一种 pool：  名称字符 单个大小 总共个数 内存空间">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-09T14:41:12.243Z">
+<meta property="article:modified_time" content="2020-12-09T14:41:12.244Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP%20inside/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LwIP inside | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP%20inside/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LwIP inside
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LwIP/" itemprop="url" rel="index"><span itemprop="name">LwIP</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Network/TCPIP/LwIP/LwIP%20inside/" class="post-meta-item leancloud_visitors" data-flag-title="LwIP inside" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文使用的源码版本是 2.0.3</p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>LwIP 自带两种内存管理机制：内存堆(heap)和内存池(pool)。</p>
+<p>堆和池各自的优缺点不再阐述，其实就是效率和利用率之间的权衡。</p>
+<h3 id="内存池"><a href="#内存池" class="headerlink" title="内存池"></a>内存池</h3><p>Pool 是个链表结构，LwIP 中每种类型的数据结构都对应着一种 pool，协议栈用 5 个属性来描述一种 pool：</p>
+<ol>
+<li>名称字符</li>
+<li>单个大小</li>
+<li>总共个数</li>
+<li>内存空间</li>
+</ol>
+<a id="more"></a>
+
+<ol start="5">
+<li>首指针</li>
+</ol>
+<p>用结构体来描述就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct memp_desc</span><br><span class="line">&#123;</span><br><span class="line">  char *desc;</span><br><span class="line">  int size;</span><br><span class="line">  int num;</span><br><span class="line">  int *mem_base;</span><br><span class="line">  memp *tab;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每类 pool 都对应一个结构体变量，什么时候用什么方法初始化这些结构体变量呢？</p>
+<p>普通的做法是为每类 pool 定义一个变量并赋初值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">memp_desc memp_RAW_PCB &#x3D; </span><br><span class="line">&#123;</span><br><span class="line">  &quot;RAW_PCB&quot;,</span><br><span class="line">  1024,</span><br><span class="line">  16,</span><br><span class="line">  0x20001234;</span><br><span class="line">  &amp;memp_tab_RAW_PCB;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但是协议栈中有那么多的 pool，这样很繁琐且不灵活。</p>
+<p>LwIP 使用了一种屌炸天的奇技淫巧：宏定义大法。</p>
+<p>协议栈的 memp_std.h 中为每类 pool 定义了一行字符串：LWIP_MEMPOOL(name, num, size, desc)，这行字符串用来描述一类 pool 的属性。</p>
+<p>例如：LWIP_MEMPOOL(RAW_PCB,        MEMP_NUM_RAW_PCB,         sizeof(struct raw_pcb),        “RAW_PCB”)</p>
+<p>然后在 memp.c 中把 LWIP_MEMPOOL 定义成了一个屌炸天的宏定义（略有修改）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define LWIP_MEMPOOL_DECLARE(name,num,size,desc) \</span><br><span class="line">  u8_t memp_memory_ ## name ## _base[num * size]; \</span><br><span class="line">  static struct memp *memp_tab_ ## name; \</span><br><span class="line">  const struct memp_desc memp_ ## name &#x3D; \</span><br><span class="line">  &#123; \</span><br><span class="line">    desc, \</span><br><span class="line">    size, \</span><br><span class="line">    num, \</span><br><span class="line">    memp_memory_ ## name ## _base, \</span><br><span class="line">    &amp;memp_tab_ ## name \</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>编译展开后是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">u8_t memp_memory_RAW_PCB_base[MEMP_NUM_RAW_PCB * sizeof(struct raw_pcb)];</span><br><span class="line">static struct memp *memp_tab_RAW_PCB;</span><br><span class="line">const struct memp_desc memp_RAW_PCB &#x3D;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;RAW_PCB&quot;,</span><br><span class="line">  sizeof(struct raw_pcb),</span><br><span class="line">  MEMP_NUM_RAW_PCB,</span><br><span class="line">  memp_memory_RAW_PCB_base,</span><br><span class="line">  &amp;memp_tab_RAW_PCB</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>就问你屌不屌！😎😎😎😎😎😎😎😎</p>
+<p>==<strong>只要代码中有定义多个相同结构体类型的变量的地方，都可以使用这种方式来简化代码。</strong>==</p>
+<p>MEMP 类型大全：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">RAW_PCB</span><br><span class="line">UDP_PCB</span><br><span class="line">TCP_PCB</span><br><span class="line">TCP_PCB_LISTEN</span><br><span class="line">TCP_SEG</span><br><span class="line">REASSDATA</span><br><span class="line">FRAG_PBUF</span><br><span class="line">NETBUF</span><br><span class="line">NETCONN</span><br><span class="line">TCPIP_MSG_API</span><br><span class="line">API_MSG</span><br><span class="line">DNS_API_MSG</span><br><span class="line">SOCKET_SETGETSOCKOPT_DATA</span><br><span class="line">NETIFAPI_MSG</span><br><span class="line">TCPIP_MSG_INPKT</span><br><span class="line">ARP_QUEUE</span><br><span class="line">IGMP_GROUP</span><br><span class="line">SYS_TIMEOUT</span><br><span class="line">NETDB</span><br><span class="line">LOCALHOSTLIST</span><br><span class="line">ND6_QUEUE</span><br><span class="line">IP6_REASSDATA</span><br><span class="line">MLD6_GROUP</span><br><span class="line">PBUF</span><br><span class="line">PBUF_POOL</span><br></pre></td></tr></table></figure>
+<p><strong>PBUF POOL</strong></p>
+<p>PBUF POOL是用在网络接口层存储接收到的数据的 pool，一般大小为 pbuf struct + TCP_MSS + IP header + link header。</p>
+<h3 id="内存堆"><a href="#内存堆" class="headerlink" title="内存堆"></a>内存堆</h3><p>没什么好讲的了，和一般的堆管理机制大同小异。</p>
+<p>mem.c 中的数组变量 ram_heap[MEM_SIZE] 就是分配的堆空间，MEM_SIZE 默认是 1600，用户可在 lwipopts.h 内自定义大小。</p>
+<h3 id="使用系统的内存管理"><a href="#使用系统的内存管理" class="headerlink" title="使用系统的内存管理"></a>使用系统的内存管理</h3><p>LwIP 自带的内存池可以提供高效率的分配/回收，自带的内存堆可以避免协议栈内存出现问题时对系统内存的影响。</p>
+<p>但在 ARM MCU 平台上，网络性能的瓶颈往往在于内存大小和网络本身，CPU 速度已足够快，内存池和内存堆的效率差别不大，另外，为协议栈单独分配内存堆也会造成内存浪费，所以 LwIP 提供了选项让协议栈全部使用系统的内存管理机制。</p>
+<p>定义 MEM_LIBC_MALLOC 为 1 让协议栈使用系统的内存堆，定义 MEMP_MEM_MALLOC 为 1 让协议栈用内存堆来代替内存池[^1]。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * MEM_LIBC_MALLOC&#x3D;&#x3D;1: Use malloc&#x2F;free&#x2F;realloc provided by your C-library</span><br><span class="line"> * instead of the lwip internal allocator. Can save code size if you</span><br><span class="line"> * already use it.</span><br><span class="line"> *&#x2F;</span><br><span class="line">#if !defined MEM_LIBC_MALLOC || defined __DOXYGEN__</span><br><span class="line">#define MEM_LIBC_MALLOC                 0</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * MEMP_MEM_MALLOC&#x3D;&#x3D;1: Use mem_malloc&#x2F;mem_free instead of the lwip pool allocator.</span><br><span class="line"> * Especially useful with MEM_LIBC_MALLOC but handle with care regarding execution</span><br><span class="line"> * speed (heap alloc can be much slower than pool alloc) and usage from interrupts</span><br><span class="line"> * (especially if your netif driver allocates PBUF_POOL pbufs for received frames</span><br><span class="line"> * from interrupt)!</span><br><span class="line"> * ATTENTION: Currently, this uses the heap for ALL pools (also for private pools,</span><br><span class="line"> * not only for internal pools defined in memp_std.h)!</span><br><span class="line"> *&#x2F;</span><br><span class="line">#if !defined MEMP_MEM_MALLOC || defined __DOXYGEN__</span><br><span class="line">#define MEMP_MEM_MALLOC                 0</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+<p>注意：若使用系统的内存管理，那么每类 pool 的个数就用不到了，但是协议栈编译时会做有效性检查，所以还是要定义一个合适的值。</p>
+<p>[^1]: ESP32 就是这样做的。</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>LwIP 内有大量的全局变量，要保证线程安全地调用协议栈函数，协议栈提供了两种方法：</p>
+<ol>
+<li>向协议栈守护线程 tcpip_thread 发送 TCPIP_MSG_CALLBACK 消息，让函数在 tcpip_thread 内运行，此时 tcpip_thread 相当于是 worker thread。</li>
+<li>用户线程和 tcpip_thread 之间通过一个 core-locking 锁来实现互斥。</li>
+<li>通过进/退临界区的方式来实现线程安全。</li>
+</ol>
+<p>要使用第 2 种方法，要定义 LWIP_TCPIP_CORE_LOCKING 为 1，其实协议栈中默认已经定义为 1 了，LwIP 推荐某些函数使用这种方法来运行，比如 lwip_set/getsockopt，这样的好处是减少资源和时间的消耗。</p>
+<p>要使用第 3 种方法，要定义 SYS_ARCH_PROTECT 为 1，并实现 sys_arch_protect 和 sys_arch_unprotect 函数，在 LwIP 中一般是用于 buffer 或 memory 的分配/释放，这样的好处是相对方法 2 速度更快，因为方法 2 内用户函数一定要等待 tcpip_thread 在处理完所有的消息后释放锁后才能运行的，但是缺点是会频繁地开关中断。一个典型的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">  This optional function does a &quot;fast&quot; critical region protection and returns</span><br><span class="line">  the previous protection level. This function is only called during very short</span><br><span class="line">  critical regions. An embedded system which supports ISR-based drivers might</span><br><span class="line">  want to implement this function by disabling interrupts. Task-based systems</span><br><span class="line">  might want to implement this by using a mutex or disabling tasking. This</span><br><span class="line">  function should support recursive calls from the same task or interrupt. In</span><br><span class="line">  other words, sys_arch_protect() could be called while already protected. In</span><br><span class="line">  that case the return value indicates that it is already protected.</span><br><span class="line"></span><br><span class="line">  sys_arch_protect() is only required if your port is supporting an operating</span><br><span class="line">  system.</span><br><span class="line">*&#x2F;</span><br><span class="line">sys_prot_t sys_arch_protect(void)</span><br><span class="line">&#123;</span><br><span class="line">	vPortEnterCritical();</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;*</span><br><span class="line">  This optional function does a &quot;fast&quot; set of critical region protection to the</span><br><span class="line">  value specified by pval. See the documentation for sys_arch_protect() for</span><br><span class="line">  more information. This function is only required if your port is supporting</span><br><span class="line">  an operating system.</span><br><span class="line">*&#x2F;</span><br><span class="line">void sys_arch_unprotect(sys_prot_t pval)</span><br><span class="line">&#123;</span><br><span class="line">	( void ) pval;</span><br><span class="line">	vPortExitCritical();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>SO_BINDTODEVICE</p>
+<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>用户调用 gethostbyname 后，发送 callback 消息给 tcpip_thread，先查询缓存内是否已经有了此项，若有则直接返回给用户，若无则发送 dns query 请求。在底层递交一个 UDP 包后，若是 DNS response，则解析并返回给用户。同时维护了一个 timer 以处理超时错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">user</span><br><span class="line">⇩</span><br><span class="line">lwip_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">netconn_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">tcpip_callback(lwip_netconn_do_gethostbyname)</span><br><span class="line">⇩                    ⇣</span><br><span class="line">sys_sem_wait          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">return                ⇣</span><br><span class="line">---------------------------------------- query -------------------------------------------</span><br><span class="line">                      ⇣</span><br><span class="line">tcpip_thread          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">lwip_netconn_do_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">dns_gethostbyname_addrtype</span><br><span class="line">⇩</span><br><span class="line">dns_lookup ⇨(on found) sys_sem_signal</span><br><span class="line">⇩</span><br><span class="line">dns_enqueue</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">dns_send</span><br><span class="line">⇩</span><br><span class="line">udp_sendto</span><br><span class="line">------------------------------------- response -------------------------------------------</span><br><span class="line">udp_input</span><br><span class="line">⇩</span><br><span class="line">dns_recv</span><br><span class="line">⇩</span><br><span class="line">dns_correct_response</span><br><span class="line">⇩</span><br><span class="line">dns_call_found</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal</span><br><span class="line">-------------------------------------- timeout -------------------------------------------</span><br><span class="line">tcpip_thread</span><br><span class="line">⇩</span><br><span class="line">(on timer expired)</span><br><span class="line">dns_timer</span><br><span class="line">⇩</span><br><span class="line">dns_tmr</span><br><span class="line">⇩</span><br><span class="line">dns_check_entries</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">(on maxium retries)</span><br><span class="line">dns_call_found(NULL)</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal</span><br></pre></td></tr></table></figure>
+
+<h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><p>用户线程在调用 gethostbyname 后，就阻塞在一个信号量上。有 3 种情况会 give 信号量：</p>
+<ol>
+<li>缓冲中已有此项</li>
+<li>收到 dns response</li>
+<li>超时</li>
+</ol>
+<h3 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h3><p>其中，dns timer 是 DNS_TMR_INTERVAL，lwip 2.0.2 版本是 1000ms，重试次数是 DNS_MAX_RETRIES，默认是 4，num_dns 默认是 1，所以 dns 超时是 4 秒。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Network/TCPIP/LwIP/LwIP/" rel="prev" title="LwIP">
+      <i class="fa fa-chevron-left"></i> LwIP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Others/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="next" title="个人博客">
+      个人博客 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">1.1.</span> <span class="nav-text">内存池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%A0%86"><span class="nav-number">1.2.</span> <span class="nav-text">内存堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">使用系统的内存管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">3.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E"><span class="nav-number">3.2.</span> <span class="nav-text">阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%97%B6"><span class="nav-number">3.3.</span> <span class="nav-text">超时</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

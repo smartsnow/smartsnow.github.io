@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="IoT">
+  <meta name="description" content="十里平湖霜满天，寸寸青丝愁华年">
 <meta property="og:type" content="website">
 <meta property="og:title" content="冷香小筑">
 <meta property="og:url" content="http://example.com/page/4/index.html">
 <meta property="og:site_name" content="冷香小筑">
-<meta property="og:description" content="IoT">
+<meta property="og:description" content="十里平湖霜满天，寸寸青丝愁华年">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Snow Yang">
 <meta name="twitter:card" content="summary">
@@ -47,6 +47,15 @@
   
 
 
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -181,12 +190,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -195,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/" class="post-title-link" itemprop="url">BLE 最大化吞吐量</a>
+            <a href="/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/" class="post-title-link" itemprop="url">最大包长的变化</a>
         </h2>
 
         <div class="post-meta">
@@ -205,7 +214,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,6 +227,13 @@
             </span>
 
           
+            <span id="/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/" class="post-meta-item leancloud_visitors" data-flag-title="最大包长的变化" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -228,16 +244,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Slave 通过 notification 发送 293 字节数据，ATT_MTU 为 247 字节，所以分为两次发送。</p>
-<p>抓包看有三次 connection event，其中第二次 connection event 没有数据传输，这是为什么呢？</p>
-<img src=".最大化吞吐量.assets/image-20201130210148848.png" alt="image-20201130210148848" style="zoom:90%;" />
-
-<p>因为 slave 代码中调用发送 notification API 之后，要等待发送成功事件再发送下一个 notification。</p>
-<p>而发送成功事件是在收到的下个 master 数据包的 NESN 后产生，此时 slave 看到 queue 中没有数据，就回复了 Empty PDU。</p>
-<p>所以第三次 connection event 才将剩下的数据发送出去。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">0.000000	Master	Slave		35	12	-50 dBm	Sent Write Command, Handle: 0x0049 (Unknown: Unknown)</span><br><span class="line">0.000998	Slave	Master		26	12	-45 dBm	Empty PDU</span><br><span class="line">0.007012	Master	Slave		26	12	-48 dBm	Empty PDU</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">0.007999	Slave	Master		26	12	-44 dBm	Empty PDU</span><br><span class="line">0.014914	Master	Slave		26	21	-49 dBm	Empty PDU</span><br><span class="line">0.015960	Slave	Master		35	21	-45 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.021647	Master	Slave		26	32	-50 dBm	Empty PDU</span><br><span class="line">0.022649	Slave	Master		26	32	-46 dBm	Empty PDU</span><br><span class="line">0.029649	Master	Slave		26	34	-52 dBm	Empty PDU</span><br><span class="line">0.030667	Slave	Master		26	34	-53 dBm	Empty PDU</span><br><span class="line">0.036895	Master	Slave		26	12	-49 dBm	Empty PDU</span><br><span class="line">0.045277	Slave	Master		277	12	-44 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.046275	Master	Slave		26	21	-49 dBm	Empty PDU</span><br><span class="line">0.047276	Slave	Master		26	21	-44 dBm	Empty PDU</span><br><span class="line">0.051274	Master	Slave		26	19	-49 dBm	Empty PDU</span><br><span class="line">0.053273	Slave	Master		82	19	-44 dBm	Rcvd Handle Value Notification, Handle: 0x004b (Unknown: Unknown)</span><br><span class="line">0.060110	Master	Slave		26	17	-48 dBm	Empty PDU</span><br><span class="line">0.060110	Slave	Master		26	17	-44 dBm	Empty PDU</span><br></pre></td></tr></table></figure>
-
-
+          <table>
+<thead>
+<tr>
+<th>版本</th>
+<th>ATT MTU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4.0 - 4.1</td>
+<td>23</td>
+</tr>
+<tr>
+<td>4.2 - 5.0</td>
+<td>247</td>
+</tr>
+<tr>
+<td>5.1 - 5.2</td>
+<td>248</td>
+</tr>
+</tbody></table>
+<p>为什么不一开始就定义更大的 ATT MTU 呢，因为数据包越长则射频电路发热越严重进而导致频偏，ATT MTU 是根据当时的芯片工艺和成本来制定的。</p>
+<p>以 4.2 为例，其 Linker Layer packet 格式如下：</p>
+<p><img src="/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/image-20201201231940316.png"></p>
+<p>其中 PDU 格式如下：</p>
+<p><img src="/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/image-20201201232003913.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -256,12 +295,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -270,7 +309,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="url">BLE spec 全部版本</a>
+            <a href="/2020/12/09/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Wireshark 抓包</a>
         </h2>
 
         <div class="post-meta">
@@ -280,7 +319,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,6 +332,450 @@
             </span>
 
           
+            <span id="/2020/12/09/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/" class="post-meta-item leancloud_visitors" data-flag-title="Wireshark 抓包" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="如何判断漏抓包"><a href="#如何判断漏抓包" class="headerlink" title="如何判断漏抓包"></a>如何判断漏抓包</h2><p>判断是否丢包有几种方式：</p>
+<ul>
+<li>看 channel。一次 connection event 只在一个 channel 上，包的数量是偶数的。</li>
+<li>看 master 和 slave。master 和 slave 轮流发包。</li>
+<li>看 more data。more data 后面一定还跟有数据。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/Wireshark%20%E6%8A%93%E5%8C%85/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/Connection%20Update/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Wireless/BLE/Connection%20Update/" class="post-title-link" itemprop="url">Connection Update</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Wireless/BLE/Connection%20Update/" class="post-meta-item leancloud_visitors" data-flag-title="Connection Update" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Connection-Update-Procedure"><a href="#Connection-Update-Procedure" class="headerlink" title="Connection Update Procedure"></a>Connection Update Procedure</h2><p>根据<em>Core_4.0 | Vol 6, Part B, 5.1.1 Connection Update procedure</em></p>
+<blockquote>
+<p>The Link Layer parameters for a connection (<em>connInterval</em>, <em>connSlaveLatency</em> and <em>connSupervisionTimeout</em>) may be updated after entering the Connection State. The master can update the connection parameters by sending an LL_CONNECTION_UPDATE_REQ PDU. The slave shall not send this PDU; the slave may request a change to the connection parameters using the L2CAP LE signaling channel.</p>
+</blockquote>
+<h2 id="Connection-Parameters-Request-procedure"><a href="#Connection-Parameters-Request-procedure" class="headerlink" title="Connection Parameters Request procedure"></a>Connection Parameters Request procedure</h2><p>根据<em>Core_5.2 | Vol 6, Part B, 5.1.7 Connection Parameters Request procedure</em></p>
+<blockquote>
+<p>The master or slave may initiate a Connection Parameters Request procedure to request the remote device to have the Link Layer parameters for the connection (connInterval, connSlaveLatency and connSupervisionTimeout) updated any time after entering the Connection State.</p>
+</blockquote>
+<p>Master 和 Slave 都可以发起 Connection Parameters Request procedure。</p>
+<p>发起者发送<code>LL_CONNECTION_PARAM_REQ</code>，包含 Interval_Min 和 Interval_Max。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/Connection%20Update/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/" class="post-title-link" itemprop="url">bluepy - Python 版的 BLE 利器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/" class="post-meta-item leancloud_visitors" data-flag-title="bluepy - Python 版的 BLE 利器" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>无意间发现了一个 python 版的 BLE 利器 - <a target="_blank" rel="noopener" href="https://github.com/IanHarvey/bluepy">bluepy</a>。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>bluepy 是 github 上的一个开源项目，它用 python 封装了 linux 上的 BLE 接口。</p>
+<p>作者主要基于树莓派开发，也可以运行在 x86 Debian Linux 上。</p>
+<p>bluepy 其实是 BlueZ 的 python 封装。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于 Windows 和 macOS 用户，可以用虚拟机安装 Ubuntu（基于 Debian 系统）。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/bluepy%20-%20Python%20%E7%89%88%E7%9A%84%20BLE%20%E5%88%A9%E5%99%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/CLI%20on%20GATT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Wireless/BLE/CLI%20on%20GATT/" class="post-title-link" itemprop="url">CLI on GATT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Wireless/BLE/CLI%20on%20GATT/" class="post-meta-item leancloud_visitors" data-flag-title="CLI on GATT" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>利用 GATT 作为通道以实现 Command Line Interface 功能。</p>
+<h2 id="回显延迟"><a href="#回显延迟" class="headerlink" title="回显延迟"></a>回显延迟</h2><p>设备收到一个字符后要回送此字符，称之为回显。回显速度影响和用户体验，太慢会造成卡顿的感觉。</p>
+<p>根据 Core_5.2 | Vol 6, Part B, 4.5.1 Connection events，BLE connection interval 最小为 7.5ms，也即一个字符来回需要 15ms，不会造成延迟感。</p>
+<blockquote>
+<p>The connInterval shall be a multiple of 1.25 ms in the range 7.5 ms to 4.0 s. </p>
+</blockquote>
+<h2 id="Nagle-算法"><a href="#Nagle-算法" class="headerlink" title="Nagle 算法"></a>Nagle 算法</h2><p>由于 connection interval 和包头包尾的开销，payload 越长则速率越高，但让应用层来去考虑这个显然是不友好且不现实的。</p>
+<p>比如要将 buf 中数据以 hex 方式输出：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/CLI%20on%20GATT/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/" class="post-title-link" itemprop="url">BLE 最大化吞吐量</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/" class="post-meta-item leancloud_visitors" data-flag-title="BLE 最大化吞吐量" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Slave 通过 notification 发送 293 字节数据，ATT_MTU 为 247 字节，所以分为两次发送。</p>
+<p>抓包看有三次 connection event，其中第二次 connection event 没有数据传输，这是为什么呢？</p>
+<img src=".最大化吞吐量.assets/image-20201130210148848.png" alt="image-20201130210148848" style="zoom:90%;" />
+
+<p>因为 slave 代码中调用发送 notification API 之后，要等待发送成功事件再发送下一个 notification。</p>
+<p>而发送成功事件是在收到的下个 master 数据包的 NESN 后产生，此时 slave 看到 queue 中没有数据，就回复了 Empty PDU。</p>
+<p>所以第三次 connection event 才将剩下的数据发送出去。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/BLE%20%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%9E%E5%90%90%E9%87%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="url">BLE spec 全部版本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BLE/" itemprop="url" rel="index"><span itemprop="name">BLE</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/" class="post-meta-item leancloud_visitors" data-flag-title="BLE spec 全部版本" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -316,7 +799,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/Wireless/BLE/BLE%20spec%20%E5%85%A8%E9%83%A8%E7%89%88%E6%9C%AC/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -340,12 +823,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/Ruby/Ruby%20Install/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/Ruby/Ruby%20Install/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -354,7 +837,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Programing%20Language/Ruby/Ruby%20Install/" class="post-title-link" itemprop="url">Ruby Install</a>
+            <a href="/2020/12/09/Programing%20Language/Ruby/Ruby%20Install/" class="post-title-link" itemprop="url">Ruby Install</a>
         </h2>
 
         <div class="post-meta">
@@ -364,7 +847,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -377,6 +860,13 @@
             </span>
 
           
+            <span id="/2020/12/09/Programing%20Language/Ruby/Ruby%20Install/" class="post-meta-item leancloud_visitors" data-flag-title="Ruby Install" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -389,14 +879,14 @@
       
           <h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><p>macOS 自带 ruby，但是千万不要用，因为自带的 ruby 是给系统用，搞乱了会出问题。</p>
 <p>所以需要自己另外安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install ruby</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">$ brew reinstall ruby</span><br><span class="line">&#x3D;&#x3D;&gt; Reinstalling ruby </span><br><span class="line">&#x3D;&#x3D;&gt; Downloading https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;homebrew-bottles&#x2F;bottles&#x2F;ru</span><br><span class="line">Already downloaded: &#x2F;Users&#x2F;snowyang&#x2F;Library&#x2F;Caches&#x2F;Homebrew&#x2F;downloads&#x2F;ce913df96139a56c9bc1ad301492f882a83f160400516538c5d4737f6c6d5e51--ruby-2.7.0.high_sierra.bottle.tar.gz</span><br><span class="line">&#x3D;&#x3D;&gt; Pouring ruby-2.7.0.high_sierra.bottle.tar.gz</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&gt; Caveats</span><br><span class="line">By default, binaries installed by gem will be placed into:</span><br><span class="line">  &#x2F;usr&#x2F;local&#x2F;lib&#x2F;ruby&#x2F;gems&#x2F;2.7.0&#x2F;bin</span><br><span class="line"></span><br><span class="line">You may want to add this to your PATH.</span><br><span class="line"></span><br><span class="line">ruby is keg-only, which means it was not symlinked into &#x2F;usr&#x2F;local,</span><br><span class="line">because macOS already provides this software and installing another version in</span><br><span class="line">parallel can cause all kinds of trouble.</span><br><span class="line"></span><br><span class="line">If you need to have ruby first in your PATH run:</span><br><span class="line">  echo &#39;export PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;bin:$PATH&quot;&#39; &gt;&gt; ~&#x2F;.bash_profile</span><br><span class="line"></span><br><span class="line">For compilers to find ruby you may need to set:</span><br><span class="line">  export LDFLAGS&#x3D;&quot;-L&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;lib&quot;</span><br><span class="line">  export CPPFLAGS&#x3D;&quot;-I&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;include&quot;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&gt; Summary</span><br><span class="line">🍺  &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;ruby&#x2F;2.7.0: 20,346 files, 32.8MB</span><br></pre></td></tr></table></figure>
-
-<p>添加到 PATH 中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;ruby&#x2F;bin:$PATH&quot;</span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Programing%20Language/Ruby/Ruby%20Install/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -415,12 +905,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -429,7 +919,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C 整型转换</a>
+            <a href="/2020/12/09/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C 整型转换</a>
         </h2>
 
         <div class="post-meta">
@@ -439,7 +929,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -452,6 +942,13 @@
             </span>
 
           
+            <span id="/2020/12/09/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-meta-item leancloud_visitors" data-flag-title="C 整型转换" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -462,7 +959,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int8_t a &#x3D; -1;</span><br><span class="line">uint32_t b &#x3D; a;</span><br><span class="line">b &#x3D; ?</span><br></pre></td></tr></table></figure>
+          <a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int8_t a &#x3D; -1;</span><br><span class="line">uint32_t b &#x3D; a;</span><br><span class="line">b &#x3D; ?</span><br></pre></td></tr></table></figure>
 
 <p>这要用到整型转换规则， <strong>C Programming Language(K &amp; R)</strong> (A.6.2)上这样解释：</p>
 <blockquote>
@@ -470,15 +969,8 @@
 </blockquote>
 <p>将任何整数转换为带符号类型时，如果它可以在新的类型中表示出来，则其值保持不变，否则它的值同具体的实现有关。</p>
 <p>其中<code>以该无符号数类型能够表示的最大值加1为模，找出与此整数同余的最小的非负值</code>，我觉得太拗口，下面那段才比较好理解<code>在对二的补码表示中，如果该无符号类型的位模式较窄，这就相当于左截取；如果该符号类型的位模式较宽，这就相当于对带符号的值进行符号扩展和对无符号的值进行0填充。</code></p>
-<p>比如把 0x1234 放到一个 uint8_t 类型变量 x 中，那么高 8 位就被截掉，低 8 位被放到变量中，最终 x 的值为 0x34。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%9E%8B%E8%BD%AC%E6%8D%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p>比如把 0x1234 放到一个 uint8_t 类型变量 x 中，那么高 8 位就被截掉，低 8 位被放到变量中，最终 x 的值为 0x34。<br>比如把 -1 放到 x 中，因为 -1 的二进制码是 0xFFFFFFFF，那么 x 的值就等于 0xFF。</p>
+
       
     </div>
 
@@ -497,12 +989,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/strtol/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/C/strtol/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -511,7 +1003,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Programing%20Language/C/strtol/" class="post-title-link" itemprop="url">strtol</a>
+            <a href="/2020/12/09/Programing%20Language/C/strtol/" class="post-title-link" itemprop="url">strtol</a>
         </h2>
 
         <div class="post-meta">
@@ -521,7 +1013,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -534,6 +1026,13 @@
             </span>
 
           
+            <span id="/2020/12/09/Programing%20Language/C/strtol/" class="post-meta-item leancloud_visitors" data-flag-title="strtol" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -544,408 +1043,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="strtol"><a href="#strtol" class="headerlink" title="strtol"></a>strtol</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">long int strtol(const char *nptr, char **endptr, int base);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>字符串无法解析，例如出现了非数字字符等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">If endptr is not NULL, strtol() stores the address of the first invalid</span><br><span class="line">character  in *endptr.  If there were no digits at all, strtol() stores</span><br><span class="line">the original value of nptr in *endptr (and returns 0).  In  particular,</span><br><span class="line">if  *nptr is not &#39;\0&#39; but **endptr is &#39;\0&#39; on return, the entire string</span><br><span class="line">is valid.</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
+          <h2 id="strtol"><a href="#strtol" class="headerlink" title="strtol"></a>strtol</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/C/strtol/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">C 入口函数分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
-<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/" class="post-title-link" itemprop="url">C 整形提升</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>摘自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%B4%E5%9E%8B%E6%8F%90%E5%8D%87">维基百科</a>：</p>
-<p>整型提升是C程序设计语言中的一项规定：在表达式计算时，各种整形首先要提升为int类型，如果int类型不足以表示则要提升为unsigned int类型；然后执行表达式的运算。[1]</p>
-<p>这一规则是由C语言的发明人丹尼斯·里奇与肯·汤普逊创设的：[2]</p>
-<blockquote>
-<p>A character, a short integer, or an integer bit-field, all either signed or not, or an object of enumeration type, may be used in an expression wherever an integer maybe used. If an int can represent all the values of the original type, then the value is converted to int; otherwise the value is converted to unsigned int. This process is called integral promotion.</p>
-</blockquote>
-<p>这段话的大意是：表达式中可以使用整数的地方，就可以使用枚举类型，或有符号或无符号的字符、短整数、整数位域。如果一个int可以表示上述类型，则该值被转化为int类型的值；否则，该值被转化为unsigned int类型的值。这一过程被称作integral promotion。</p>
-<p>整型提升的意义在于：表达式的整型运算要在CPU的相应运算器件内执行，CPU内整型运算器(ALU)的操作数的字节长度一般就是int的字节长度，同时也是CPU的通用寄存器的长度。因此，即使两个char类型的相加，在CPU执行时实际上也要先转换为CPU内整型操作数的标准长度。通用CPU（general-purpose CPU）是难以直接实现两个8比特字节直接相加运算（虽然机器指令中可能有这种字节相加指令）。所以，表达式中各种长度可能小于int长度的整型值，都必须先转换为int或unsigned int，然后才能送入CPU去执行运算。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C 隐式类型转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在项目中遇到一个奇怪的问题，伪代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int8_t  a &#x3D; 0x8F;</span><br><span class="line">uint8_t b &#x3D; 0x8F；</span><br><span class="line"></span><br><span class="line">if( a &#x3D;&#x3D; b )</span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;a &#x3D; b\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;a !&#x3D; b, a &#x3D; %02x, b &#x3D; %02x\n&quot;, a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">newlib 中的 crt0 流程分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近对 newlib 中的启动代码 crt0 产生了兴趣，于是就分析了下其代码。crt0 的源码位于 libgloss/arm/crt0.S，为了兼容各种 ARM 架构，crt0.S 中有大量的条件判断宏定义，对于只关心 ARMv7e-M 的我来说很是痛苦。刚好手上有个基于 STM32F412 的 mbed 工程用的是 crt0 的启动方式，参考 crt0.o 的反汇编我可以提炼出 crt0.S 中和 ARMv7e-M 相关的部分代码。</p>
-<p>crt0.o 的反汇编如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">08008220 &lt;_mainCRTStartup&gt;:</span><br><span class="line"> 8008220:    4b15          ldr    r3, [pc, #84]    ; (8008278 &lt;_mainCRTStartup+0x58&gt;)</span><br><span class="line"> 8008222:    2b00          cmp    r3, #0</span><br><span class="line"> 8008224:    bf08          it    eq</span><br><span class="line"> 8008226:    4b13          ldreq    r3, [pc, #76]    ; (8008274 &lt;_mainCRTStartup+0x54&gt;)</span><br><span class="line"> 8008228:    469d          mov    sp, r3</span><br><span class="line"> 800822a:    f5a3 3a80     sub.w    sl, r3, #65536    ; 0x10000</span><br><span class="line"> 800822e:    2100          movs    r1, #0</span><br><span class="line"> 8008230:    468b          mov    fp, r1</span><br><span class="line"> 8008232:    460f          mov    r7, r1</span><br><span class="line"> 8008234:    4813          ldr    r0, [pc, #76]    ; (8008284 &lt;_mainCRTStartup+0x64&gt;)</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line"> 8008236:    4a14          ldr    r2, [pc, #80]    ; (8008288 &lt;_mainCRTStartup+0x68&gt;)</span><br><span class="line"> 8008238:    1a12          subs    r2, r2, r0</span><br><span class="line"> 800823a:    f01c fcd7     bl    8024bec &lt;memset&gt;</span><br><span class="line"> 800823e:    4b0f          ldr    r3, [pc, #60]    ; (800827c &lt;_mainCRTStartup+0x5c&gt;)</span><br><span class="line"> 8008240:    2b00          cmp    r3, #0</span><br><span class="line"> 8008242:    d000          beq.n    8008246 &lt;_mainCRTStartup+0x26&gt;</span><br><span class="line"> 8008244:    4798          blx    r3</span><br><span class="line"> 8008246:    4b0e          ldr    r3, [pc, #56]    ; (8008280 &lt;_mainCRTStartup+0x60&gt;)</span><br><span class="line"> 8008248:    2b00          cmp    r3, #0</span><br><span class="line"> 800824a:    d000          beq.n    800824e &lt;_mainCRTStartup+0x2e&gt;</span><br><span class="line"> 800824c:    4798          blx    r3</span><br><span class="line"> 800824e:    2000          movs    r0, #0</span><br><span class="line"> 8008250:    2100          movs    r1, #0</span><br><span class="line"> 8008252:    0004          movs    r4, r0</span><br><span class="line"> 8008254:    000d          movs    r5, r1</span><br><span class="line"> 8008256:    480d          ldr    r0, [pc, #52]    ; (800828c &lt;_mainCRTStartup+0x6c&gt;)</span><br><span class="line"> 8008258:    2800          cmp    r0, #0</span><br><span class="line"> 800825a:    d002          beq.n    8008262 &lt;_mainCRTStartup+0x42&gt;</span><br><span class="line"> 800825c:    480c          ldr    r0, [pc, #48]    ; (8008290 &lt;_mainCRTStartup+0x70&gt;)</span><br><span class="line"> 800825e:    f00f f868     bl    8017332 &lt;__wrap_atexit&gt;</span><br><span class="line"> 8008262:    f01c f805     bl    8024270 &lt;__libc_init_array&gt;</span><br><span class="line"> 8008266:    0020          movs    r0, r4</span><br><span class="line"> 8008268:    0029          movs    r1, r5</span><br><span class="line"> 800826a:    f00f f821     bl    80172b0 &lt;__wrap_main&gt;</span><br><span class="line"> 800826e:    f00f f85d     bl    801732c &lt;__wrap_exit&gt;</span><br><span class="line"> 8008272:    bf00          nop</span><br><span class="line"> 8008274:    00080000     .word    0x00080000</span><br><span class="line"> 8008278:    20040000     .word    0x20040000</span><br><span class="line"> 800827c:    00000000     .word    0x00000000</span><br><span class="line"> 8008280:    080172a3     .word    0x080172a3</span><br><span class="line"> 8008284:    20000c00     .word    0x20000c00</span><br><span class="line"> 8008288:    2000ac58     .word    0x2000ac58</span><br><span class="line"> 800828c:    08017333     .word    0x08017333</span><br><span class="line"> 8008290:    00000000     .word    0x00000000</span><br></pre></td></tr></table></figure>
-
-<p>提炼后的 crt0.S 代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">    FUNC_START  _mainCRTStartup</span><br><span class="line">    FUNC_START  _start</span><br><span class="line">&#x2F;* Start by setting up a stack *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;*  Set up the stack pointer to a fixed value *&#x2F;</span><br><span class="line">    &#x2F;*  Changes by toralf:</span><br><span class="line">        - Allow linker script to provide stack via __stack symbol - see</span><br><span class="line">          defintion of .Lstack</span><br><span class="line">        - Provide &quot;hooks&quot; that may be used by the application to add</span><br><span class="line">          custom init code - see .Lhwinit and .Lswinit  </span><br><span class="line">        - Go through all execution modes and set up stack for each of them.</span><br><span class="line">          Loosely based on init.s from ARM&#x2F;Motorola example code.</span><br><span class="line">              Note: Mode switch via CPSR is not allowed once in non-privileged</span><br><span class="line">            mode, so we take care not to enter &quot;User&quot; to set up its sp,</span><br><span class="line">            and also skip most operations if already in that mode. *&#x2F;</span><br><span class="line"></span><br><span class="line">    ldr r3, .Lstack</span><br><span class="line">    cmp r3, #0</span><br><span class="line"></span><br><span class="line">    it  eq</span><br><span class="line"></span><br><span class="line">    ldreq   r3, .LC0</span><br><span class="line">    &#x2F;* Note: This &#39;mov&#39; is essential when starting in User, and ensures we</span><br><span class="line">         always get *some* sp value for the initial mode, even if we </span><br><span class="line">         have somehow missed it below (in which case it gets the same</span><br><span class="line">         value as FIQ - not ideal, but better than nothing.) *&#x2F;</span><br><span class="line">    mov sp, r3</span><br><span class="line"></span><br><span class="line">.LC23:</span><br><span class="line">    &#x2F;* Setup a default stack-limit in-case the code has been</span><br><span class="line">       compiled with &quot;-mapcs-stack-check&quot;.  Hard-wiring this value</span><br><span class="line">       is not ideal, since there is currently no support for</span><br><span class="line">       checking that the heap and stack have not collided, or that</span><br><span class="line">       this default 64k is enough for the program being executed.</span><br><span class="line">       However, it ensures that this simple crt0 world will not</span><br><span class="line">       immediately cause an overflow event:  *&#x2F;</span><br><span class="line">    sub sl, r3, #64 &lt;&lt; 10   &#x2F;* Still assumes 256bytes below sl *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Zero the memory in the .bss section.  *&#x2F;</span><br><span class="line">    movs    a2, #0          &#x2F;* Second arg: fill value *&#x2F;</span><br><span class="line">    mov fp, a2          &#x2F;* Null frame pointer *&#x2F;</span><br><span class="line">    mov r7, a2          &#x2F;* Null frame pointer for Thumb *&#x2F;</span><br><span class="line">    </span><br><span class="line">    ldr a1, .LC1        &#x2F;* First arg: start of memory block *&#x2F;</span><br><span class="line">    ldr a3, .LC2    </span><br><span class="line">    subs    a3, a3, a1      &#x2F;* Third arg: length of block *&#x2F;</span><br><span class="line">    </span><br><span class="line">    bl  memset</span><br><span class="line"></span><br><span class="line">&#x2F;* Changes by toralf: Taken from libgloss&#x2F;m68k&#x2F;crt0.S</span><br><span class="line"> * initialize target specific stuff. Only execute these</span><br><span class="line"> * functions it they exist.</span><br><span class="line"> *&#x2F;</span><br><span class="line">    ldr r3, .Lhwinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC24</span><br><span class="line">    indirect_call r3</span><br><span class="line">.LC24:  </span><br><span class="line">    ldr r3, .Lswinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC25</span><br><span class="line">    indirect_call r3</span><br><span class="line"></span><br><span class="line">.LC25:  </span><br><span class="line">    movs    r0, #0      &#x2F;*  no arguments  *&#x2F;</span><br><span class="line">    movs    r1, #0      &#x2F;*  no argv either *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Some arm&#x2F;elf targets use the .init and .fini sections</span><br><span class="line">       to create constructors and destructors, and for these</span><br><span class="line">       targets we need to call the _init function and arrange</span><br><span class="line">       for _fini to be called at program exit.  *&#x2F;</span><br><span class="line">    movs    r4, r0</span><br><span class="line">    movs    r5, r1e</span><br><span class="line"></span><br><span class="line">    &#x2F;* Make reference to atexit weak to avoid unconditionally pulling in</span><br><span class="line">       support code.  Refer to comments in __atexit.c for more details.  *&#x2F;</span><br><span class="line">    ldr r0, .Latexit</span><br><span class="line">    cmp r0, #0</span><br><span class="line">    beq .Lweak_atexit</span><br><span class="line"></span><br><span class="line">    ldr r0, .Lfini</span><br><span class="line">    bl  atexit</span><br><span class="line">.Lweak_atexit:</span><br><span class="line">    bl  _init</span><br><span class="line">    movs    r0, r4</span><br><span class="line">    movs    r1, r5</span><br><span class="line"></span><br><span class="line">    bl  main</span><br><span class="line"></span><br><span class="line">    bl  exit        &#x2F;* Should not return.  *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;* For Thumb, constants must be after the code since only </span><br><span class="line">       positive offsets are supported for PC relative addresses.  *&#x2F;</span><br><span class="line">.LC0:</span><br><span class="line">    .word   0x80000         &#x2F;* Top of RAM on the PIE board.  *&#x2F;</span><br><span class="line">.Lstack:    </span><br><span class="line">    .word   __stack</span><br><span class="line">.Lhwinit:   </span><br><span class="line">    .word   ardware_init_hook</span><br><span class="line">.Lswinit:</span><br><span class="line">    .word   software_init_hook</span><br><span class="line"></span><br><span class="line">    &#x2F;* Set up defaults for the above variables in the form of weak symbols</span><br><span class="line">       - so that application will link correctly, and get value 0 in</span><br><span class="line">       runtime (meaning &quot;ignore setting&quot;) for the variables, when the user</span><br><span class="line">       does not provide the symbols. (The linker uses a weak symbol if,</span><br><span class="line">       and only if, a normal version of the same symbol isn&#39;t provided</span><br><span class="line">       e.g. by a linker script or another object file.) *&#x2F;  </span><br><span class="line"></span><br><span class="line">    .weak __stack</span><br><span class="line">    .weak hardware_init_hook</span><br><span class="line">    .weak software_init_hook</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">  .word __bss_start__</span><br><span class="line">.LC2:</span><br><span class="line">  .word __bss_end__</span><br><span class="line"></span><br><span class="line">  .weak atexit</span><br><span class="line">.Latexit:</span><br><span class="line">  .word atexit</span><br><span class="line"></span><br><span class="line">  &#x2F;* Weak reference _fini in case of lite exit.  *&#x2F;</span><br><span class="line">  .weak _fini</span><br><span class="line">.Lfini:</span><br><span class="line">  .word _fini</span><br></pre></td></tr></table></figure>
-
-<p>crt0 启动流程如下：</p>
-<ol>
-<li>设置 SP 为 __stack，若 __stack 未被用户定义，则使用默认的值（0x80000处的值）。</li>
-<li>清空 .bss 段，起始地址为 <strong>bss_start__，结束地址为 __bss_end</strong> 。</li>
-<li>若用户定义了 hardware_init_hook 和 software_init_hook ，则调用它们。</li>
-<li>若用户定义了 atexit，则调用它，并将传递参数 _fini（_fini 被宏定义为 __libc_fini_array）。</li>
-<li>调用 _init（_ini 被宏定义为 __libc_ini_array）。</li>
-<li>调用 main（argc 和 argv 都等于 0）。</li>
-<li>调用 exit。</li>
-</ol>
-<p>其中 <strong>stack，__bss_start__ 和 __bss_end</strong> 必须被定义。</p>
-<p>hardware_init_hook 和 software_init_hook 可以实现一些需要在 main 之前的功能。</p>
-<p>aiexit，exit，_init 和 _fini 一般是和 C++ 的全局构造和析构有关，这个放在下一节来分析。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/" class="post-title-link" itemprop="url">Mermaid 画图</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Markdown/" itemprop="url" rel="index"><span itemprop="name">Markdown</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a>（美人鱼）通过代码来表示画图。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/Programing%20Language/C/strtol/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1026,25 +1127,32 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">Snow Yang</p>
-  <div class="site-description" itemprop="description">IoT</div>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
 
 
 
@@ -1084,6 +1192,97 @@
 
 
 
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
 
 
       </div>

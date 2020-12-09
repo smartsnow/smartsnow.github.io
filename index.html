@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="IoT">
+  <meta name="description" content="十里平湖霜满天，寸寸青丝愁华年">
 <meta property="og:type" content="website">
 <meta property="og:title" content="冷香小筑">
 <meta property="og:url" content="http://example.com/index.html">
 <meta property="og:site_name" content="冷香小筑">
-<meta property="og:description" content="IoT">
+<meta property="og:description" content="十里平湖霜满天，寸寸青丝愁华年">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Snow Yang">
 <meta name="twitter:card" content="summary">
@@ -47,6 +47,15 @@
   
 
 
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -181,12 +190,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/OS/Zephyr/Zephyr%20UART/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -195,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Git 实用技巧</a>
+            <a href="/2020/12/09/OS/Zephyr/Zephyr%20UART/" class="post-title-link" itemprop="url">Zephyr UART</a>
         </h2>
 
         <div class="post-meta">
@@ -205,7 +214,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -213,11 +222,18 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                  <a href="/categories/Zephyr/" itemprop="url" rel="index"><span itemprop="name">Zephyr</span></a>
                 </span>
             </span>
 
           
+            <span id="/2020/12/09/OS/Zephyr/Zephyr%20UART/" class="post-meta-item leancloud_visitors" data-flag-title="Zephyr UART" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -228,14 +244,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="git-clean-删除未追踪的文件和目录"><a href="#git-clean-删除未追踪的文件和目录" class="headerlink" title="git clean - 删除未追踪的文件和目录"></a>git clean - 删除未追踪的文件和目录</h2><p>删除一些没有git add的文件；</p>
-<p>git clean 参数：<br>-n 显示将要删除的文件和目录<br>-f 删除文件，-df删除文件和目录</p>
-<h2 id="git-archive-打包"><a href="#git-archive-打包" class="headerlink" title="git archive - 打包"></a>git archive - 打包</h2><p>如果使用压缩工具（tar、7zip、winzip、rar等）将工作区文件归档，一不小心会把版本库（.git目录）包含其中，甚至将工作区中的忽略文件、临时文件也包含其中。  </p>
-<p>Git提供了一个归档命令：<code>gitarchive</code>，可以对任意提交对应的目录树建立归档。  </p>
-<p>如，基于最新提交建立归档文件 latest.zip。</p>
+          <p>Demo</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/OS/Zephyr/Zephyr%20UART/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -259,12 +271,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Zephyr/Zephyr%20Primer/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/Python/Python%20Primer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +285,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/OS/Zephyr/Zephyr%20Primer/" class="post-title-link" itemprop="url">Zephyr Primer</a>
+            <a href="/2020/12/09/Programing%20Language/Python/Python%20Primer/" class="post-title-link" itemprop="url">Python Primer</a>
         </h2>
 
         <div class="post-meta">
@@ -283,7 +295,499 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Programing%20Language/Python/Python%20Primer/" class="post-meta-item leancloud_visitors" data-flag-title="Python Primer" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><h3 id="安全的访问-dict-中的-key"><a href="#安全的访问-dict-中的-key" class="headerlink" title="安全的访问 dict 中的 key"></a>安全的访问 dict 中的 key</h3><p>如果key不存在，访问 dict就会报错：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Programing%20Language/Python/Python%20Primer/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/" class="post-title-link" itemprop="url">Python Static variable</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/" class="post-meta-item leancloud_visitors" data-flag-title="Python Static variable" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="How-to-declare-a-static-variable-in-a-function-in-Python"><a href="#How-to-declare-a-static-variable-in-a-function-in-Python" class="headerlink" title="How to declare a static variable in a function in Python"></a>How to declare a static variable in a function in Python</h2><p>Use a variable <code>func.var</code>, where <code>func</code> is the name of the function and <code>var</code> is the name of a variable as a static variable in <code>func</code>. Either initialize the variable outside of the function or in the function, call <a target="_blank" rel="noopener" href="https://kite.com/python/docs/builtins.hasattr"><code>hasattr(fun, var)</code></a> to test if <code>func.var</code> has been initialized. If it has not, initialize it to the appropriate value, otherwise continue with the function.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP%20%E8%B7%A8%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C%20socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Network/TCPIP/LwIP/LwIP%20%E8%B7%A8%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C%20socket/" class="post-title-link" itemprop="url">LwIP 跨线程操作 socket</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LwIP/" itemprop="url" rel="index"><span itemprop="name">LwIP</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Network/TCPIP/LwIP/LwIP%20%E8%B7%A8%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C%20socket/" class="post-meta-item leancloud_visitors" data-flag-title="LwIP 跨线程操作 socket" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>tcpip_thread</code>有一个<code>tcpip_mbox</code>用以接收应用层或底层的消息。</p>
+<p>每个 socket 对应一个<code>netconn</code>，其中有一个<code>op_completed</code>信号量，用以同步在<code>tcpip_thread</code>中执行的函数。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Network/TCPIP/LwIP/LwIP%20%E8%B7%A8%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C%20socket/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/SoC/Realtek/RTL8762C/access_send/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/SoC/Realtek/RTL8762C/access_send/" class="post-title-link" itemprop="url">access_send</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RTL8762C/" itemprop="url" rel="index"><span itemprop="name">RTL8762C</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/SoC/Realtek/RTL8762C/access_send/" class="post-meta-item leancloud_visitors" data-flag-title="access_send" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>access_send 用以发送 mesh access 层消息，返回值为发送结果。</p>
+<h2 id="强制分片"><a href="#强制分片" class="headerlink" title="强制分片"></a>强制分片</h2><p>access_send 参数为<code>mesh_msg_t</code>结构体变量，若将其中<code>seg</code>设为 1，则强制分片发送。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/SoC/Realtek/RTL8762C/access_send/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/CPU/ARM/Hardfault%20%E8%B0%83%E8%AF%95%E5%AE%9E%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/CPU/ARM/Hardfault%20%E8%B0%83%E8%AF%95%E5%AE%9E%E4%BE%8B/" class="post-title-link" itemprop="url">Hardfault 调试实例</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARM/" itemprop="url" rel="index"><span itemprop="name">ARM</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/CPU/ARM/Hardfault%20%E8%B0%83%E8%AF%95%E5%AE%9E%E4%BE%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Hardfault 调试实例" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="非对齐的访问"><a href="#非对齐的访问" class="headerlink" title="非对齐的访问"></a>非对齐的访问</h2><p>rf_pin_sleep 函数，在按键长按回调中调用没有异常，但是在 TIM_SLP 定时器回调中就会挂掉，调试发现是触发了 Hardfault。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/CPU/ARM/Hardfault%20%E8%B0%83%E8%AF%95%E5%AE%9E%E4%BE%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Git 实用技巧</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" class="post-meta-item leancloud_visitors" data-flag-title="Git 实用技巧" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="git-clean-删除未追踪的文件和目录"><a href="#git-clean-删除未追踪的文件和目录" class="headerlink" title="git clean - 删除未追踪的文件和目录"></a>git clean - 删除未追踪的文件和目录</h2><p>删除一些没有git add的文件；</p>
+<p>git clean 参数：<br>-n 显示将要删除的文件和目录<br>-f 删除文件，-df删除文件和目录</p>
+<h2 id="git-archive-打包"><a href="#git-archive-打包" class="headerlink" title="git archive - 打包"></a>git archive - 打包</h2><p>如果使用压缩工具（tar、7zip、winzip、rar等）将工作区文件归档，一不小心会把版本库（.git目录）包含其中，甚至将工作区中的忽略文件、临时文件也包含其中。  </p>
+<p>Git提供了一个归档命令：<code>gitarchive</code>，可以对任意提交对应的目录树建立归档。  </p>
+<p>如，基于最新提交建立归档文件 latest.zip。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/09/Git/Git%20%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/OS/Zephyr/Zephyr%20Primer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/OS/Zephyr/Zephyr%20Primer/" class="post-title-link" itemprop="url">Zephyr Primer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -296,6 +800,13 @@
             </span>
 
           
+            <span id="/2020/12/09/OS/Zephyr/Zephyr%20Primer/" class="post-meta-item leancloud_visitors" data-flag-title="Zephyr Primer" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -314,7 +825,7 @@
 <p><strong>Wiki</strong>：<a target="_blank" rel="noopener" href="https://github.com/zephyrproject-rtos/zephyr/wiki">https://github.com/zephyrproject-rtos/zephyr/wiki</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/OS/Zephyr/Zephyr%20Primer/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/OS/Zephyr/Zephyr%20Primer/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -338,12 +849,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Zephyr/Zephyr%20UART/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -352,7 +863,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/OS/Zephyr/Zephyr%20UART/" class="post-title-link" itemprop="url">Zephyr UART</a>
+            <a href="/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/" class="post-title-link" itemprop="url">AliOS-Things KV</a>
         </h2>
 
         <div class="post-meta">
@@ -362,76 +873,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Zephyr/" itemprop="url" rel="index"><span itemprop="name">Zephyr</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Demo</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;zephyr.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;drivers/uart.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cli_uart_isr</span><span class="params">(<span class="keyword">const</span> struct device *uart, <span class="keyword">void</span> *user_data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">int</span> rx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* get all of the data off UART as fast as we can */</span></span><br><span class="line">	<span class="keyword">while</span> (uart_irq_update(uart) &amp;&amp; uart_irq_rx_ready(uart)) &#123;</span><br><span class="line">		rx = uart_fifo_read(uart, &amp;c, <span class="keyword">sizeof</span>(c));</span><br><span class="line">		<span class="keyword">if</span> (rx &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		uart_poll_out(dev, c);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">uart_fifo_flush</span><span class="params">(<span class="keyword">const</span> struct device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">while</span> (uart_fifo_read(dev, &amp;c, <span class="number">1</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">continue</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">device</span> *<span class="title">uart_dev</span> =</span> device_get_binding(CONFIG_UART_CONSOLE_ON_DEV_NAME);    </span><br><span class="line">  </span><br><span class="line">  uart_irq_rx_disable(uart_dev);</span><br><span class="line">	uart_irq_tx_disable(uart_dev);</span><br><span class="line">	uart_fifo_flush(uart_dev);</span><br><span class="line">	uart_irq_callback_set(uart_dev, cli_uart_isr);</span><br><span class="line">	uart_irq_rx_enable(uart_dev);</span><br><span class="line">  </span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		k_sleep(K_SECONDS(<span class="number">1</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/" class="post-title-link" itemprop="url">AliOS-Things KV</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -444,6 +886,13 @@
             </span>
 
           
+            <span id="/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/" class="post-meta-item leancloud_visitors" data-flag-title="AliOS-Things KV" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -455,25 +904,9 @@
 
       
           <h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>block 的头部如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Flash block header description *&#x2F;</span><br><span class="line">typedef struct _block_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of block *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of the block *&#x2F;</span><br><span class="line">    uint8_t     reserved[2];</span><br><span class="line">&#125; __attribute__((packed)) block_hdr_t;</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="left">magic</th>
-<th align="left">state</th>
-<th align="left">reserved</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ASCII ‘K’</td>
-<td align="left">1B</td>
-<td align="left">2B</td>
-</tr>
-</tbody></table>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/OS/AliOS-Things/AliOS-Things%20KV/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -497,12 +930,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -511,7 +944,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/" class="post-title-link" itemprop="url">磁盘占用查看工具 - treesize</a>
+            <a href="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/" class="post-title-link" itemprop="url">磁盘占用查看工具 - treesize</a>
         </h2>
 
         <div class="post-meta">
@@ -521,7 +954,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -534,6 +967,13 @@
             </span>
 
           
+            <span id="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/" class="post-meta-item leancloud_visitors" data-flag-title="磁盘占用查看工具 - treesize" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -545,426 +985,15 @@
 
       
           <p>有时候 C 盘红了，不知道哪些大文件吃了硬盘，可以用 treesize 来分析。</p>
-<p><img src="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/image-20201203110215721.png" alt="image-20201203110215721">
+<p><img src="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/image-20201203110215721.png" alt="image-20201203110215721"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/08/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/#more" rel="contents">
+              <a class="btn" href="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/Linux/sudo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/OS/Linux/sudo/" class="post-title-link" itemprop="url">sudo</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><code>sudo</code>就是<code>su do</code>的意思。</p>
-<p><code>su</code>是<code>super user</code>的缩写。</p>
-<p>在 user 账号下 pip install 的库，sudo 是找不到的，必须 sudo pip install，因为 sudo 会切到 root 账号。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/OS/Linux/sudo/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/OS/FreeRTOS/FreeRTOS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/OS/FreeRTOS/FreeRTOS/" class="post-title-link" itemprop="url">FreeRTOS</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FreeRTOS/" itemprop="url" rel="index"><span itemprop="name">FreeRTOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><ul>
-<li><p>老版本的 FreeRTOS 如何下载？<br><a target="_blank" rel="noopener" href="https://sourceforge.net/p/freertos/code/HEAD/tree/%EF%BC%8C%E7%82%B9%E5%87%BB">https://sourceforge.net/p/freertos/code/HEAD/tree/，点击</a> tags 进入，选择版本然后点击<code>Download Snapshot</code>按钮即可启动下载。</p>
-</li>
-<li><p>FreeRTOS 配置选项<br>FreeRTOSConfig.h 的说明：<a target="_blank" rel="noopener" href="https://www.freertos.org/a00110.html">https://www.freertos.org/a00110.html</a></p>
-</li>
-<li><p>如何移植<br><a target="_blank" rel="noopener" href="https://www.freertos.org/FreeRTOS-porting-guide.html">https://www.freertos.org/FreeRTOS-porting-guide.html</a></p>
-</li>
-<li><p>中断优先级设置？</p>
-<p>在移植 5062 时遇到了 StartScheduler 函数内执行 SVC 0 指令后触发 Hardfault 的错误，调试发现是 SVC 中断被屏蔽所导致的。FreeRTOS 在 StartScheduler 前会 portDISABLE_INTERRUPTS，Cortex-M 是通过写 BASEPRI 来屏蔽中断的，5062 的BASRPRI 的值被写为 0x20，而 SVC 的优先级恰好也被设置成了 0x20，所以 SVC 中断被屏蔽了。在 SVC 中断被屏蔽时去触发它会产生一个用法错误 - Hardfaut。</p>
-<blockquote>
-<p>configMAX_SYSCALL_INTERRUPT_PRIORITY needs to be a raw priority value as it is written to the NVIC priority registers in the Cortex-M3 device, as documented in the ARM manuals. The priorities of 0..15 are not real Cortex-M3 priorities, and are simplified priorities for use in some library calls (because the real priorities are so complex on Cortex-M devices).</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/OS/FreeRTOS/FreeRTOS/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Qt 学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Qt/" itemprop="url" rel="index"><span itemprop="name">Qt</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><h3 id="Qt"><a href="#Qt" class="headerlink" title="Qt"></a>Qt</h3><p> <a target="_blank" rel="noopener" href="http://doc.qt.io/">http://doc.qt.io</a></p>
-<h3 id="PyQt"><a href="#PyQt" class="headerlink" title="PyQt"></a>PyQt</h3><p> <a target="_blank" rel="noopener" href="http://pyqt.sourceforge.net/Docs/PyQt5">http://pyqt.sourceforge.net/Docs/PyQt5</a></p>
-<h2 id="MainThread-QTimer-QThread-Signal-和-Slot"><a href="#MainThread-QTimer-QThread-Signal-和-Slot" class="headerlink" title="MainThread , QTimer, QThread, Signal 和 Slot"></a>MainThread , QTimer, QThread, Signal 和 Slot</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal</span><br><span class="line">from PyQt5.QtWidgets import QApplication, QWidget</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">from PyQt5.uic import loadUi</span><br><span class="line">from threading import current_thread, get_ident</span><br><span class="line"></span><br><span class="line">class MainForm(QWidget):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(MainForm, self).__init__()</span><br><span class="line">        loadUi(&#39;form.ui&#39;, self)</span><br><span class="line">        self.pushButton.clicked.connect(self.onButtonClicked)</span><br><span class="line">        self.timer &#x3D; QTimer(self)</span><br><span class="line">        self.timer.setInterval(1000)</span><br><span class="line">        self.timer.timeout.connect(self.onTimerExpire)</span><br><span class="line">        self.timer.start()</span><br><span class="line"></span><br><span class="line">    def onButtonClicked(self):</span><br><span class="line">        print(&#39;onButtonClicked:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">    def onTimerExpire(self):</span><br><span class="line">        self.timer.stop()</span><br><span class="line">        print(&#39;QTimer:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">class Worker(QThread):</span><br><span class="line"></span><br><span class="line">    labelSignal &#x3D; pyqtSignal(str)</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        print(&#39;QThread:&#39;,current_thread().getName(), get_ident())</span><br><span class="line">        self.labelSignal.connect(self.onSignalEmit)</span><br><span class="line">        self.labelSignal.emit(&#39;Hello signal&#39;)</span><br><span class="line"></span><br><span class="line">    def onSignalEmit(self):</span><br><span class="line">        print(&#39;Signal:&#39;,current_thread().getName(), get_ident())</span><br><span class="line"></span><br><span class="line">app &#x3D; QApplication(sys.argv)</span><br><span class="line">mainForm &#x3D; MainForm()</span><br><span class="line">mainForm.show()</span><br><span class="line">print(&#39;Main:&#39;,current_thread().getName(), get_ident())</span><br><span class="line">worker &#x3D; Worker()</span><br><span class="line">worker.start()</span><br><span class="line">sys.exit(app.exec())</span><br></pre></td></tr></table></figure>
-
-<p>程序运行结果是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 form.py</span><br><span class="line">Main: MainThread 140735591891840</span><br><span class="line">QThread: Dummy-1 123145307324416</span><br><span class="line">Signal: MainThread 140735591891840</span><br><span class="line">QTimer: MainThread 140735591891840</span><br><span class="line">onButtonClicked: MainThread 140735591891840</span><br></pre></td></tr></table></figure>
-
-<h3 id="MainThread"><a href="#MainThread" class="headerlink" title="MainThread"></a>MainThread</h3><blockquote>
-<p>In normal conditions, the main thread is the thread from which the Python interpreter was started.</p>
-</blockquote>
-<p>MainThread 就是 Python 开始解释运行的一个线程，就 Qt 而言又叫 UI 线程，负责 UI 更新和事件响应。</p>
-<p>代码中的 app.exec() 本质上是个大循环，Qt 在里面更新 UI 和处理事件。</p>
-<h3 id="QTimer"><a href="#QTimer" class="headerlink" title="QTimer"></a>QTimer</h3><p>QTimer 本质上是运行在 MainThread 内的软件定时器，可以直接更新 UI，不能做耗时长的操作。</p>
-<h3 id="QThread"><a href="#QThread" class="headerlink" title="QThread"></a>QThread</h3><p>QThread 本质上是个 thread，但是可以定义 pyqtSignal 成员变量。</p>
-<h3 id="Signal-和-Slot"><a href="#Signal-和-Slot" class="headerlink" title="Signal 和 Slot"></a>Signal 和 Slot</h3><p>Signal 是 pyqtSignal 类的实例，其 emit 方法会向 MainThread 推送一个函数来执行，这个函数就是 slot，通过 signal 的 connect 方法来绑定。</p>
-<p>不准确的来讲，可以把 MainThread 看作 worker thread，signal 就是向 worker thread 内 push 函数来执行。</p>
-<p>所以 slot 函数是运行在 MainThread 内的，可以直接操作 UI。</p>
-<h2 id="错误以及处理"><a href="#错误以及处理" class="headerlink" title="错误以及处理"></a>错误以及处理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING **: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=196070">https://www.raspberrypi.org/forums/viewtopic.php?t=196070</a></p>
-<p><code>sudo apt-get install at-spi2-core</code></p>
-<h2 id="QSS"><a href="#QSS" class="headerlink" title="QSS"></a>QSS</h2><p>控件的 QSS 必须包含所有预期的样式，否则就会用默认的，比如想设置 QPushButton 圆角，若只在 QSS 内配置了 border-radius 是无效的，因为 border 的宽度和颜色默认都是无。</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">树莓派外设开发</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="WiringPi"><a href="#WiringPi" class="headerlink" title="WiringPi"></a>WiringPi</h2><p><a target="_blank" rel="noopener" href="https://github.com/WiringPi">https://github.com/WiringPi</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11">https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11</a></p>
-<p><a target="_blank" rel="noopener" href="http://www.waveshare.net/study/article-742-1.html">http://www.waveshare.net/study/article-742-1.html</a></p>
-<p>RPi.GPIO目前还不支持I2C、SPI等接口，且缺乏高精度定时功能。wiringpi除了提供C语言接口之外，目前已经支持Python等语言的扩展。对于GPIO的操作非常强大</p>
-<p>安装 WiringPi Library：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install wiringpi</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/08/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/Boards/Raspberry%20Pi/SSH%20%E7%99%BB%E9%99%86%E6%A0%91%E8%8E%93%E6%B4%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow Yang">
-      <meta itemprop="description" content="IoT">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冷香小筑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/Boards/Raspberry%20Pi/SSH%20%E7%99%BB%E9%99%86%E6%A0%91%E8%8E%93%E6%B4%BE/" class="post-title-link" itemprop="url">SSH 登陆树莓派</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-08 23:21:31" itemprop="dateCreated datePublished" datetime="2020-12-08T23:21:31+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="http://shumeipai.nxez.com/2017/09/13/raspberry-pi-network-configuration-before-boot.html">http://shumeipai.nxez.com/2017/09/13/raspberry-pi-network-configuration-before-boot.html</a></p>
-<p>自 2016-11 官方发布的 Raspbian 系统镜像，系统默认禁用了 SSH 服务。在 SD 卡的 boot 磁盘根目录新建一个 ssh 空白文件即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd &#x2F;Volumes&#x2F;boot&#x2F;</span><br><span class="line">$ touch ssh</span><br></pre></td></tr></table></figure>
-
-<p>然后用 arp 查找树莓派的 IP 地址：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ arp -a</span><br><span class="line">? (192.168.3.1) at 4:4f:4c:37:74:28 on en0 ifscope [ethernet]</span><br><span class="line">? (192.168.3.2) at 74:8d:8:c2:cd:84 on en0 ifscope [ethernet]</span><br><span class="line">? (192.168.3.33) at b8:27:eb:7e:b3:9e on en0 ifscope [ethernet]</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">? (224.0.0.251) at 1:0:5e:0:0:fb on en0 ifscope permanent [ethernet]</span><br></pre></td></tr></table></figure>
-
-<p>192.168.3.33 就是树莓派的地址，用 ssh 登陆之，用户名是 pi，密码是 raspberry：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh pi@192.168.3.33</span><br></pre></td></tr></table></figure>
-
-<h3 id="免密码登陆"><a href="#免密码登陆" class="headerlink" title="免密码登陆"></a>免密码登陆</h3><p><a target="_blank" rel="noopener" href="https://www.imooc.com/article/18859?block_id=tuijian_wz">https://www.imooc.com/article/18859?block_id=tuijian_wz</a></p>
-<p>生成公钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
-
-<p>上传公钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub  pi@192.168.199.200</span><br></pre></td></tr></table></figure>
-
-
       
     </div>
 
@@ -1040,25 +1069,32 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">Snow Yang</p>
-  <div class="site-description" itemprop="description">IoT</div>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
 
 
 
@@ -1098,6 +1134,97 @@
 
 
 
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
 
 
       </div>

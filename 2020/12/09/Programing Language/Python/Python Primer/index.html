@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="字典安全的访问 dict 中的 key如果key不存在，访问 dict就会报错：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Primer">
+<meta property="og:url" content="http://example.com/2020/12/09/Programing%20Language/Python/Python%20Primer/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="字典安全的访问 dict 中的 key如果key不存在，访问 dict就会报错：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-09T14:42:41.290Z">
+<meta property="article:modified_time" content="2020-12-09T14:42:41.290Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/12/09/Programing%20Language/Python/Python%20Primer/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python Primer | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/Python/Python%20Primer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python Primer
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:42:41" itemprop="dateCreated datePublished" datetime="2020-12-09T22:42:41+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Programing%20Language/Python/Python%20Primer/" class="post-meta-item leancloud_visitors" data-flag-title="Python Primer" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><h3 id="安全的访问-dict-中的-key"><a href="#安全的访问-dict-中的-key" class="headerlink" title="安全的访问 dict 中的 key"></a>安全的访问 dict 中的 key</h3><p>如果key不存在，访问 dict就会报错：</p>
+<a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="string">&#x27;Thomas&#x27;</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">KeyError: <span class="string">&#x27;Thomas&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>要避免key不存在的错误，有两种办法，一是通过<code>in</code>判断key是否存在：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Thomas&#x27;</span> <span class="keyword">in</span> d</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>二是通过dict提供的<code>get()</code>方法，如果key不存在，可以返回<code>None</code>，或者自己指定的value：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.get(<span class="string">&#x27;Thomas&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.get(<span class="string">&#x27;Thomas&#x27;</span>, -<span class="number">1</span>)</span><br><span class="line">-<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：返回<code>None</code>的时候Python的交互环境不显示结果。</p>
+<h3 id="删除-key"><a href="#删除-key" class="headerlink" title="删除 key"></a>删除 key</h3><p>要删除一个key，用<code>pop(key)</code>方法，对应的value也会从dict中删除：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.pop(<span class="string">&#x27;Bob&#x27;</span>)</span><br><span class="line"><span class="number">75</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;<span class="string">&#x27;Michael&#x27;</span>: <span class="number">95</span>, <span class="string">&#x27;Tracy&#x27;</span>: <span class="number">85</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="List-和-Dict-的对比"><a href="#List-和-Dict-的对比" class="headerlink" title="List 和 Dict 的对比"></a>List 和 Dict 的对比</h3><p>和list比较，dict有以下几个特点：</p>
+<ul>
+<li>查找和插入的速度极快，不会随着key的增加而变慢；</li>
+<li>需要占用大量的内存，内存浪费多。</li>
+</ul>
+<p>而list相反：</p>
+<ul>
+<li>查找和插入的时间随着元素的增加而增加；</li>
+<li>占用空间小，浪费内存很少。</li>
+</ul>
+<p>所以，dict是用空间来换取时间的一种方法。</p>
+<p>dict可以用在需要高速查找的很多地方，在Python代码中几乎无处不在，正确使用dict非常重要，需要牢记的第一条就是dict的key必须是<strong>不可变对象</strong>。</p>
+<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><p>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。</p>
+<p>重复元素在set中自动被过滤：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="built_in">set</span>([<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>add(key)</code>方法可以添加元素到set中，可以重复添加，但不会有效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.add(<span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.add(<span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>remove(key)</code>方法可以删除元素：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.remove(<span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>set可以看成数学意义上的无序和无重复元素的集合，因此，两个set可以做数学意义上的交集、并集等操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1 = <span class="built_in">set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s2 = <span class="built_in">set</span>([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1 &amp; s2</span><br><span class="line">&#123;<span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1 | s2</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p><code>L[0:3]</code>表示，从索引<code>0</code>开始取，直到索引<code>3</code>为止，但不包括索引<code>3</code>。即索引<code>0</code>，<code>1</code>，<code>2</code>，正好是3个元素。</p>
+<p>记住倒数第一个元素的索引是<code>-1</code>。</p>
+<p>切片操作十分有用。我们先创建一个0-99的数列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">100</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, ..., <span class="number">99</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>前10个数：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[:<span class="number">10</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>后10个数：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[-<span class="number">10</span>:]</span><br><span class="line">[<span class="number">90</span>, <span class="number">91</span>, <span class="number">92</span>, <span class="number">93</span>, <span class="number">94</span>, <span class="number">95</span>, <span class="number">96</span>, <span class="number">97</span>, <span class="number">98</span>, <span class="number">99</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>前11-20个数：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[<span class="number">10</span>:<span class="number">20</span>]</span><br><span class="line">[<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>, <span class="number">15</span>, <span class="number">16</span>, <span class="number">17</span>, <span class="number">18</span>, <span class="number">19</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>前10个数，每2个取1个：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[:<span class="number">10</span>:<span class="number">2</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>所有数，每5个取1个：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[::<span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">25</span>, <span class="number">30</span>, <span class="number">35</span>, <span class="number">40</span>, <span class="number">45</span>, <span class="number">50</span>, <span class="number">55</span>, <span class="number">60</span>, <span class="number">65</span>, <span class="number">70</span>, <span class="number">75</span>, <span class="number">80</span>, <span class="number">85</span>, <span class="number">90</span>, <span class="number">95</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原样复制一个list：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[:]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, ..., <span class="number">99</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h2><p>默认情况下，dict迭代的是key。如果要迭代value，可以用<code>for value in d.values()</code>，如果要同时迭代key和value，可以用<code>for k, v in d.items()</code>。</p>
+<p>Python内置的<code>enumerate</code>函数可以把一个list变成索引-元素对，这样就可以在<code>for</code>循环中同时迭代索引和元素本身：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>([<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>]):</span><br><span class="line"><span class="meta">... </span>    print(i, value)</span><br><span class="line">...</span><br><span class="line"><span class="number">0</span> A</span><br><span class="line"><span class="number">1</span> B</span><br><span class="line"><span class="number">2</span> C</span><br></pre></td></tr></table></figure>
+
+<h2 id="列表生成式"><a href="#列表生成式" class="headerlink" title="列表生成式"></a>列表生成式</h2><p>如果要生成<code>[1x1, 2x2, 3x3, ..., 10x10]</code>怎么做？方法一是循环：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line"><span class="meta">... </span>   L.append(x * x)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+
+<p>但是循环太繁琐，而列表生成式则可以用一行语句代替循环生成上面的list：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>)]</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+
+<p>写列表生成式时，把要生成的元素<code>x * x</code>放到前面，后面跟<code>for</code>循环，就可以把list创建出来，十分有用，多写几次，很快就可以熟悉这种语法。</p>
+<p>for循环后面还可以加上if判断，这样我们就可以筛选出仅偶数的平方：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>) <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line">[<span class="number">4</span>, <span class="number">16</span>, <span class="number">36</span>, <span class="number">64</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+
+<p>还可以使用两层循环，可以生成全排列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[m + n <span class="keyword">for</span> m <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span> <span class="keyword">for</span> n <span class="keyword">in</span> <span class="string">&#x27;XYZ&#x27;</span>]</span><br><span class="line">[<span class="string">&#x27;AX&#x27;</span>, <span class="string">&#x27;AY&#x27;</span>, <span class="string">&#x27;AZ&#x27;</span>, <span class="string">&#x27;BX&#x27;</span>, <span class="string">&#x27;BY&#x27;</span>, <span class="string">&#x27;BZ&#x27;</span>, <span class="string">&#x27;CX&#x27;</span>, <span class="string">&#x27;CY&#x27;</span>, <span class="string">&#x27;CZ&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><p>由于函数也是一个对象，而且函数对象可以被赋值给变量，所以，通过变量也能调用该函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">now</span>():</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">&#x27;2015-3-25&#x27;</span>)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = now</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f()</span><br><span class="line"><span class="number">2015</span>-<span class="number">3</span>-<span class="number">25</span></span><br></pre></td></tr></table></figure>
+
+<p>现在，假设我们要增强<code>now()</code>函数的功能，比如，在函数调用前后自动打印日志，但又不希望修改<code>now()</code>函数的定义，这种在代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）。</p>
+<p>本质上，decorator就是一个返回函数的高阶函数。所以，我们要定义一个能打印日志的decorator，可以定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span>(<span class="params">func</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kw</span>):</span></span><br><span class="line">        print(<span class="string">&#x27;call %s():&#x27;</span> % func.__name__)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kw)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p>观察上面的<code>log</code>，因为它是一个decorator，所以接受一个函数作为参数，并返回一个函数。我们要借助Python的@语法，把decorator置于函数的定义处：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@log</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">now</span>():</span></span><br><span class="line">    print(<span class="string">&#x27;2015-3-25&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>调用<code>now()</code>函数，不仅会运行<code>now()</code>函数本身，还会在运行<code>now()</code>函数前打印一行日志：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>now()</span><br><span class="line">call now():</span><br><span class="line"><span class="number">2015</span>-<span class="number">3</span>-<span class="number">25</span></span><br></pre></td></tr></table></figure>
+
+<p>把<code>@log</code>放到<code>now()</code>函数的定义处，相当于执行了语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">now = log(now)</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>log()</code>是一个decorator，返回一个函数，所以，原来的<code>now()</code>函数仍然存在，只是现在同名的<code>now</code>变量指向了新的函数，于是调用<code>now()</code>将执行新函数，即在<code>log()</code>函数中返回的<code>wrapper()</code>函数。</p>
+<p><code>wrapper()</code>函数的参数定义是<code>(*args, **kw)</code>，因此，<code>wrapper()</code>函数可以接受任意参数的调用。在<code>wrapper()</code>函数内，首先打印日志，再紧接着调用原始函数。</p>
+<h2 id="使用-propery"><a href="#使用-propery" class="headerlink" title="使用 @propery"></a>使用 @propery</h2><p>在绑定属性时，如果我们直接把属性暴露出去，虽然写起来很简单，但是，没办法检查参数，导致可以把成绩随便改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = Student()</span><br><span class="line">s.score = <span class="number">9999</span></span><br></pre></td></tr></table></figure>
+
+<p>这显然不合逻辑。为了限制score的范围，可以通过一个<code>set_score()</code>方法来设置成绩，再通过一个<code>get_score()</code>来获取成绩，这样，在<code>set_score()</code>方法里，就可以检查参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_score</span>(<span class="params">self</span>):</span></span><br><span class="line">         <span class="keyword">return</span> self._score</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_score</span>(<span class="params">self, value</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, <span class="built_in">int</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;score must be an integer!&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> value &lt; <span class="number">0</span> <span class="keyword">or</span> value &gt; <span class="number">100</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;score must between 0 ~ 100!&#x27;</span>)</span><br><span class="line">        self._score = value</span><br></pre></td></tr></table></figure>
+
+<p>现在，对任意的Student实例进行操作，就不能随心所欲地设置score了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Student()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.set_score(<span class="number">60</span>) <span class="comment"># ok!</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.get_score()</span><br><span class="line"><span class="number">60</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.set_score(<span class="number">9999</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: score must between <span class="number">0</span> ~ <span class="number">100</span>!</span><br></pre></td></tr></table></figure>
+
+<p>但是，上面的调用方法又略显复杂，没有直接用属性这么直接简单。</p>
+<p>有没有既能检查参数，又可以用类似属性这样简单的方式来访问类的变量呢？对于追求完美的Python程序员来说，这是必须要做到的！</p>
+<p>还记得装饰器（decorator）可以给函数动态加上功能吗？对于类的方法，装饰器一样起作用。</p>
+<p>Python内置的<code>@property</code>装饰器就是负责把一个方法变成属性调用的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">score</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self._score</span><br><span class="line"></span><br><span class="line"><span class="meta">    @score.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">score</span>(<span class="params">self, value</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, <span class="built_in">int</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;score must be an integer!&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> value &lt; <span class="number">0</span> <span class="keyword">or</span> value &gt; <span class="number">100</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;score must between 0 ~ 100!&#x27;</span>)</span><br><span class="line">        self._score = value</span><br></pre></td></tr></table></figure>
+
+<p><code>@property</code>的实现比较复杂，我们先考察如何使用。把一个getter方法变成属性，只需要加上<code>@property</code>就可以了，此时，<code>@property</code>本身又创建了另一个装饰器<code>@score.setter</code>，负责把一个setter方法变成属性赋值，于是，我们就拥有一个可控的属性操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Student()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.score = <span class="number">60</span> <span class="comment"># OK，实际转化为s.set_score(60)</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.score <span class="comment"># OK，实际转化为s.get_score()</span></span><br><span class="line"><span class="number">60</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.score = <span class="number">9999</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: score must between <span class="number">0</span> ~ <span class="number">100</span>!</span><br></pre></td></tr></table></figure>
+
+<p>注意到这个神奇的<code>@property</code>，我们在对实例属性操作的时候，就知道该属性很可能不是直接暴露的，而是通过getter和setter方法来实现的。</p>
+<p>还可以定义只读属性，只定义getter方法，不定义setter方法就是一个只读属性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self._birth</span><br><span class="line"></span><br><span class="line"><span class="meta">    @birth.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span>(<span class="params">self, value</span>):</span></span><br><span class="line">        self._birth = value</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">age</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">2015</span> - self._birth</span><br></pre></td></tr></table></figure>
+
+<p>上面的<code>birth</code>是可读写属性，而<code>age</code>就是一个<em>只读</em>属性，因为<code>age</code>可以根据<code>birth</code>和当前时间计算出来。</p>
+<h2 id="使用枚举类"><a href="#使用枚举类" class="headerlink" title="使用枚举类"></a>使用枚举类</h2><p>当我们需要定义常量时，一个办法是用大写变量通过整数来定义，例如月份：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">JAN = <span class="number">1</span></span><br><span class="line">FEB = <span class="number">2</span></span><br><span class="line">MAR = <span class="number">3</span></span><br><span class="line">...</span><br><span class="line">NOV = <span class="number">11</span></span><br><span class="line">DEC = <span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<p>好处是简单，缺点是类型是<code>int</code>，并且仍然是变量。</p>
+<p>更好的方法是为这样的枚举类型定义一个class类型，然后，每个常量都是class的一个唯一实例。Python提供了<code>Enum</code>类来实现这个功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> enum <span class="keyword">import</span> Enum</span><br><span class="line"></span><br><span class="line">Month = Enum(<span class="string">&#x27;Month&#x27;</span>, (<span class="string">&#x27;Jan&#x27;</span>, <span class="string">&#x27;Feb&#x27;</span>, <span class="string">&#x27;Mar&#x27;</span>, <span class="string">&#x27;Apr&#x27;</span>, <span class="string">&#x27;May&#x27;</span>, <span class="string">&#x27;Jun&#x27;</span>, <span class="string">&#x27;Jul&#x27;</span>, <span class="string">&#x27;Aug&#x27;</span>, <span class="string">&#x27;Sep&#x27;</span>, <span class="string">&#x27;Oct&#x27;</span>, <span class="string">&#x27;Nov&#x27;</span>, <span class="string">&#x27;Dec&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就获得了<code>Month</code>类型的枚举类，可以直接使用<code>Month.Jan</code>来引用一个常量，或者枚举它的所有成员：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> name, member <span class="keyword">in</span> Month.__members__.items():</span><br><span class="line">    print(name, <span class="string">&#x27;=&gt;&#x27;</span>, member, <span class="string">&#x27;,&#x27;</span>, member.value)</span><br></pre></td></tr></table></figure>
+
+<p><code>value</code>属性则是自动赋给成员的<code>int</code>常量，默认从<code>1</code>开始计数。</p>
+<p>如果需要更精确地控制枚举类型，可以从<code>Enum</code>派生出自定义类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> enum <span class="keyword">import</span> Enum, unique</span><br><span class="line"></span><br><span class="line"><span class="meta">@unique</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Weekday</span>(<span class="params">Enum</span>):</span></span><br><span class="line">    Sun = <span class="number">0</span> <span class="comment"># Sun的value被设定为0</span></span><br><span class="line">    Mon = <span class="number">1</span></span><br><span class="line">    Tue = <span class="number">2</span></span><br><span class="line">    Wed = <span class="number">3</span></span><br><span class="line">    Thu = <span class="number">4</span></span><br><span class="line">    Fri = <span class="number">5</span></span><br><span class="line">    Sat = <span class="number">6</span></span><br></pre></td></tr></table></figure>
+
+<p><code>@unique</code>装饰器可以帮助我们检查保证没有重复值。</p>
+<p>访问这些枚举类型可以有若干种方法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>day1 = Weekday.Mon</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(day1)</span><br><span class="line">Weekday.Mon</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(Weekday.Tue)</span><br><span class="line">Weekday.Tue</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(Weekday[<span class="string">&#x27;Tue&#x27;</span>])</span><br><span class="line">Weekday.Tue</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(Weekday.Tue.value)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(day1 == Weekday.Mon)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(day1 == Weekday.Tue)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(Weekday(<span class="number">1</span>))</span><br><span class="line">Weekday.Mon</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(day1 == Weekday(<span class="number">1</span>))</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Weekday(<span class="number">7</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: <span class="number">7</span> <span class="keyword">is</span> <span class="keyword">not</span> a valid Weekday</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> name, member <span class="keyword">in</span> Weekday.__members__.items():</span><br><span class="line"><span class="meta">... </span>    print(name, <span class="string">&#x27;=&gt;&#x27;</span>, member)</span><br><span class="line">...</span><br><span class="line">Sun =&gt; Weekday.Sun</span><br><span class="line">Mon =&gt; Weekday.Mon</span><br><span class="line">Tue =&gt; Weekday.Tue</span><br><span class="line">Wed =&gt; Weekday.Wed</span><br><span class="line">Thu =&gt; Weekday.Thu</span><br><span class="line">Fri =&gt; Weekday.Fri</span><br><span class="line">Sat =&gt; Weekday.Sat</span><br></pre></td></tr></table></figure>
+
+<p>可见，既可以用成员名称引用枚举常量，又可以直接根据value的值获得枚举常量。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/" rel="prev" title="Python Static variable">
+      <i class="fa fa-chevron-left"></i> Python Static variable
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/09/OS/Zephyr/Zephyr%20UART/" rel="next" title="Zephyr UART">
+      Zephyr UART <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8"><span class="nav-number">1.</span> <span class="nav-text">字典</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%9A%84%E8%AE%BF%E9%97%AE-dict-%E4%B8%AD%E7%9A%84-key"><span class="nav-number">1.1.</span> <span class="nav-text">安全的访问 dict 中的 key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4-key"><span class="nav-number">1.2.</span> <span class="nav-text">删除 key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List-%E5%92%8C-Dict-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.3.</span> <span class="nav-text">List 和 Dict 的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E7%89%87"><span class="nav-number">3.</span> <span class="nav-text">切片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">4.</span> <span class="nav-text">迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E7%94%9F%E6%88%90%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">列表生成式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-propery"><span class="nav-number">7.</span> <span class="nav-text">使用 @propery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%9A%E4%B8%BE%E7%B1%BB"><span class="nav-number">8.</span> <span class="nav-text">使用枚举类</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

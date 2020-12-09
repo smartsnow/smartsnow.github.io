@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LwIPLwIP 官方网站： http:&#x2F;&#x2F;savannah.nongnu.org&#x2F;projects&#x2F;lwip&#x2F; Git 仓库：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LwIP">
+<meta property="og:url" content="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="LwIPLwIP 官方网站： http:&#x2F;&#x2F;savannah.nongnu.org&#x2F;projects&#x2F;lwip&#x2F; Git 仓库：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/Users/snowyang/markdown/resources/LwIP/dhcp_options.png">
+<meta property="og:image" content="http://example.com/resources/TCP:IP/%5Blwip%5D-udp_pcb.jpg">
+<meta property="article:published_time" content="2020-12-09T14:41:12.224Z">
+<meta property="article:modified_time" content="2020-12-09T14:41:12.225Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/Users/snowyang/markdown/resources/LwIP/dhcp_options.png">
+
+<link rel="canonical" href="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LwIP | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Network/TCPIP/LwIP/LwIP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LwIP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LwIP/" itemprop="url" rel="index"><span itemprop="name">LwIP</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Network/TCPIP/LwIP/LwIP/" class="post-meta-item leancloud_visitors" data-flag-title="LwIP" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="LwIP"><a href="#LwIP" class="headerlink" title="LwIP"></a>LwIP</h2><p>LwIP 官方网站：</p>
+<p><a target="_blank" rel="noopener" href="http://savannah.nongnu.org/projects/lwip/">http://savannah.nongnu.org/projects/lwip/</a></p>
+<p>Git 仓库：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lwIP - A Lightweight TCPIP stack</span><br><span class="line">git clone https:&#x2F;&#x2F;git.savannah.nongnu.org&#x2F;git&#x2F;lwip.git</span><br><span class="line"></span><br><span class="line">Unnamed repository; edit this file &#39;description&#39; to name the repository.</span><br><span class="line">git clone https:&#x2F;&#x2F;git.savannah.nongnu.org&#x2F;git&#x2F;lwip&#x2F;lwip-contrib.git</span><br></pre></td></tr></table></figure>
+
+<p>lwip-contrib 仓库用以一些牛逼的第三方开发者贡献自己的代码。内有各种各样牛逼又实用的代码，比如 ping，shell, httpd 以及在 win32, unix 上的 port。这些代码都是经过官方审查的，就比如 ping 肯定比那些野生的 ping 要好用和稳定。</p>
+<h2 id="LwIP-理解"><a href="#LwIP-理解" class="headerlink" title="LwIP 理解"></a>LwIP 理解</h2><p>我觉得协议栈中的 <code>栈</code> 字用的特别精确，协议栈就是一层层协议搭建起来的栈，一层协议负责一种职能，数据在栈中自下而上或者自上而下的传输。比如发送一个 TCP 报文，就自上而下地经过了负责可靠传输的传输层，负责路由和转发的网络层，最终由物理层转换为信号发送出去；而接收到一个原始数据包，就自下而上地经过网络层和传输层的处理，然后递交给用户。</p>
+<h2 id="LwIP-移植"><a href="#LwIP-移植" class="headerlink" title="LwIP 移植"></a>LwIP 移植</h2><ol>
+<li><p>需要编译哪些 .c，需要包含哪些 .h？</p>
+<p>在 src 目录下有 Filelists.mk 文件，里面定义了 LwIP 各种功能所需的 .c。</p>
+<p>所有的 .h 都在 include 目录下，并且都是以相对路径的方式引用的，所以只需要把 include 加入头文件搜索路径即可。</p>
+<p>当然，最快最保险的方法还是直接用 STM32CubeMX 生成一个 FreeRTOS + LwIP 例程。</p>
+</li>
+<li><p>需要用户移植哪些文件？</p>
+<p>参考《嵌入式网络那些事》，用户只需移植 lwipopts.h, perf.h 和 cc.h 这 3 个头文件即可完成内核（无 OS）的移植，若使用 OS，还需额外移植 sys_arch.c/.h 这 2 个文件。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lwipopts.h</td>
+<td>LwIP configuration</td>
+</tr>
+<tr>
+<td>perf.h</td>
+<td>Architecture specific performance measurement.</td>
+</tr>
+<tr>
+<td>cc.h</td>
+<td>Architecture environment, some compiler specific, some environment specific.</td>
+</tr>
+<tr>
+<td>sys_arch.c/.h</td>
+<td>Abstract operation system  layer.</td>
+</tr>
+</tbody></table>
+<p> <a href="resources/LwIP/doc/sys_arch.txt">doc/sys_arch.txt</a> 可能没有及时更新，其实在 2.0.3 中，cc.h 中的大部分定义在 include/lwip/arch.h 中已经有默认定义了，对于 ARM + GCC 平台可以直接使用。lwip_contrib 的 master 分支最新 commit 上的 ports/unix 可供 ARM + GCC 参考，其 port/include/arch/cc.h 内其实只定义了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#define LWIP_TIMEVAL_PRIVATE 0</span><br><span class="line">#include &lt;sys&#x2F;time.h&gt;</span><br><span class="line">#define LWIP_ERRNO_INCLUDE &lt;errno.h&gt;</span><br><span class="line">#define LWIP_RAND() ((u32_t)rand())</span><br></pre></td></tr></table></figure>
+
+<p>如果没有在 lwipopts.h 内定义 LWIP_PERF，则无需 perf.h。</p>
+<p>对于 sys_arch.h，<a href="resources/LwIP/doc/sys_arch.txt">doc/sys_arch.txt</a>  内说明如下：</p>
+<blockquote>
+<p>sys_arch.h - Tied to sys_arch.c</p>
+<p>  Arch dependent types for the following objects:</p>
+<pre><code>sys_sem_t, sys_mbox_t, sys_thread_t,</code></pre>
+<p>  And, optionally:</p>
+<pre><code>sys_prot_t</code></pre>
+<p>  Defines to set vars of sys_mbox_t and sys_sem_t to NULL.</p>
+<pre><code>SYS_MBOX_NULL NULL
+SYS_SEM_NULL NULL</code></pre>
+</blockquote>
+<p>其实少了一个 sys_mutex_t ，如果使用的是 FreeRTOS，则可以直接使用 lwip_contrib 的 ports/freertos 的代码。</p>
+<p>lwipopts.h 使用了 ESP32 的即可。</p>
+</li>
+</ol>
+<h2 id="LwIP-初始化"><a href="#LwIP-初始化" class="headerlink" title="LwIP 初始化"></a>LwIP 初始化</h2><p>参考 <a href="resources/LwIP/doc/rawapi.txt">doc/rawapi.txt</a> 的 System initalization 章节。 <a href="resources/LwIP/doc/NO_SYS_SampleCode.c">doc/NO_SYS_SampleCode.c</a> 是示例代码。</p>
+<p>参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/byeyear/p/4169834.html">lwip初始化过程</a></p>
+<blockquote>
+<p>初始化过程的前半部分主要针对lwip的内存管理和各个协议层，在src/core/init.c中有一个lwip_init()函数已经为我们做好了，直接调用即可；</p>
+<p>初始化过程的后半部分初始化网络接口，依次调用以下函数：</p>
+<p>netif_add（如果有多个接口则需多次调用）</p>
+<p>netif_set_default</p>
+<p>netif_set_up</p>
+<p>dhcp_start</p>
+<p>调用netif_add函数时我们需要提供一个init函数指针，这个指针指向我们自己的硬件接口初始化函数，一般来说就是ethernetif.c中的ethernetif_init()。</p>
+</blockquote>
+<p>其中 lwip_init 函数内主要是做内存和变量初始化。</p>
+<p>在 netif_add 函数内会调用 init 函数指针来初始化网卡。LwIP 的逻辑是认为在添加网卡时就应该初始化它。</p>
+<p>LwIP 通过 netif_set_link_up 触发的事件来启动 DHCP discovery。</p>
+<p>使用 OS 的 LwIP 初始化只是把第一步的 lwip_init 换成了 tcpip_init。其实 tcpip_init 里也是调用了 lwip_init，并创建了 tcpip_thread。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void</span><br><span class="line">tcpip_init(tcpip_init_done_fn initfunc, void *arg)</span><br><span class="line">&#123;</span><br><span class="line">  lwip_init();</span><br><span class="line">  tcpip_init_done &#x3D; initfunc;</span><br><span class="line">  tcpip_init_done_arg &#x3D; arg;</span><br><span class="line">  if (sys_mbox_new(&amp;mbox, TCPIP_MBOX_SIZE) !&#x3D; ERR_OK) &#123;</span><br><span class="line">    LWIP_ASSERT(&quot;failed to create tcpip_thread mbox&quot;, 0);</span><br><span class="line">  &#125;</span><br><span class="line">#if LWIP_TCPIP_CORE_LOCKING</span><br><span class="line">  if (sys_mutex_new(&amp;lock_tcpip_core) !&#x3D; ERR_OK) &#123;</span><br><span class="line">    LWIP_ASSERT(&quot;failed to create lock_tcpip_core&quot;, 0);</span><br><span class="line">  &#125;</span><br><span class="line">#endif &#x2F;* LWIP_TCPIP_CORE_LOCKING *&#x2F;</span><br><span class="line">  sys_thread_new(TCPIP_THREAD_NAME, tcpip_thread, NULL, TCPIP_THREAD_STACKSIZE, TCPIP_THREAD_PRIO);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="netif-set-link-up-和-netif-set-up-的区别"><a href="#netif-set-link-up-和-netif-set-up-的区别" class="headerlink" title="netif_set_link_up 和 netif_set_up 的区别"></a>netif_set_link_up 和 netif_set_up 的区别</h2><p>参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/byeyear/p/3514573.html">LwIP：处理链路状态改变</a></p>
+<p>此作者的 LwIP 分类：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/byeyear/category/513604.html">http://www.cnblogs.com/byeyear/category/513604.html</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="http://lwip.wikia.com/wiki/Network_interfaces_management">Network interfaces management</a></p>
+<p>还有个 WiKi：<a target="_blank" rel="noopener" href="http://lwip.wikia.com/wiki/LwIP_Wiki">lwIP Wiki</a></p>
+<p>它们似乎都认为 netif_set_up 代表着网卡拿到了 IP 地址，可以收发数据了。</p>
+<p>但是根据作者本人回复：<a target="_blank" rel="noopener" href="http://savannah.nongnu.org/bugs/?func=detailitem&item_id=37068"><em>bug #37068</em>: netif up/down handling is unclear</a></p>
+<p>再根据 CHANGELOG：</p>
+<blockquote>
+<p>  2015-03-05: Simon Goldschmidt</p>
+<ul>
+<li>netif.c, ip4.c, dhcp.c, autoip.c: fixed bug #37068 (netif up/down handling<br>is unclear): correclty separated administrative status of a netif (up/down)<br>from ‘valid address’ status<br>ATTENTION: netif_set_up() now always has to be called, even when dhcp/autoip<br>is used!</li>
+</ul>
+</blockquote>
+<p>官方解释如下：</p>
+<blockquote>
+<p>This is the administrative (= software) state of the netif, when the netif is fully configured this function must be called.</p>
+</blockquote>
+<blockquote>
+<p>Bring an interface up, available for processing traffic.</p>
+</blockquote>
+<p>所以：</p>
+<p>netif_set_up 是使能网卡，设置 NETIF_FLAG_UP 标志位，必须在网卡被使用前用户来调用<br>netif_set_link_up 是当网卡链路层 active 时由网卡驱动来设置的，如，station 关联上 AP 后就应该调用netif_set_link_up。</p>
+<h2 id="注册-DHCP-回调函数-netif-set-status-callback"><a href="#注册-DHCP-回调函数-netif-set-status-callback" class="headerlink" title="注册 DHCP 回调函数 - netif_set_status_callback()"></a>注册 DHCP 回调函数 - netif_set_status_callback()</h2><p>使用<code>netif_set_status_callback</code>函数可以注册回调函数<code>NETIF_STATUS_CALLBACK</code>，那么协议栈中什么时候回调这个函数呢？ </p>
+<ul>
+<li><h3 id="NETIF-STATUS-CALLBACK"><a href="#NETIF-STATUS-CALLBACK" class="headerlink" title="NETIF_STATUS_CALLBACK"></a>NETIF_STATUS_CALLBACK</h3></li>
+</ul>
+<p>有 3 个函数内会回调这个函数，这 3 个函数内会判断网卡状态有变化才调用此回调函数(如网卡从 down 到 up，或者设置了新的IP地址)：</p>
+<ol>
+<li><code>netif_set_up</code><br>由用户调用以使能网卡</li>
+<li><code>netif_set_down</code><br>由用户调用以禁止网卡</li>
+<li><code>netif_set_ipaddr</code><br>由<code>netif_set_addr</code>调用（<code>netif_set_ipaddr</code>设置 IP 地址，而<code>netif_set_addr</code>还设置了子网掩码和网关地址）</li>
+</ol>
+<ul>
+<li><h3 id="netif-set-addr"><a href="#netif-set-addr" class="headerlink" title="netif_set_addr"></a>netif_set_addr</h3></li>
+</ul>
+<p><code>netif_set_addr</code>有 4 个地方调用：</p>
+<ol>
+<li>netif 中的<code>netif_add</code></li>
+<li>dhcp </li>
+<li>autoip </li>
+<li>ppp </li>
+</ol>
+<p>autoip 和 ppp 没有用到，<code>netif_add</code>是在初始化网卡时调用的，所以只用分析 dhcp。</p>
+<p>dhcp 中有 3 个函数会调用<code>netif_set_addr</code>： </p>
+<ol>
+<li><code>dhcp_handle_nak</code><br>DHCP server收到 client 的 DHCP request 后，如果由于某些原因不能正常的分配IP地址，则会发送 NAK 给 client，这个 NAK 就在<code>dhcp_handle_nak</code>中处理：首先调用<code>netif_set_addr</code>将网卡的地址恢复默认的<code>IP_ADDR_ANY</code>，然后重启 dhcp。</li>
+<li><code>dhcp_bind</code><br>在 2 个函数内被调用： <ol>
+<li><code>dhcp_recv</code><br>成功收到 DHCP ACK 后，若网卡不支持 ARP，则会直接调用<code>dhcp_bind</code>来绑定 IP 地址，DHCP 完成。</li>
+<li><code>dhcp_timeout</code><br>若用网卡支持 ARP，则在<code>dhcp_recv</code>内会向分配的 IP 地址发送一个 ARP 包以检查是否已被其他主机使用，若没有收到 ARP 回复，则 500ms 后的<code>dhcp_timeout</code>会调用<code>dhcp_bind</code>来绑定 IP 地址，DHCP 完成。</li>
+</ol>
+</li>
+<li><code>dhcp_release</code><br>释放已分配的 IP 地址，也会调用<code>netif_set_addr</code>将网卡的地址恢复默认。</li>
+</ol>
+<p>所以<code>NETIF_STATUS_CALLBACK</code>可以用作是 DHCP 结果的一个回调函数。</p>
+<p>DHCP 最后阶段的 ACK 包中含有：</p>
+<ul>
+<li>Your IP address：分配给本机的 IP 地址。</li>
+<li>Subnet Mask：子网掩码。</li>
+<li>Router：网关 IP 地址。</li>
+<li>Domain Name Server：DNS 服务器 IP 地址。<br><img src="/Users/snowyang/markdown/resources/LwIP/dhcp_options.png" alt="dhcp_options"></li>
+</ul>
+<h2 id="Redefination-of-timeval"><a href="#Redefination-of-timeval" class="headerlink" title="Redefination of timeval"></a>Redefination of timeval</h2><p>struct timeval 在 LwIP 的 socket.h 和 GCC 的 _timeval.h 内都有定义，这样在编译时就会出错。</p>
+<p>有两种解决方法：</p>
+<ul>
+<li><p>使用 GCC 的 timeval：在 lwipopts.h 定义 LWIP_TIMEVAL_PRIVATE 为 0，并在 cc.h 内包含头文件 &lt;sys/time.h&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;** LWIP_TIMEVAL_PRIVATE: if you want to use the struct timeval provided</span><br><span class="line"> * by your system, set this to 0 and include &lt;sys&#x2F;time.h&gt; in cc.h *&#x2F;</span><br><span class="line">#ifndef LWIP_TIMEVAL_PRIVATE</span><br><span class="line">#define LWIP_TIMEVAL_PRIVATE 1</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">#if LWIP_TIMEVAL_PRIVATE</span><br><span class="line">struct timeval &#123;</span><br><span class="line">  long    tv_sec;         &#x2F;* seconds *&#x2F;</span><br><span class="line">  long    tv_usec;        &#x2F;* and microseconds *&#x2F;</span><br><span class="line">&#125;;</span><br><span class="line">#endif &#x2F;* LWIP_TIMEVAL_PRIVATE *&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 LwIP 的 timeval：加入全局编译选项<code>-D_TIMEVAL_DEFINED</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#ifndef _TIMEVAL_DEFINED</span><br><span class="line">#define _TIMEVAL_DEFINED</span><br><span class="line"></span><br><span class="line">&#x2F;*</span><br><span class="line"> * Structure returned by gettimeofday(2) system call, and used in other calls.</span><br><span class="line"> *&#x2F;</span><br><span class="line">struct timeval &#123;</span><br><span class="line">	time_t		tv_sec;		&#x2F;* seconds *&#x2F;</span><br><span class="line">	suseconds_t	tv_usec;	&#x2F;* and microseconds *&#x2F;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="DNS-缓存问题"><a href="#DNS-缓存问题" class="headerlink" title="DNS 缓存问题"></a>DNS 缓存问题</h2></li>
+</ul>
+<p>主机在收到 DNS response 后会将 <Domain : IP> 存储到 DNS cache 内，下次可快速提供给应用层。</p>
+<p>当路由器没有外网时，对于主机的 DNS query，一般的路由器是不予理会，那么主机自然会超时失败，但有些路由器会回复一个自己 IP 的 DNS response，那么主机就认为 DNS 成功了，用这个 IP 去建立 HTTPS 连接就会失败。</p>
+<p>一般在 HTTPS 连接失败后，主机会再次去查询 DNS，即使此时路由器的外网建立了连接，但由于 DNS 缓存的存在（此所以主机不会发 DNS query），导致得到的还是路由器的 IP，所以会 HTTPS 连接失败。只能等到 DNS 缓存过期主机会发出 DNS query，才能得到正确的 IP 地址 。</p>
+<p>有三种方法来解决此问题：</p>
+<ul>
+<li>在 dns_gethostbyname 内屏蔽 dns_lookup，即不要查询 DNS 缓存。</li>
+<li>在调用 gethostbyname 前调用 dns_clean 以清除 DNS 缓存。</li>
+<li>把 DNS_MAX_TTL 设置为 1（秒），DNS_MAX_TTL 即为 DNS 缓存的最大时间。推荐此方法，改动最小。</li>
+</ul>
+<h2 id="DNS-返回多个地址"><a href="#DNS-返回多个地址" class="headerlink" title="DNS 返回多个地址"></a>DNS 返回多个地址</h2><p>LwIP 中的 DNS 只返回一个地址，对于一些开启了负载均衡的服务器就有可能连不上。</p>
+<h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><h3 id="注册-DHCP-回调函数"><a href="#注册-DHCP-回调函数" class="headerlink" title="注册 DHCP 回调函数"></a>注册 DHCP 回调函数</h3><p>使用<code>netif_set_status_callback</code>函数可以注册回调函数<code>NETIF_STATUS_CALLBACK</code>，那么协议栈中什么时候回调这个函数呢？ </p>
+<p><strong>NETIF_STATUS_CALLBACK</strong></p>
+<p>有 3 个函数内会回调这个函数，这 3 个函数内会判断网卡状态有变化才调用此回调函数(如网卡从 down 到 up，或者设置了新的IP地址)：</p>
+<ol>
+<li><p><code>netif_set_up</code><br> 由用户调用以使能网卡</p>
+</li>
+<li><p><code>netif_set_down</code><br> 由用户调用以禁止网卡</p>
+</li>
+<li><p><code>netif_set_ipaddr</code><br> 由<code>netif_set_addr</code>调用（<code>netif_set_ipaddr</code>设置 IP 地址，而<code>netif_set_addr</code>还设置了子网掩码和网关地址）</p>
+</li>
+</ol>
+<p><strong>netif_set_addr</strong></p>
+<p><code>netif_set_addr</code>有 4 个地方调用：</p>
+<ol>
+<li>netif 中的<code>netif_add</code></li>
+<li>dhcp </li>
+<li>autoip </li>
+<li>ppp </li>
+</ol>
+<p>autoip 和 ppp 没有用到，<code>netif_add</code>是在初始化网卡时调用的，所以只用分析 dhcp。</p>
+<p>dhcp 中有 3 个函数会调用<code>netif_set_addr</code>： </p>
+<ol>
+<li><p><code>dhcp_handle_nak</code><br> DHCP server收到 client 的 DHCP request 后，如果由于某些原因不能正常的分配IP地址，则会发送 NAK 给 client，这个 NAK 就在<code>dhcp_handle_nak</code>中处理：首先调用<code>netif_set_addr</code>将网卡的地址恢复默认的<code>IP_ADDR_ANY</code>，然后重启 dhcp。</p>
+</li>
+<li><p><code>dhcp_bind</code><br> 在 2 个函数内被调用： </p>
+</li>
+<li><p><code>dhcp_recv</code>  </p>
+<p>成功收到 DHCP ACK 后，若网卡不支持 ARP，则会直接调用<code>dhcp_bind</code>来绑定 IP 地址，DHCP 完成。</p>
+</li>
+<li><p><code>dhcp_timeout</code>  </p>
+<p>若用网卡支持 ARP，则在<code>dhcp_recv</code>内会向分配的 IP 地址发送一个 ARP 包以检查是否已被其他主机使用，若没有收到 ARP 回复，则 500ms 后的<code>dhcp_timeout</code>会调用<code>dhcp_bind</code>来绑定 IP 地址，DHCP 完成。</p>
+</li>
+<li><p><code>dhcp_release</code><br> 释放已分配的 IP 地址，也会调用<code>netif_set_addr</code>将网卡的地址恢复默认。</p>
+</li>
+</ol>
+<p>所以<code>NETIF_STATUS_CALLBACK</code>可以用作是 DHCP 结果的一个回调函数。</p>
+<p>DHCP 最后阶段的 ACK 包中含有：</p>
+<ul>
+<li>Your IP address：分配给本机的 IP 地址。</li>
+<li>Subnet Mask：子网掩码。</li>
+<li>Router：网关 IP 地址。</li>
+<li>Domain Name Server：DNS 服务器 IP 地址。</li>
+</ul>
+<h3 id="启动-DHCP-dhcp-start"><a href="#启动-DHCP-dhcp-start" class="headerlink" title="启动 DHCP - dhcp_start"></a>启动 DHCP - dhcp_start</h3><p><code>dhcp_start</code>会检查当前网卡的链路是否active，若是，则直接调用<code>dhcp_discovery</code>，否则，设置 dhcp 的 state 为<code>INIT</code>。</p>
+<p>网卡驱动中应该在网卡 link up 后（如 Wi-Fi 网络中 station 连接上 AP) 调用<code>netif_set_link_up</code>，<code>netif_set_link_up</code>内会调用<code>dhcp_network_changed</code>，<code>dhcp_network_changed</code>内发现当前 DHCP 状态为<code>INIT</code>时就调用<code>dhcp_discovery</code>，从而发起 discovery。</p>
+<p>所以可以在网卡 link up 前就调用<code>dhcp_start</code>。</p>
+<h3 id="DHCP-加速"><a href="#DHCP-加速" class="headerlink" title="DHCP 加速"></a>DHCP 加速</h3><p>有时候连网会很慢，抓包来看是 DHCP 花费了很长时间，究其原因主要有两点：</p>
+<ol>
+<li>丢包，特别是 Wi-Fi 。</li>
+<li>一些路由器是出于安全考虑，会拒绝设备的再次请求。</li>
+</ol>
+<p>以上两种原因的结果都是超时重传，在 LwIP 中 DHCP 的超时重传时间是 2s，4s，8s …，以 2 的指数倍增长，所以一旦发生超时重传，就会很慢。</p>
+<p>解决这个问题的方法也很简单，DHCP 由一个 500ms 的 fine timer 来处理超时事件，那么将所有的 DHCP 超时重传间隔设置为 500ms 即可大大加快 DHCP 的速度。</p>
+<p>经过测试，在未优化之前，DHCP 平均需要约 4s 的时间，优化后只需 2s 的时间。</p>
+<h2 id="操作系统模拟层移植"><a href="#操作系统模拟层移植" class="headerlink" title="操作系统模拟层移植"></a>操作系统模拟层移植</h2><p>移植操作系统模拟层，本质上就是实现几个操作系统接口函数：信号量，邮箱，互斥量和线程。 </p>
+<p>信号量，邮箱和互斥量的操作：</p>
+<ul>
+<li>new</li>
+<li>free</li>
+<li>write</li>
+<li>read</li>
+</ul>
+<p>信号量和邮箱还有额外的四个操作：</p>
+<ul>
+<li>try_write</li>
+<li>try_read</li>
+<li>valid</li>
+<li>invalid </li>
+</ul>
+<p>线程的操作：</p>
+<ul>
+<li>new</li>
+</ul>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="LwIP-中的-ACK"><a href="#LwIP-中的-ACK" class="headerlink" title="LwIP 中的 ACK"></a>LwIP 中的 ACK</h3><p>在<code>tcp_receive</code>内会调用<code>tcp_ack</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#define tcp_ack(pcb)                               \</span><br><span class="line">  do &#123;                                             \</span><br><span class="line">    if((pcb)-&gt;flags &amp; TF_ACK_DELAY) &#123;              \</span><br><span class="line">      (pcb)-&gt;flags &amp;&#x3D; ~TF_ACK_DELAY;               \</span><br><span class="line">      (pcb)-&gt;flags |&#x3D; TF_ACK_NOW;                  \</span><br><span class="line">    &#125;                                              \</span><br><span class="line">    else &#123;                                         \</span><br><span class="line">      (pcb)-&gt;flags |&#x3D; TF_ACK_DELAY;                \</span><br><span class="line">    &#125;                                              \</span><br><span class="line">  &#125; while (0)</span><br></pre></td></tr></table></figure>
+
+<p>收到第一个数据后，会置位<code>TF_ACK_DELAY</code>。</p>
+<p>在 250 ms 一次的<code>tcp_fasttmr</code>内，若发现<code>TF_ACK_DELAY</code>仍然处于置位状态，就说明没有捎带确认或累计确认，那必须在这里发送 ACK 出去。</p>
+<h3 id="累计确认"><a href="#累计确认" class="headerlink" title="累计确认"></a>累计确认</h3><p>收到第二个数据后，会置位<code>TF_ACK_NOW</code>并清零<code>TF_ACK_DELAY</code>。</p>
+<p>在<code>tcp_input</code>的最后会调用<code>tcp_output</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">err_t</span><br><span class="line">tcp_output(struct tcp_pcb *pcb)</span><br><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  if (pcb-&gt;flags &amp; TF_ACK_NOW &amp;&amp;</span><br><span class="line">     (seg &#x3D;&#x3D; NULL ||</span><br><span class="line">      lwip_ntohl(seg-&gt;tcphdr-&gt;seqno) - pcb-&gt;lastack + seg-&gt;len &gt; wnd)) &#123;</span><br><span class="line">     return tcp_send_empty_ack(pcb);</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若<code>TF_ACK_NOW</code>被置位，说明至少收到已经两个数据包了，则立即发送 ACK，这就实现了累计确认的功能。</p>
+<h3 id="捎带确认"><a href="#捎带确认" class="headerlink" title="捎带确认"></a>捎带确认</h3><p>在<code>tcp_output</code>发送数据报时，会填充 TCP 头的 ACK 域，并将<code>TF_ACK_DELAY</code>和<code>TF_ACK_NOW</code>清零。</p>
+<h2 id="LwIP-尽量减小功能之间的耦合性"><a href="#LwIP-尽量减小功能之间的耦合性" class="headerlink" title="LwIP 尽量减小功能之间的耦合性"></a>LwIP 尽量减小功能之间的耦合性</h2><p>比如，延时确认的 250ms 超时在<code>tcp_fasttmr</code>内处理，它只看<code>TF_ACK_DELAY</code>是否被置位，置位则说明延时确认超时，需要马上发送 ACK。</p>
+<p>那么它和其他功能模块之间的唯一耦合就是<code>TF_ACK_DELAY</code>这个 flag。在<code>tcp_receive</code>内只需将<code>TF_ACK_DELAY</code>置位即可，在捎带确认或者累计确认内也只需将<code>TF_ACK_DELAY</code>清零即可。</p>
+<p>在 LwIP 中，特别是这种协议超时，普遍使用这种方式。</p>
+<h2 id="LwIP-中的日志输出"><a href="#LwIP-中的日志输出" class="headerlink" title="LwIP 中的日志输出"></a>LwIP 中的日志输出</h2><p>LwIP 使用<code>LWIP_DEBUGF</code>宏来输出日志，有 2 个参数：<code>debug</code>和<code>message</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define LWIP_DEBUGF(debug, message) do &#123; \</span><br><span class="line">    if ( \</span><br><span class="line">        ((debug) &amp; LWIP_DBG_ON) &amp;&amp; \</span><br><span class="line">        ((debug) &amp; LWIP_DBG_TYPES_ON) &amp;&amp; \</span><br><span class="line">        ((s16_t)((debug) &amp; LWIP_DBG_MASK_LEVEL) &gt;&#x3D; LWIP_DBG_MIN_LEVEL)) &#123; \</span><br><span class="line">      LWIP_PLATFORM_DIAG(message); \</span><br><span class="line">      if ((debug) &amp; LWIP_DBG_HALT) &#123; \</span><br><span class="line">        while(1); \</span><br><span class="line">      &#125; \</span><br><span class="line">    &#125; \</span><br><span class="line">  &#125; while(0)</span><br></pre></td></tr></table></figure>
+
+
+<p><code>debug</code>参数的值是模块，类型和等级的组合，这三种是与的关系，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE | LWIP_DBG_LEVEL_WARNING, </span><br><span class="line">(&quot;dhcp_check: could not perform ARP query\n&quot;));</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>debug</code>的模块是<code>DHCP</code>，类型是<code>trace</code>，等级是<code>warning</code>。  </p>
+<p>用户可以在<code>lwipopts.h</code>中配置日志输出：  </p>
+<ul>
+<li>定义<code>LWIP_DBG_OFF</code>来开启某个模块的日志输出  </li>
+<li>定义<code>LWIP_DBG_TYPES_ON</code>来开启某个类型的日志输出  </li>
+<li>定义<code>LWIP_DBG_MIN_LEVEL</code>来开启某个等级的日志输出  </li>
+</ul>
+<h2 id="LwIP-中的协议控制块"><a href="#LwIP-中的协议控制块" class="headerlink" title="LwIP 中的协议控制块"></a>LwIP 中的协议控制块</h2><p><code>PCB</code>全称是<code>Protocol Control Block</code>，即<code>协议控制块</code>，包含着一个连接的属性和方法。</p>
+<p>一个控制块代表着着一个协议层的一个实体的属性。</p>
+<ul>
+<li><p>用户控制块 - netconn，主要属性有：</p>
+<ul>
+<li>xxx_pcb</li>
+<li>同步信号量</li>
+<li>数据邮箱，代表着一个用户层次的传输层连接 </li>
+</ul>
+</li>
+<li><p>传输层控制块 - xxx_pcb，代表着一个内核层次的传输层连接,主要属性有：  </p>
+<ul>
+<li>源/目 IP 地址和端口</li>
+<li>回调函数和参数 </li>
+</ul>
+</li>
+<li><p>网卡控制块 - netif，代表着一个网卡，主要属性有：  </p>
+<ul>
+<li>MAC 地址</li>
+<li>IP 地址，子网掩码和网关地址</li>
+<li>输入/输出函数</li>
+</ul>
+</li>
+</ul>
+<p>网络层的作用是寻址和路由，是个中间层，所以没有对应的控制块。</p>
+<p>如下图，多个 UDP 控制块组织成一个链表，协议栈在收到一个 UDP 包后会遍历这个链表查找匹配的控制块，然后调用其接收回调函数（用户也可以注册）。</p>
+<p><img src="/../resources/TCP:IP/%5Blwip%5D-udp_pcb.jpg" alt="lwip-udp_pcb"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Network/TCPIP/TCPIP%20Hacking/" rel="prev" title="TCPIP Hacking">
+      <i class="fa fa-chevron-left"></i> TCPIP Hacking
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Network/TCPIP/LwIP/LwIP%20inside/" rel="next" title="LwIP inside">
+      LwIP inside <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP"><span class="nav-number">1.</span> <span class="nav-text">LwIP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E7%90%86%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">LwIP 理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.</span> <span class="nav-text">LwIP 移植</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">LwIP 初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netif-set-link-up-%E5%92%8C-netif-set-up-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.</span> <span class="nav-text">netif_set_link_up 和 netif_set_up 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C-DHCP-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0-netif-set-status-callback"><span class="nav-number">6.</span> <span class="nav-text">注册 DHCP 回调函数 - netif_set_status_callback()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NETIF-STATUS-CALLBACK"><span class="nav-number">6.1.</span> <span class="nav-text">NETIF_STATUS_CALLBACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netif-set-addr"><span class="nav-number">6.2.</span> <span class="nav-text">netif_set_addr</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redefination-of-timeval"><span class="nav-number">7.</span> <span class="nav-text">Redefination of timeval</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">DNS 缓存问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E5%9C%B0%E5%9D%80"><span class="nav-number">9.</span> <span class="nav-text">DNS 返回多个地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">10.</span> <span class="nav-text">DHCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C-DHCP-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">10.1.</span> <span class="nav-text">注册 DHCP 回调函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-DHCP-dhcp-start"><span class="nav-number">10.2.</span> <span class="nav-text">启动 DHCP - dhcp_start</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DHCP-%E5%8A%A0%E9%80%9F"><span class="nav-number">10.3.</span> <span class="nav-text">DHCP 加速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A8%A1%E6%8B%9F%E5%B1%82%E7%A7%BB%E6%A4%8D"><span class="nav-number">11.</span> <span class="nav-text">操作系统模拟层移植</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">12.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LwIP-%E4%B8%AD%E7%9A%84-ACK"><span class="nav-number">12.1.</span> <span class="nav-text">LwIP 中的 ACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%AF%E8%AE%A1%E7%A1%AE%E8%AE%A4"><span class="nav-number">12.2.</span> <span class="nav-text">累计确认</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%8E%E5%B8%A6%E7%A1%AE%E8%AE%A4"><span class="nav-number">12.3.</span> <span class="nav-text">捎带确认</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E5%B0%BD%E9%87%8F%E5%87%8F%E5%B0%8F%E5%8A%9F%E8%83%BD%E4%B9%8B%E9%97%B4%E7%9A%84%E8%80%A6%E5%90%88%E6%80%A7"><span class="nav-number">13.</span> <span class="nav-text">LwIP 尽量减小功能之间的耦合性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA"><span class="nav-number">14.</span> <span class="nav-text">LwIP 中的日志输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LwIP-%E4%B8%AD%E7%9A%84%E5%8D%8F%E8%AE%AE%E6%8E%A7%E5%88%B6%E5%9D%97"><span class="nav-number">15.</span> <span class="nav-text">LwIP 中的协议控制块</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

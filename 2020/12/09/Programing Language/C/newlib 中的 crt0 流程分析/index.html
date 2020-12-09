@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="最近对 newlib 中的启动代码 crt0 产生了兴趣，于是就分析了下其代码。crt0 的源码位于 libgloss&#x2F;arm&#x2F;crt0.S，为了兼容各种 ARM 架构，crt0.S 中有大量的条件判断宏定义，对于只关心 ARMv7e-M 的我来说很是痛苦。刚好手上有个基于 STM32F412 的 mbed 工程用的是 crt0 的启动方式，参考 crt0.o 的反汇编我可以提炼出 crt0.S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="newlib 中的 crt0 流程分析">
+<meta property="og:url" content="http://example.com/2020/12/09/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="最近对 newlib 中的启动代码 crt0 产生了兴趣，于是就分析了下其代码。crt0 的源码位于 libgloss&#x2F;arm&#x2F;crt0.S，为了兼容各种 ARM 架构，crt0.S 中有大量的条件判断宏定义，对于只关心 ARMv7e-M 的我来说很是痛苦。刚好手上有个基于 STM32F412 的 mbed 工程用的是 crt0 的启动方式，参考 crt0.o 的反汇编我可以提炼出 crt0.S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-09T14:41:12.375Z">
+<meta property="article:modified_time" content="2020-12-09T14:41:12.375Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/12/09/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>newlib 中的 crt0 流程分析 | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          newlib 中的 crt0 流程分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Programing%20Language/C/newlib%20%E4%B8%AD%E7%9A%84%20crt0%20%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="newlib 中的 crt0 流程分析" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近对 newlib 中的启动代码 crt0 产生了兴趣，于是就分析了下其代码。crt0 的源码位于 libgloss/arm/crt0.S，为了兼容各种 ARM 架构，crt0.S 中有大量的条件判断宏定义，对于只关心 ARMv7e-M 的我来说很是痛苦。刚好手上有个基于 STM32F412 的 mbed 工程用的是 crt0 的启动方式，参考 crt0.o 的反汇编我可以提炼出 crt0.S 中和 ARMv7e-M 相关的部分代码。</p>
+<p>crt0.o 的反汇编如下：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">08008220 &lt;_mainCRTStartup&gt;:</span><br><span class="line"> 8008220:    4b15          ldr    r3, [pc, #84]    ; (8008278 &lt;_mainCRTStartup+0x58&gt;)</span><br><span class="line"> 8008222:    2b00          cmp    r3, #0</span><br><span class="line"> 8008224:    bf08          it    eq</span><br><span class="line"> 8008226:    4b13          ldreq    r3, [pc, #76]    ; (8008274 &lt;_mainCRTStartup+0x54&gt;)</span><br><span class="line"> 8008228:    469d          mov    sp, r3</span><br><span class="line"> 800822a:    f5a3 3a80     sub.w    sl, r3, #65536    ; 0x10000</span><br><span class="line"> 800822e:    2100          movs    r1, #0</span><br><span class="line"> 8008230:    468b          mov    fp, r1</span><br><span class="line"> 8008232:    460f          mov    r7, r1</span><br><span class="line"> 8008234:    4813          ldr    r0, [pc, #76]    ; (8008284 &lt;_mainCRTStartup+0x64&gt;)</span><br><span class="line"> 8008236:    4a14          ldr    r2, [pc, #80]    ; (8008288 &lt;_mainCRTStartup+0x68&gt;)</span><br><span class="line"> 8008238:    1a12          subs    r2, r2, r0</span><br><span class="line"> 800823a:    f01c fcd7     bl    8024bec &lt;memset&gt;</span><br><span class="line"> 800823e:    4b0f          ldr    r3, [pc, #60]    ; (800827c &lt;_mainCRTStartup+0x5c&gt;)</span><br><span class="line"> 8008240:    2b00          cmp    r3, #0</span><br><span class="line"> 8008242:    d000          beq.n    8008246 &lt;_mainCRTStartup+0x26&gt;</span><br><span class="line"> 8008244:    4798          blx    r3</span><br><span class="line"> 8008246:    4b0e          ldr    r3, [pc, #56]    ; (8008280 &lt;_mainCRTStartup+0x60&gt;)</span><br><span class="line"> 8008248:    2b00          cmp    r3, #0</span><br><span class="line"> 800824a:    d000          beq.n    800824e &lt;_mainCRTStartup+0x2e&gt;</span><br><span class="line"> 800824c:    4798          blx    r3</span><br><span class="line"> 800824e:    2000          movs    r0, #0</span><br><span class="line"> 8008250:    2100          movs    r1, #0</span><br><span class="line"> 8008252:    0004          movs    r4, r0</span><br><span class="line"> 8008254:    000d          movs    r5, r1</span><br><span class="line"> 8008256:    480d          ldr    r0, [pc, #52]    ; (800828c &lt;_mainCRTStartup+0x6c&gt;)</span><br><span class="line"> 8008258:    2800          cmp    r0, #0</span><br><span class="line"> 800825a:    d002          beq.n    8008262 &lt;_mainCRTStartup+0x42&gt;</span><br><span class="line"> 800825c:    480c          ldr    r0, [pc, #48]    ; (8008290 &lt;_mainCRTStartup+0x70&gt;)</span><br><span class="line"> 800825e:    f00f f868     bl    8017332 &lt;__wrap_atexit&gt;</span><br><span class="line"> 8008262:    f01c f805     bl    8024270 &lt;__libc_init_array&gt;</span><br><span class="line"> 8008266:    0020          movs    r0, r4</span><br><span class="line"> 8008268:    0029          movs    r1, r5</span><br><span class="line"> 800826a:    f00f f821     bl    80172b0 &lt;__wrap_main&gt;</span><br><span class="line"> 800826e:    f00f f85d     bl    801732c &lt;__wrap_exit&gt;</span><br><span class="line"> 8008272:    bf00          nop</span><br><span class="line"> 8008274:    00080000     .word    0x00080000</span><br><span class="line"> 8008278:    20040000     .word    0x20040000</span><br><span class="line"> 800827c:    00000000     .word    0x00000000</span><br><span class="line"> 8008280:    080172a3     .word    0x080172a3</span><br><span class="line"> 8008284:    20000c00     .word    0x20000c00</span><br><span class="line"> 8008288:    2000ac58     .word    0x2000ac58</span><br><span class="line"> 800828c:    08017333     .word    0x08017333</span><br><span class="line"> 8008290:    00000000     .word    0x00000000</span><br></pre></td></tr></table></figure>
+
+<p>提炼后的 crt0.S 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">    FUNC_START  _mainCRTStartup</span><br><span class="line">    FUNC_START  _start</span><br><span class="line">&#x2F;* Start by setting up a stack *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;*  Set up the stack pointer to a fixed value *&#x2F;</span><br><span class="line">    &#x2F;*  Changes by toralf:</span><br><span class="line">        - Allow linker script to provide stack via __stack symbol - see</span><br><span class="line">          defintion of .Lstack</span><br><span class="line">        - Provide &quot;hooks&quot; that may be used by the application to add</span><br><span class="line">          custom init code - see .Lhwinit and .Lswinit  </span><br><span class="line">        - Go through all execution modes and set up stack for each of them.</span><br><span class="line">          Loosely based on init.s from ARM&#x2F;Motorola example code.</span><br><span class="line">              Note: Mode switch via CPSR is not allowed once in non-privileged</span><br><span class="line">            mode, so we take care not to enter &quot;User&quot; to set up its sp,</span><br><span class="line">            and also skip most operations if already in that mode. *&#x2F;</span><br><span class="line"></span><br><span class="line">    ldr r3, .Lstack</span><br><span class="line">    cmp r3, #0</span><br><span class="line"></span><br><span class="line">    it  eq</span><br><span class="line"></span><br><span class="line">    ldreq   r3, .LC0</span><br><span class="line">    &#x2F;* Note: This &#39;mov&#39; is essential when starting in User, and ensures we</span><br><span class="line">         always get *some* sp value for the initial mode, even if we </span><br><span class="line">         have somehow missed it below (in which case it gets the same</span><br><span class="line">         value as FIQ - not ideal, but better than nothing.) *&#x2F;</span><br><span class="line">    mov sp, r3</span><br><span class="line"></span><br><span class="line">.LC23:</span><br><span class="line">    &#x2F;* Setup a default stack-limit in-case the code has been</span><br><span class="line">       compiled with &quot;-mapcs-stack-check&quot;.  Hard-wiring this value</span><br><span class="line">       is not ideal, since there is currently no support for</span><br><span class="line">       checking that the heap and stack have not collided, or that</span><br><span class="line">       this default 64k is enough for the program being executed.</span><br><span class="line">       However, it ensures that this simple crt0 world will not</span><br><span class="line">       immediately cause an overflow event:  *&#x2F;</span><br><span class="line">    sub sl, r3, #64 &lt;&lt; 10   &#x2F;* Still assumes 256bytes below sl *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Zero the memory in the .bss section.  *&#x2F;</span><br><span class="line">    movs    a2, #0          &#x2F;* Second arg: fill value *&#x2F;</span><br><span class="line">    mov fp, a2          &#x2F;* Null frame pointer *&#x2F;</span><br><span class="line">    mov r7, a2          &#x2F;* Null frame pointer for Thumb *&#x2F;</span><br><span class="line">    </span><br><span class="line">    ldr a1, .LC1        &#x2F;* First arg: start of memory block *&#x2F;</span><br><span class="line">    ldr a3, .LC2    </span><br><span class="line">    subs    a3, a3, a1      &#x2F;* Third arg: length of block *&#x2F;</span><br><span class="line">    </span><br><span class="line">    bl  memset</span><br><span class="line"></span><br><span class="line">&#x2F;* Changes by toralf: Taken from libgloss&#x2F;m68k&#x2F;crt0.S</span><br><span class="line"> * initialize target specific stuff. Only execute these</span><br><span class="line"> * functions it they exist.</span><br><span class="line"> *&#x2F;</span><br><span class="line">    ldr r3, .Lhwinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC24</span><br><span class="line">    indirect_call r3</span><br><span class="line">.LC24:  </span><br><span class="line">    ldr r3, .Lswinit</span><br><span class="line">    cmp r3, #0</span><br><span class="line">    beq .LC25</span><br><span class="line">    indirect_call r3</span><br><span class="line"></span><br><span class="line">.LC25:  </span><br><span class="line">    movs    r0, #0      &#x2F;*  no arguments  *&#x2F;</span><br><span class="line">    movs    r1, #0      &#x2F;*  no argv either *&#x2F;</span><br><span class="line"></span><br><span class="line">    &#x2F;* Some arm&#x2F;elf targets use the .init and .fini sections</span><br><span class="line">       to create constructors and destructors, and for these</span><br><span class="line">       targets we need to call the _init function and arrange</span><br><span class="line">       for _fini to be called at program exit.  *&#x2F;</span><br><span class="line">    movs    r4, r0</span><br><span class="line">    movs    r5, r1e</span><br><span class="line"></span><br><span class="line">    &#x2F;* Make reference to atexit weak to avoid unconditionally pulling in</span><br><span class="line">       support code.  Refer to comments in __atexit.c for more details.  *&#x2F;</span><br><span class="line">    ldr r0, .Latexit</span><br><span class="line">    cmp r0, #0</span><br><span class="line">    beq .Lweak_atexit</span><br><span class="line"></span><br><span class="line">    ldr r0, .Lfini</span><br><span class="line">    bl  atexit</span><br><span class="line">.Lweak_atexit:</span><br><span class="line">    bl  _init</span><br><span class="line">    movs    r0, r4</span><br><span class="line">    movs    r1, r5</span><br><span class="line"></span><br><span class="line">    bl  main</span><br><span class="line"></span><br><span class="line">    bl  exit        &#x2F;* Should not return.  *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;* For Thumb, constants must be after the code since only </span><br><span class="line">       positive offsets are supported for PC relative addresses.  *&#x2F;</span><br><span class="line">.LC0:</span><br><span class="line">    .word   0x80000         &#x2F;* Top of RAM on the PIE board.  *&#x2F;</span><br><span class="line">.Lstack:    </span><br><span class="line">    .word   __stack</span><br><span class="line">.Lhwinit:   </span><br><span class="line">    .word   ardware_init_hook</span><br><span class="line">.Lswinit:</span><br><span class="line">    .word   software_init_hook</span><br><span class="line"></span><br><span class="line">    &#x2F;* Set up defaults for the above variables in the form of weak symbols</span><br><span class="line">       - so that application will link correctly, and get value 0 in</span><br><span class="line">       runtime (meaning &quot;ignore setting&quot;) for the variables, when the user</span><br><span class="line">       does not provide the symbols. (The linker uses a weak symbol if,</span><br><span class="line">       and only if, a normal version of the same symbol isn&#39;t provided</span><br><span class="line">       e.g. by a linker script or another object file.) *&#x2F;  </span><br><span class="line"></span><br><span class="line">    .weak __stack</span><br><span class="line">    .weak hardware_init_hook</span><br><span class="line">    .weak software_init_hook</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">  .word __bss_start__</span><br><span class="line">.LC2:</span><br><span class="line">  .word __bss_end__</span><br><span class="line"></span><br><span class="line">  .weak atexit</span><br><span class="line">.Latexit:</span><br><span class="line">  .word atexit</span><br><span class="line"></span><br><span class="line">  &#x2F;* Weak reference _fini in case of lite exit.  *&#x2F;</span><br><span class="line">  .weak _fini</span><br><span class="line">.Lfini:</span><br><span class="line">  .word _fini</span><br></pre></td></tr></table></figure>
+
+<p>crt0 启动流程如下：</p>
+<ol>
+<li>设置 SP 为 __stack，若 __stack 未被用户定义，则使用默认的值（0x80000处的值）。</li>
+<li>清空 .bss 段，起始地址为 <strong>bss_start__，结束地址为 __bss_end</strong> 。</li>
+<li>若用户定义了 hardware_init_hook 和 software_init_hook ，则调用它们。</li>
+<li>若用户定义了 atexit，则调用它，并将传递参数 _fini（_fini 被宏定义为 __libc_fini_array）。</li>
+<li>调用 _init（_ini 被宏定义为 __libc_ini_array）。</li>
+<li>调用 main（argc 和 argv 都等于 0）。</li>
+<li>调用 exit。</li>
+</ol>
+<p>其中 <strong>stack，__bss_start__ 和 __bss_end</strong> 必须被定义。</p>
+<p>hardware_init_hook 和 software_init_hook 可以实现一些需要在 main 之前的功能。</p>
+<p>aiexit，exit，_init 和 _fini 一般是和 C++ 的全局构造和析构有关，这个放在下一节来分析。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/" rel="prev" title="Mermaid 画图">
+      <i class="fa fa-chevron-left"></i> Mermaid 画图
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Programing%20Language/C/C%20%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="next" title="C 隐式类型转换">
+      C 隐式类型转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

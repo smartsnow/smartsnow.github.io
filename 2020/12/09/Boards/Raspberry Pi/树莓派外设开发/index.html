@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="WiringPihttps:&#x2F;&#x2F;github.com&#x2F;WiringPi https:&#x2F;&#x2F;blog.csdn.net&#x2F;messidona11&#x2F;article&#x2F;details&#x2F;71514329?fps&#x3D;1&amp;locationNum&#x3D;11 http:&#x2F;&#x2F;www.waveshare.net&#x2F;study&#x2F;article-742-1.html RPi.GPIO目前还不支持I2C、SPI等接口，且缺乏高精">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派外设开发">
+<meta property="og:url" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="WiringPihttps:&#x2F;&#x2F;github.com&#x2F;WiringPi https:&#x2F;&#x2F;blog.csdn.net&#x2F;messidona11&#x2F;article&#x2F;details&#x2F;71514329?fps&#x3D;1&amp;locationNum&#x3D;11 http:&#x2F;&#x2F;www.waveshare.net&#x2F;study&#x2F;article-742-1.html RPi.GPIO目前还不支持I2C、SPI等接口，且缺乏高精">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_01.png">
+<meta property="og:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds1308_rtc_module_06.png">
+<meta property="og:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_02.png">
+<meta property="og:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_03.png">
+<meta property="og:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/image-20201208213936798.png">
+<meta property="article:published_time" content="2020-12-09T14:41:12.927Z">
+<meta property="article:modified_time" content="2020-12-09T14:41:12.927Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_01.png">
+
+<link rel="canonical" href="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>树莓派外设开发 | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="十里平湖霜满天，寸寸青丝愁华年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          树莓派外设开发
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 22:41:12" itemprop="dateCreated datePublished" datetime="2020-12-09T22:41:12+08:00">2020-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/" class="post-meta-item leancloud_visitors" data-flag-title="树莓派外设开发" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="WiringPi"><a href="#WiringPi" class="headerlink" title="WiringPi"></a>WiringPi</h2><p><a target="_blank" rel="noopener" href="https://github.com/WiringPi">https://github.com/WiringPi</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11">https://blog.csdn.net/messidona11/article/details/71514329?fps=1&amp;locationNum=11</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.waveshare.net/study/article-742-1.html">http://www.waveshare.net/study/article-742-1.html</a></p>
+<p>RPi.GPIO目前还不支持I2C、SPI等接口，且缺乏高精度定时功能。wiringpi除了提供C语言接口之外，目前已经支持Python等语言的扩展。对于GPIO的操作非常强大</p>
+<p>安装 WiringPi Library：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install wiringpi</span><br></pre></td></tr></table></figure>
+
+<p>安装 WiringPi Python：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install wiringpi</span><br></pre></td></tr></table></figure>
+
+<p>读取树莓派引脚表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ gpio readall</span><br><span class="line"> +-----+-----+---------+------+---+---Pi 3---+---+------+---------+-----+-----+</span><br><span class="line"> | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |</span><br><span class="line"> +-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+</span><br><span class="line"> |     |     |    3.3v |      |   |  1 || 2  |   |      | 5v      |     |     |</span><br><span class="line"> |   2 |   8 |   SDA.1 |   IN | 1 |  3 || 4  |   |      | 5v      |     |     |</span><br><span class="line"> |   3 |   9 |   SCL.1 |   IN | 1 |  5 || 6  |   |      | 0v      |     |     |</span><br><span class="line"> |   4 |   7 | GPIO. 7 |   IN | 1 |  7 || 8  | 0 | IN   | TxD     | 15  | 14  |</span><br><span class="line"> |     |     |      0v |      |   |  9 || 10 | 1 | IN   | RxD     | 16  | 15  |</span><br><span class="line"> |  17 |   0 | GPIO. 0 |   IN | 0 | 11 || 12 | 0 | IN   | GPIO. 1 | 1   | 18  |</span><br><span class="line"> |  27 |   2 | GPIO. 2 |   IN | 0 | 13 || 14 |   |      | 0v      |     |     |</span><br><span class="line"> |  22 |   3 | GPIO. 3 |   IN | 0 | 15 || 16 | 0 | IN   | GPIO. 4 | 4   | 23  |</span><br><span class="line"> |     |     |    3.3v |      |   | 17 || 18 | 0 | IN   | GPIO. 5 | 5   | 24  |</span><br><span class="line"> |  10 |  12 |    MOSI |   IN | 0 | 19 || 20 |   |      | 0v      |     |     |</span><br><span class="line"> |   9 |  13 |    MISO |   IN | 0 | 21 || 22 | 0 | IN   | GPIO. 6 | 6   | 25  |</span><br><span class="line"> |  11 |  14 |    SCLK |   IN | 0 | 23 || 24 | 1 | IN   | CE0     | 10  | 8   |</span><br><span class="line"> |     |     |      0v |      |   | 25 || 26 | 1 | IN   | CE1     | 11  | 7   |</span><br><span class="line"> |   0 |  30 |   SDA.0 |   IN | 1 | 27 || 28 | 1 | IN   | SCL.0   | 31  | 1   |</span><br><span class="line"> |   5 |  21 | GPIO.21 |   IN | 1 | 29 || 30 |   |      | 0v      |     |     |</span><br><span class="line"> |   6 |  22 | GPIO.22 |   IN | 1 | 31 || 32 | 0 | IN   | GPIO.26 | 26  | 12  |</span><br><span class="line"> |  13 |  23 | GPIO.23 |   IN | 0 | 33 || 34 |   |      | 0v      |     |     |</span><br><span class="line"> |  19 |  24 | GPIO.24 |   IN | 0 | 35 || 36 | 0 | IN   | GPIO.27 | 27  | 16  |</span><br><span class="line"> |  26 |  25 | GPIO.25 |   IN | 0 | 37 || 38 | 0 | IN   | GPIO.28 | 28  | 20  |</span><br><span class="line"> |     |     |      0v |      |   | 39 || 40 | 0 | IN   | GPIO.29 | 29  | 21  |</span><br><span class="line"> +-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+</span><br><span class="line"> | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |</span><br><span class="line"> +-----+-----+---------+------+---+---Pi 3---+---+------+---------+-----+-----+</span><br></pre></td></tr></table></figure>
+
+<h2 id="GPIO"><a href="#GPIO" class="headerlink" title="GPIO"></a>GPIO</h2><p><a target="_blank" rel="noopener" href="http://wiringpi.com/examples/blink/">http://wiringpi.com/examples/blink/</a></p>
+<p>配置上下拉：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wiringPiSetup();</span><br><span class="line">pullUpDnControl(13, PUD_UP);</span><br></pre></td></tr></table></figure>
+
+<h2 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/messidona11/article/details/73957275?utm_source=gold_browser_extension">https://blog.csdn.net/messidona11/article/details/73957275?utm_source=gold_browser_extension</a></p>
+<p>官方似乎没有提供详细的 API 文档，但是可以直接看源码：<a target="_blank" rel="noopener" href="https://github.com/WiringPi/WiringPi/blob/master/wiringPi/wiringPiSPI.c">https://github.com/WiringPi/WiringPi/blob/master/wiringPi/wiringPiSPI.c</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int wiringPiSPIGetFd     (int channel) ;</span><br><span class="line">int wiringPiSPIDataRW    (int channel, unsigned char *data, int len) ;</span><br><span class="line">int wiringPiSPISetupMode (int channel, int speed, int mode) ;</span><br><span class="line">int wiringPiSPISetup     (int channel, int speed) ;</span><br></pre></td></tr></table></figure>
+
+<p>Raspian 默认不使能 SPI，需要在 raspi-config 内 enable SPI interface。</p>
+<p>在 /dev 内会出现两个 SPI 设备 spidev0.0 和 spidev0.1，这两个设备共用 MOSI，MISO 和 SCLK，NSS 分别是 CE0 和 CE1，引脚序号如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+-----+-----+---------+------+---+---Pi 3---+---+------+---------+-----+-----+</span><br><span class="line">| BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |</span><br><span class="line">+-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+</span><br><span class="line">|  10 |  12 |    MOSI |   IN | 0 | 19 || 20 |   |      | 0v      |     |     |</span><br><span class="line">|   9 |  13 |    MISO |   IN | 0 | 21 || 22 | 0 | IN   | GPIO. 6 | 6   | 25  |</span><br><span class="line">|  11 |  14 |    SCLK |   IN | 0 | 23 || 24 | 1 | IN   | CE0     | 10  | 8   |</span><br><span class="line">|     |     |      0v |      |   | 25 || 26 | 1 | IN   | CE1     | 11  | 7   |</span><br></pre></td></tr></table></figure>
+
+<p>注意，wiringpi 的作者 Gordon 只提供了 C/C++ 版本实现，其他语言的 wrappers 由其他开发者提供，如 Python 是 <a target="_blank" rel="noopener" href="http://pi.gadgetoid.co.uk/">Gadgetoid</a> 实现的。</p>
+<blockquote>
+<p><strong>Other wiringPi resources:</strong></p>
+<ul>
+<li>Thanks to <a target="_blank" rel="noopener" href="http://pi.gadgetoid.co.uk/">Gadgetoid</a> there are now wrappers for Ruby, Python and Perl and these can all be <a target="_blank" rel="noopener" href="https://github.com/WiringPi">found here</a>.</li>
+<li>Thanks to <a target="_blank" rel="noopener" href="http://jkransen.wordpress.com/2012/07/16/raspberry-pi/">Jeroen Kransen</a> there are wrappers for Java which can be <a target="_blank" rel="noopener" href="https://github.com/jkransen/framboos">found here</a>.</li>
+<li>Thanks to Dave Boulton for creating a TCL wrapper  which can be <a target="_blank" rel="noopener" href="https://github.com/davidb24v/WiringPi-Tcl">found here</a>.</li>
+<li><a target="_blank" rel="noopener" href="http://pi4j.com/">Pi4J</a> is another Java project that uses WiringPi. It has a <a target="_blank" rel="noopener" href="https://github.com/Pi4J/pi4j/">Github repository here</a>.</li>
+</ul>
+</blockquote>
+<p>Python 的 wiringpi 代码仓库：<a target="_blank" rel="noopener" href="https://github.com/WiringPi/WiringPi-Python">https://github.com/WiringPi/WiringPi-Python</a></p>
+<p>使用 Python wiringpi 的 SPI 要特别注意，wiringPiSPIDataRW( channel ,data ) 的 data 参数是会被修改的，由于没有仔细看文档，我被这个坑了很久。</p>
+<blockquote>
+<p><strong>SPI:</strong></p>
+<p>The <code>wiringPiSPIDataRW()</code> function needs to be passed a <code>bytes</code> object in Python 3. In Python 2, it takes a string. The following should work in either Python 2 or 3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wiringpi.wiringPiSPISetup(channel, speed)</span><br><span class="line">buf &#x3D; bytes([your data here])</span><br><span class="line">retlen, retdata &#x3D; wiringpi.wiringPiSPIDataRW(0, buf)</span><br></pre></td></tr></table></figure>
+
+<p>Now, <code>retlen</code> will contain the number of bytes received/read by the call.  <code>retdata</code> will contain the data itself, and <strong>==in Python 3, <code>buf</code> will have been modified to contain it as well==</strong> (that won’t happen in Python 2, because then <code>buf</code> is a string, and strings are immutable).</p>
+</blockquote>
+<p>令人蛋痛的是不管用 bytes() 还是 copy()，最后 data 的值还是被修改了，只能用 buf =bytes.fromhex(data.hex())  或者 buf = bytes(bytearray(data)) 这样的方法来避免问题了。</p>
+<p>更蛋痛的是作者自己也说了，这个不是官方移植版本的，那就意味着可能会有很多碧游鸡，在使用过程中果然遇到了一些坑爹的地方，比如 wiringPiSPIDataRW 的 data 参数超过了 0x1000 就会 segment fault 等。</p>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>This is an unofficial port of Gordon’s WiringPi library. Please do not email Gordon if you have issues, he will not be able to help.</p>
+<p>For support, comments, questions, etc please join the WiringPi Discord channel: <a target="_blank" rel="noopener" href="https://discord.gg/SM4WUVG">https://discord.gg/SM4WUVG</a></p>
+</blockquote>
+<p>所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</p>
+<hr>
+<p>2018-04-06 更新</p>
+<p>看来我是冤枉 Gadgetoid 这位大神了，wiringpi 中 SPI 一次发送的数据本来就最大只有 4K。</p>
+<p>不过实际测试下来，读取 2M 的 SPI Flash，python 用 2.9s, C 用了 1.5s，几乎是 C 的 2 倍多时间，所以还是 C 的效率快。</p>
+<h2 id="SPI-Flash"><a href="#SPI-Flash" class="headerlink" title="SPI Flash"></a>SPI Flash</h2><p><a target="_blank" rel="noopener" href="https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c">https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c</a></p>
+<p>一个日本人用 wiringpi 实现的 SPI Flash 驱动。</p>
+<h2 id="树莓派安装-RTC-时钟"><a href="#树莓派安装-RTC-时钟" class="headerlink" title="树莓派安装 RTC 时钟"></a>树莓派安装 RTC 时钟</h2><p>安装 RTC 时钟后，树莓派就不用网络时间来同步了（可以不接外网）。</p>
+<p><a target="_blank" rel="noopener" href="https://www.raspberrypi-spy.co.uk/2015/05/adding-a-ds3231-real-time-clock-to-the-raspberry-pi/">https://www.raspberrypi-spy.co.uk/2015/05/adding-a-ds3231-real-time-clock-to-the-raspberry-pi/</a></p>
+<h3 id="DS1307-or-DS3231"><a href="#DS1307-or-DS3231" class="headerlink" title="DS1307 or DS3231?"></a>DS1307 or DS3231?</h3><p>Modules based on the DS1307 and DS3231 chips are popular devices and you’ll see them for sale from various retailers. I purchased both types and quickly realised my DS1307 modules were useless. My advice would be to go for a DS3231 based module. They are more accurate and run happily from 3.3V. My two “Tiny RTC” DS1307 modules went straight in the bin.</p>
+<h3 id="I2C-Setup"><a href="#I2C-Setup" class="headerlink" title="I2C Setup"></a>I2C Setup</h3><p>As with all I2C devices you must configure the I2C interface. This is quite easy to do and explained in my <a target="_blank" rel="noopener" href="https://www.raspberrypi-spy.co.uk/2014/11/enabling-the-i2c-interface-on-the-raspberry-pi/">Enabling The I2C Interface On The Raspberry Pi</a> tutorial.</p>
+<h3 id="DS3231-Module-Setup"><a href="#DS3231-Module-Setup" class="headerlink" title="DS3231 Module Setup"></a>DS3231 Module Setup</h3><p>Now we need to modify a system file using :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano &#x2F;etc&#x2F;modules</span><br></pre></td></tr></table></figure>
+
+<p>If it isn’t already there add “rtc-ds1307” to the bottom so it looks something like :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">snd-bcm2835</span><br><span class="line">i2c-bcm2835</span><br><span class="line">i2c-dev</span><br><span class="line">rtc-ds1307</span><br></pre></td></tr></table></figure>
+
+<p>Shutdown the Pi using “sudo halt” and remove the power when it has completed the process.</p>
+<h3 id="Interface-Test"><a href="#Interface-Test" class="headerlink" title="Interface Test"></a>Interface Test</h3><p>Power up the Pi and run the following command :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo i2cdetect -y 1</span><br></pre></td></tr></table></figure>
+
+<p>You should see something similar to this :</p>
+<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_01.png" alt="DS3231 RTC Module Config"></p>
+<p>In this example “68” is the hex address of the RTC module on the I2C interface.</p>
+<h3 id="I2C-Device-Setup"><a href="#I2C-Device-Setup" class="headerlink" title="I2C Device Setup"></a>I2C Device Setup</h3><p>To ensure the DS1307 device is setup and the time synchronised when the Pi boots we need to edit another system file :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
+<p>Add the following two lines before the exit 0 line :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo ds1307 0x68 &gt; &#x2F;sys&#x2F;class&#x2F;i2c-adapter&#x2F;i2c-1&#x2F;new_device</span><br><span class="line">hwclock -s</span><br></pre></td></tr></table></figure>
+
+<p>so it looks something like :</p>
+<p><a target="_blank" rel="noopener" href="https://www.raspberrypi-spy.co.uk/2015/05/adding-a-ds3231-real-time-clock-to-the-raspberry-pi/ds1308_rtc_module_06/"><img src="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds1308_rtc_module_06.png" alt="DS1307 RTC Module Config"></a></p>
+<p>Now reboot the Pi using :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+
+<p>Now when you repeat the i2cdetect command (see above) the 68 will turn into UU :</p>
+<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_02.png" alt="DS3231 RTC Module Config"></p>
+<h3 id="Reading-The-Date-And-Time"><a href="#Reading-The-Date-And-Time" class="headerlink" title="Reading The Date And Time"></a>Reading The Date And Time</h3><p>You can read the Pi’s system time using :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date</span><br></pre></td></tr></table></figure>
+
+<p>Once correct you can write the system date and time to the RTC module using :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hwclock -w</span><br></pre></td></tr></table></figure>
+
+<p>You should be able to read the date and time back from the RTC using :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hwclock -r</span><br></pre></td></tr></table></figure>
+
+<p>By separating the commands with a semi-colon you can read back the system time and the RTC time at the same time. Hopefully they should match and look something like this :</p>
+<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_03.png" alt="DS3231 RTC Module Config"></p>
+<p>The “hwclock -s” we added to “rc.local” sets the system time from the RTC module.</p>
+<h3 id="The-Final-Test"><a href="#The-Final-Test" class="headerlink" title="The Final Test"></a>The Final Test</h3><p>The final test is to determine if the RTC module is keeping time and that the Pi will use that time when it boots. The best way to do that is to :</p>
+<ul>
+<li>Power down the Pi</li>
+<li>Remove the power cable</li>
+<li>Remove the network connection</li>
+<li>Attach the Pi to a monitor and keyboard</li>
+<li>Leave it overnight</li>
+<li>Power it up and use “date” to see what time the Pi thinks it is</li>
+</ul>
+<h2 id="mmap-操作-IO-的同步问题"><a href="#mmap-操作-IO-的同步问题" class="headerlink" title="mmap 操作 IO 的同步问题"></a>mmap 操作 IO 的同步问题</h2><p>在用树莓派 IO 模拟 SPI，频率高于 1MHz 就经常读取错误，逻辑分析仪抓波发现是时钟有异常：</p>
+<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/image-20201208213936798.png" alt="image-20201208213936798"></p>
+<p>如红框内，SCK 应该在箭头处拉低，正确的波形如红色线标出，但是实际上却延迟了一段时间才拉低，导致了波形异常。</p>
+<p>可以用 msync 函数来把共享内容的改变直接写回到磁盘文件，但是此函数效率太低，所以用了个折中的办法，在拉低/高 IO 后，循环读取 IO 电平直到生效为止。</p>
+<h2 id="IO-反转速度问题"><a href="#IO-反转速度问题" class="headerlink" title="IO 反转速度问题"></a>IO 反转速度问题</h2><p>写了一个 SPI bitbang 驱动，发现 IO 翻转速度达不到理想，测试看是代码运行花费时间较长，默认的编译是 -O0，也就是不优化，看了 OpenOCD 是 -O2，于是也设置为 -O2，速度就提高了 2 倍。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/09/Boards/Raspberry%20Pi/SSH%20%E7%99%BB%E9%99%86%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="prev" title="SSH 登陆树莓派">
+      <i class="fa fa-chevron-left"></i> SSH 登陆树莓派
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/09/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/" rel="next" title="Qt 学习">
+      Qt 学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WiringPi"><span class="nav-number">1.</span> <span class="nav-text">WiringPi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO"><span class="nav-number">2.</span> <span class="nav-text">GPIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI"><span class="nav-number">3.</span> <span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI-Flash"><span class="nav-number">4.</span> <span class="nav-text">SPI Flash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%89%E8%A3%85-RTC-%E6%97%B6%E9%92%9F"><span class="nav-number">5.</span> <span class="nav-text">树莓派安装 RTC 时钟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DS1307-or-DS3231"><span class="nav-number">5.1.</span> <span class="nav-text">DS1307 or DS3231?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Setup"><span class="nav-number">5.2.</span> <span class="nav-text">I2C Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DS3231-Module-Setup"><span class="nav-number">5.3.</span> <span class="nav-text">DS3231 Module Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interface-Test"><span class="nav-number">5.4.</span> <span class="nav-text">Interface Test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Device-Setup"><span class="nav-number">5.5.</span> <span class="nav-text">I2C Device Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reading-The-Date-And-Time"><span class="nav-number">5.6.</span> <span class="nav-text">Reading The Date And Time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Final-Test"><span class="nav-number">5.7.</span> <span class="nav-text">The Final Test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-%E6%93%8D%E4%BD%9C-IO-%E7%9A%84%E5%90%8C%E6%AD%A5%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">mmap 操作 IO 的同步问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-%E5%8F%8D%E8%BD%AC%E9%80%9F%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">IO 反转速度问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">十里平湖霜满天，寸寸青丝愁华年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
