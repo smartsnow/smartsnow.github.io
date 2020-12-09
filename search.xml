@@ -19,20 +19,6 @@
       </categories>
   </entry>
   <entry>
-    <title>AES</title>
-    <url>/2020/12/09/Security/AES/</url>
-    <content><![CDATA[<p><a href="https://blog.csdn.net/nurke/article/details/77267081">https://blog.csdn.net/nurke/article/details/77267081</a></p>
-<p>基于 Python2 的，Python3 要修改一下，主要是 string 和 bytes 的区别：</p>
-<a id="more"></a>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#coding: utf8</span><br><span class="line">import sys</span><br><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from binascii import b2a_hex, a2b_hex</span><br><span class="line"> </span><br><span class="line">class prpcrypt():</span><br><span class="line">    def __init__(self, key):</span><br><span class="line">        self.key &#x3D; key</span><br><span class="line">        self.mode &#x3D; AES.MODE_CBC</span><br><span class="line">     </span><br><span class="line">    #加密函数，如果text不是16的倍数【加密文本text必须为16的倍数！】，那就补足为16的倍数</span><br><span class="line">    def encrypt(self, text):</span><br><span class="line">        cryptor &#x3D; AES.new(self.key, self.mode, self.key)</span><br><span class="line">        #这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度.目前AES-128足够用</span><br><span class="line">        length &#x3D; 16</span><br><span class="line">        count &#x3D; len(text)</span><br><span class="line">        if(count % length !&#x3D; 0) :</span><br><span class="line">            add &#x3D; length - (count % length)</span><br><span class="line">        else:</span><br><span class="line">            add &#x3D; 0</span><br><span class="line">        text &#x3D; text + (b&#39;\0&#39; * add)</span><br><span class="line">        self.ciphertext &#x3D; cryptor.encrypt(text)</span><br><span class="line">        #因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题</span><br><span class="line">        #所以这里统一把加密后的字符串转化为16进制字符串</span><br><span class="line">        return b2a_hex(self.ciphertext)</span><br><span class="line">     </span><br><span class="line">    #解密后，去掉补足的空格用strip() 去掉</span><br><span class="line">    def decrypt(self, text):</span><br><span class="line">        cryptor &#x3D; AES.new(self.key, self.mode, self.key)</span><br><span class="line">        plain_text &#x3D; cryptor.decrypt(a2b_hex(text))</span><br><span class="line">        return plain_text.rstrip(b&#39;\0&#39;)</span><br><span class="line"> </span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    pc &#x3D; prpcrypt(&#39;keyskeyskeyskeys&#39;)</span><br><span class="line">    e &#x3D; pc.encrypt(b&#39;0123456789ABCDEF&#39;)</span><br><span class="line">    d &#x3D; pc.decrypt(e)</span><br><span class="line">    print(e, d)</span><br><span class="line">    e &#x3D; pc.encrypt(b&#39;00000000000000000000000000&#39;)</span><br><span class="line">    d &#x3D; pc.decrypt(e)</span><br><span class="line">    print(e, d)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Security</category>
-      </categories>
-  </entry>
-  <entry>
     <title>个人博客</title>
     <url>/2020/12/09/Others/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<ul>
@@ -60,6 +46,20 @@
 ]]></content>
       <categories>
         <category>Others</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>AES</title>
+    <url>/2020/12/09/Security/AES/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/nurke/article/details/77267081">https://blog.csdn.net/nurke/article/details/77267081</a></p>
+<p>基于 Python2 的，Python3 要修改一下，主要是 string 和 bytes 的区别：</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#coding: utf8</span><br><span class="line">import sys</span><br><span class="line">from Crypto.Cipher import AES</span><br><span class="line">from binascii import b2a_hex, a2b_hex</span><br><span class="line"> </span><br><span class="line">class prpcrypt():</span><br><span class="line">    def __init__(self, key):</span><br><span class="line">        self.key &#x3D; key</span><br><span class="line">        self.mode &#x3D; AES.MODE_CBC</span><br><span class="line">     </span><br><span class="line">    #加密函数，如果text不是16的倍数【加密文本text必须为16的倍数！】，那就补足为16的倍数</span><br><span class="line">    def encrypt(self, text):</span><br><span class="line">        cryptor &#x3D; AES.new(self.key, self.mode, self.key)</span><br><span class="line">        #这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度.目前AES-128足够用</span><br><span class="line">        length &#x3D; 16</span><br><span class="line">        count &#x3D; len(text)</span><br><span class="line">        if(count % length !&#x3D; 0) :</span><br><span class="line">            add &#x3D; length - (count % length)</span><br><span class="line">        else:</span><br><span class="line">            add &#x3D; 0</span><br><span class="line">        text &#x3D; text + (b&#39;\0&#39; * add)</span><br><span class="line">        self.ciphertext &#x3D; cryptor.encrypt(text)</span><br><span class="line">        #因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题</span><br><span class="line">        #所以这里统一把加密后的字符串转化为16进制字符串</span><br><span class="line">        return b2a_hex(self.ciphertext)</span><br><span class="line">     </span><br><span class="line">    #解密后，去掉补足的空格用strip() 去掉</span><br><span class="line">    def decrypt(self, text):</span><br><span class="line">        cryptor &#x3D; AES.new(self.key, self.mode, self.key)</span><br><span class="line">        plain_text &#x3D; cryptor.decrypt(a2b_hex(text))</span><br><span class="line">        return plain_text.rstrip(b&#39;\0&#39;)</span><br><span class="line"> </span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    pc &#x3D; prpcrypt(&#39;keyskeyskeyskeys&#39;)</span><br><span class="line">    e &#x3D; pc.encrypt(b&#39;0123456789ABCDEF&#39;)</span><br><span class="line">    d &#x3D; pc.decrypt(e)</span><br><span class="line">    print(e, d)</span><br><span class="line">    e &#x3D; pc.encrypt(b&#39;00000000000000000000000000&#39;)</span><br><span class="line">    d &#x3D; pc.decrypt(e)</span><br><span class="line">    print(e, d)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Security</category>
       </categories>
   </entry>
   <entry>
@@ -169,29 +169,6 @@
 ]]></content>
       <categories>
         <category>Thinking</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>OS X 和树莓派共享文件夹</title>
-    <url>/2020/12/09/Boards/Raspberry%20Pi/OS%20X%20%E5%92%8C%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
-    <content><![CDATA[<p><a href="http://www.codeweblog.com/mac%E5%92%8C%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB%E5%92%8Ctm%E5%A4%87%E4%BB%BD">http://www.codeweblog.com/mac和树莓派实现文件共享和tm备份</a></p>
-<p><a href="http://bbs.elecfans.com/forum.php?mod=viewthread&amp;tid=540731">http://bbs.elecfans.com/forum.php?mod=viewthread&amp;tid=540731</a></p>
-<p>要用到的是 Netatalk</p>
-<p>第一步：安装</p>
-<p>sudo apt-get update</p>
-<p>sudo apt-get install netatalk</p>
-<p>第二步：配置</p>
-<p>停止服务：sudo /etc/init.d/netatalk stop</p>
-<a id="more"></a>
-
-<p>打开配置文件：sudo nano /etc/netatalk/AppleVolumes.default</p>
-<p>编辑安装文件夹或保留默认值：~/ “Home Directory”</p>
-<p>打开服务：sudo /etc/init.d/netatalk start</p>
-<p>第三步：打开搜索</p>
-<p>在MAC打开搜索，几秒后你就能在共享面板中看到树莓派。</p>
-]]></content>
-      <categories>
-        <category>Raspberry Pi</category>
       </categories>
   </entry>
   <entry>
@@ -305,6 +282,29 @@
       </categories>
   </entry>
   <entry>
+    <title>OS X 和树莓派共享文件夹</title>
+    <url>/2020/12/09/Boards/Raspberry%20Pi/OS%20X%20%E5%92%8C%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<p><a href="http://www.codeweblog.com/mac%E5%92%8C%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB%E5%92%8Ctm%E5%A4%87%E4%BB%BD">http://www.codeweblog.com/mac和树莓派实现文件共享和tm备份</a></p>
+<p><a href="http://bbs.elecfans.com/forum.php?mod=viewthread&amp;tid=540731">http://bbs.elecfans.com/forum.php?mod=viewthread&amp;tid=540731</a></p>
+<p>要用到的是 Netatalk</p>
+<p>第一步：安装</p>
+<p>sudo apt-get update</p>
+<p>sudo apt-get install netatalk</p>
+<p>第二步：配置</p>
+<p>停止服务：sudo /etc/init.d/netatalk stop</p>
+<a id="more"></a>
+
+<p>打开配置文件：sudo nano /etc/netatalk/AppleVolumes.default</p>
+<p>编辑安装文件夹或保留默认值：~/ “Home Directory”</p>
+<p>打开服务：sudo /etc/init.d/netatalk start</p>
+<p>第三步：打开搜索</p>
+<p>在MAC打开搜索，几秒后你就能在共享面板中看到树莓派。</p>
+]]></content>
+      <categories>
+        <category>Raspberry Pi</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Raspbian 镜像使用帮助</title>
     <url>/2020/12/09/Boards/Raspberry%20Pi/Raspbian%20%E9%95%9C%E5%83%8F%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/</url>
     <content><![CDATA[<h2 id="清华大学开源软件镜像站"><a href="#清华大学开源软件镜像站" class="headerlink" title="清华大学开源软件镜像站"></a>清华大学开源软件镜像站</h2><p>选择你的 Raspbian 对应的 Debian 版本:      Debian 7 (wheezy)  Debian 8 (jessie)  Debian 9 (stretch)  Debian 10 (buster) </p>
@@ -357,6 +357,20 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo dd bs&#x3D;1m of&#x3D;raspbian-backup.img if&#x3D;&#x2F;dev&#x2F;rdisk2</span><br></pre></td></tr></table></figure>
 
 <p>raspbian-backup.img 就是备份的树莓派镜像，可用以批量克隆生产树莓派系统。建议都使用相同的 SD 卡型号。</p>
+]]></content>
+      <categories>
+        <category>Raspberry Pi</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>树莓派 Qt 开发</title>
+    <url>/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%20Qt%20%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<h2 id="安装-PyQt5"><a href="#安装-PyQt5" class="headerlink" title="安装 PyQt5"></a>安装 PyQt5</h2><p><a href="https://blog.csdn.net/xqf1528399071/article/details/52248023">https://blog.csdn.net/xqf1528399071/article/details/52248023</a></p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install python3-pyqt5   </span><br></pre></td></tr></table></figure>
+
+<p>注意：树莓派不能使用 pip3 安装 pyqt5</p>
 ]]></content>
       <categories>
         <category>Raspberry Pi</category>
@@ -481,20 +495,6 @@
 <p>如红框内，SCK 应该在箭头处拉低，正确的波形如红色线标出，但是实际上却延迟了一段时间才拉低，导致了波形异常。</p>
 <p>可以用 msync 函数来把共享内容的改变直接写回到磁盘文件，但是此函数效率太低，所以用了个折中的办法，在拉低/高 IO 后，循环读取 IO 电平直到生效为止。</p>
 <h2 id="IO-反转速度问题"><a href="#IO-反转速度问题" class="headerlink" title="IO 反转速度问题"></a>IO 反转速度问题</h2><p>写了一个 SPI bitbang 驱动，发现 IO 翻转速度达不到理想，测试看是代码运行花费时间较长，默认的编译是 -O0，也就是不优化，看了 OpenOCD 是 -O2，于是也设置为 -O2，速度就提高了 2 倍。</p>
-]]></content>
-      <categories>
-        <category>Raspberry Pi</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>树莓派 Qt 开发</title>
-    <url>/2020/12/09/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%20Qt%20%E5%BC%80%E5%8F%91/</url>
-    <content><![CDATA[<h2 id="安装-PyQt5"><a href="#安装-PyQt5" class="headerlink" title="安装 PyQt5"></a>安装 PyQt5</h2><p><a href="https://blog.csdn.net/xqf1528399071/article/details/52248023">https://blog.csdn.net/xqf1528399071/article/details/52248023</a></p>
-<a id="more"></a>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install python3-pyqt5   </span><br></pre></td></tr></table></figure>
-
-<p>注意：树莓派不能使用 pip3 安装 pyqt5</p>
 ]]></content>
       <categories>
         <category>Raspberry Pi</category>
@@ -684,6 +684,77 @@
       </categories>
   </entry>
   <entry>
+    <title>配置树莓派成为一个 JTAG adapter</title>
+    <url>/2020/12/09/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/</url>
+    <content><![CDATA[<h2 id="配置树莓派成为一个-JTAG-adapter"><a href="#配置树莓派成为一个-JTAG-adapter" class="headerlink" title="配置树莓派成为一个 JTAG adapter"></a>配置树莓派成为一个 JTAG adapter</h2><p><a href="http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html">http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html</a></p>
+<p>OpenOCD 支持通过树莓派的 GPIO 作为一个 JTAG 调试器。</p>
+<p>在树莓派上编译 openocd：</p>
+<ol>
+<li><p>下载 openocd 源码</p>
+<p>基于提交： 1756f393e45c2a23dd29ff8bc85d188b547624f9</p>
+</li>
+</ol>
+<a id="more"></a>
+
+   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clone git:&#x2F;&#x2F;repo.or.cz&#x2F;openocd.git</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>按照 README 安装依赖库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get install libtool pkg-config autoconf automake texinfo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd openocd</span><br><span class="line">$ git checkout 1756f393e45c2a23dd29ff8bc85d188b547624f9</span><br><span class="line">$ .&#x2F;bootstrap</span><br><span class="line">$ .&#x2F;configure --enable-bcm2835gpio</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<p>按 BCM 编码，SWCLK 是 11 脚（排针23），SWDIO 是 25 脚（排针22），连接到 STM32F410 的 SWD 脚上</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd tcl</span><br><span class="line">$ sudo openocd -f interface&#x2F;raspberrypi2-native.cfg -c &quot;transport select swd&quot; -f target&#x2F;stm32f4x.cfg -c init -c &quot;dump_image ram.bin 0x8000000 0x10000&quot;</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-28-14:26)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">adapter speed: 20000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config sysresetreq</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">Info : clock speed 4061 kHz</span><br><span class="line">Info : SWD DPIDR 0x2ba01477</span><br><span class="line">Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints</span><br><span class="line">Info : Listening on port 3333 for gdb connections</span><br><span class="line">dumped 65536 bytes in 0.123247s (519.282 KiB&#x2F;s)</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br></pre></td></tr></table></figure>
+
+<p>速度达到可怕的 519 KiB/s，J-Link 是 103KiB/s，是 J-Link 的 5 倍多！！！</p>
+<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/image-20201208213734757.png" alt="image-20201208213734757"></p>
+<p><strong>为什么会比 J-Link 要快？</strong></p>
+<p>JTAG 通信速度由 GPIO 和 CPU 速度共同决定，J-Link v9 使用的是 STM32F205，GPIO 速度 60MHz，树莓派3B 的 BCM2837 的 GPIO 速度应该也是这个量级，并且从 log 可以看出，事实上树莓派的 JTAG clock speed 最大是 4MHz，而 J-Link 是 10MHz，这说明了影响 JTAG 速度的主要是 CPU 速度。STM32F205 最大 150 DMIPS，而树莓派是 11040 DMIPS，完全不是一个量级的，这就导致了树莓派虽然 JTAG 频率低，但是超快的协议处理速度还是让其通信速度碾压了 J-Link</p>
+<p><strong>修改 JTAG 引脚</strong></p>
+<p>在 raspberrypi2-native.cfg 内用 bcm2835gpio_swd_nums 来设置 SWD 使用的 GPIO，注意是 BCM 编码</p>
+<p><strong>bit-bang</strong></p>
+<blockquote>
+<p>什么是SPI的bitbang / bit bang / bit-bang / bitbanging</p>
+<p>在了解了基本的SPI之后，在Linux内核源码里面，发现关于SPI来说，有个叫做bitbang的东西，所以有点迷惑，想搞清楚bitbang是啥意思。</p>
+<p>找了点资料，大概看明白了：</p>
+<p>首先，对于多数情况来说，我们所用的SPI，都是有对应的SPI的控制器的，其负责和外部SPI设备进行通信，负责两者通信时候的信号之间的同步，保证信号的timing都符合SPI协议，保证可以正常进行SPI通信。</p>
+<p>但是有些时候，没有此对应的硬件上的SPI控制器，而还想要和SPI设备通信，那么就只能用GPIO端口去模拟对应的SPI接口的对应的pin：片选CS，数据输入Data In，数据输出Data Out，始终Clock，去模拟SPI协议，和对应spi设备进行通信。所以，此时你对每个端口的操作，作为编程者，你自己要去负责信号的同步，保证timing符合协议规定，才能正常进行SPI通信。</p>
+<p>这样的SPI的bit-bang，优点是不需要SPI的控制器了，但是缺点很明显，除了要用户自己负责同步，timing等事情之外，相对来说，即使本身SPI设备支持以很高的频率运行，可以实现很好的性能，但是以bit-bang的方式去使用的话，实际性能往往很差。</p>
+<p>最后，可以用一句话来解释，什么是SPI的bitbang/bit-bang：</p>
+<p>Use software to control serial communication at general-purpose I/O pins</p>
+<p>通过GPIO引脚，用软件来模拟串行通信（SPI/I2C 。。。）。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="树莓派作-JTAG-的-OpenOCD-权限问题"><a href="#树莓派作-JTAG-的-OpenOCD-权限问题" class="headerlink" title="树莓派作 JTAG 的 OpenOCD 权限问题"></a>树莓派作 JTAG 的 OpenOCD 权限问题</h2><p>pi 用户提示<code>open: Permission denied</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ openocd -s rtl8710_openocd&#x2F; -f rtl8710_openocd&#x2F;interface&#x2F;raspberrypi2-native.cfg -f rtl8710_openocd&#x2F;rtl8710&#x2F;rtl8710.cfg</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-30-05:45)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">Warn : Transport &quot;swd&quot; was already selected</span><br><span class="line">adapter speed: 10000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config vectreset</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>打开 -d 查看 debug log：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Info : 261 78 bcm2835gpio.c:438 bcm2835gpio_init(): JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br><span class="line">Debug: 262 79 command.c:642 run_command(): Command failed with error code -100</span><br></pre></td></tr></table></figure>
+
+<p>到源代码内查看，原来是写 /dev/mem 的权限问题：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (bcm2835gpio_jtag_mode_possible()) &#123;</span><br><span class="line">	if (bcm2835gpio_swd_mode_possible())</span><br><span class="line">		LOG_INFO(&quot;JTAG and SWD modes enabled&quot;);</span><br><span class="line">	else</span><br><span class="line">		LOG_INFO(&quot;JTAG only mode enabled (specify swclk and swdio gpio to add SWD mode)&quot;);</span><br><span class="line">&#125; else if (bcm2835gpio_swd_mode_possible()) &#123;</span><br><span class="line">	LOG_INFO(&quot;SWD only mode enabled (specify tck, tms, tdi and tdo gpios to add JTAG mode)&quot;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">	LOG_ERROR(&quot;Require tck, tms, tdi and tdo gpios for JTAG mode and&#x2F;or swclk and swdio gpio for SWD mode&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dev_mem_fd &#x3D; open(&quot;&#x2F;dev&#x2F;mem&quot;, O_RDWR | O_SYNC);</span><br><span class="line">if (dev_mem_fd &lt; 0) &#123;</span><br><span class="line">	perror(&quot;open&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>/dev/mem 是 CPU 的内存</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -l &#x2F;dev&#x2F;mem</span><br><span class="line">crw-r----- 1 root kmem 1, 1 Apr  3 03:39 &#x2F;dev&#x2F;mem</span><br></pre></td></tr></table></figure>
+
+<p>把 /dev/mem 换成 /dev/gpiomem，更安全，并且不需要 root 权限</p>
+<h2 id="树莓派上多个-openocd（不同-io）并行运行时的问题"><a href="#树莓派上多个-openocd（不同-io）并行运行时的问题" class="headerlink" title="树莓派上多个 openocd（不同 io）并行运行时的问题"></a>树莓派上多个 openocd（不同 io）并行运行时的问题</h2><p>比如，使用 2,3 脚作为一组 SWD，使用 4,5 脚作为另一组 SWD，那么两组 SWD 同时跑起来时就会互相影响，导致同时只有一组能用，但是，2,3 脚的 SWD 和 10,11 脚的 SWD 就不会冲突。</p>
+<p>原因是：SWDIO 是双向通信口，所以 openocd 要在通信时频繁地切换其方向（输入/输出），配置方向的寄存器是 10 个 io 共用一个寄存器（参考 BCM2835-ARM-Peripherals.pdf），总共有 0 -9 或者 10- 19 或者 20-27 三个寄存器。openocd 内配置某个 io 方向是对寄存器内位或/与来实现的，也就是（读出 - 与/或 - 写回），所以在不同进程内会有临界区风险发生。如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define INP_GPIO(g) do &#123; *(pio_base+((g)&#x2F;10)) &amp;&#x3D; ~(7&lt;&lt;(((g)%10)*3)); &#125; while (0)</span><br></pre></td></tr></table></figure>
+
+<p>即使是不属于同一个 io 方向配置寄存器，如 2,3 和 11,12，在频繁的启动 - 退出 openocd 时也会互相影响，原因是 bcm2835gpio.c 内有个 bug：bcm2835gpio.c 内使用 -1 来表示无效/不用的 io，但是它只对 trst 和 srst 作有效性判断，若使用 SWD 模式，那么 tdo, tdi 和 tck 也是不用的，此时代码内仍会去操作这些 io，就可能会写到其他 io，因为 -1%10 是 -1, -1 &lt;&lt; m 是不确定的。</p>
+<h2 id="ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题"><a href="#ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题" class="headerlink" title="ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题"></a>ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题</h2><p>树莓派默认是 ondemand 模式，此模式下 CPU 会动态调整频率。由于 openocd 内是 bitbang 模拟协议，靠 while 循环来延时，所以 SWCLK 频率随之变化，导致了 SWD 连接不稳定。</p>
+<p>修改为 powersave 模式，锁定 CPU 使用最低的 600MHz 频率就好了。</p>
+]]></content>
+      <categories>
+        <category>Raspberry Pi</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Cotex-M0 and plus</title>
     <url>/2020/12/09/CPU/ARM/Cotex-M0%20and%20plus/</url>
     <content><![CDATA[<h2 id="M0-和-M0-的区别"><a href="#M0-和-M0-的区别" class="headerlink" title="M0 和 M0+ 的区别"></a>M0 和 M0+ 的区别</h2><p>参考：<a href="https://community.cypress.com/docs/DOC-10652">Cortex® -M0 Versus Cortex-M0+ - KBA211306</a></p>
@@ -800,77 +871,6 @@
       </categories>
   </entry>
   <entry>
-    <title>配置树莓派成为一个 JTAG adapter</title>
-    <url>/2020/12/09/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/</url>
-    <content><![CDATA[<h2 id="配置树莓派成为一个-JTAG-adapter"><a href="#配置树莓派成为一个-JTAG-adapter" class="headerlink" title="配置树莓派成为一个 JTAG adapter"></a>配置树莓派成为一个 JTAG adapter</h2><p><a href="http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html">http://blog.sina.com.cn/s/blog_7cedb56d0102v141.html</a></p>
-<p>OpenOCD 支持通过树莓派的 GPIO 作为一个 JTAG 调试器。</p>
-<p>在树莓派上编译 openocd：</p>
-<ol>
-<li><p>下载 openocd 源码</p>
-<p>基于提交： 1756f393e45c2a23dd29ff8bc85d188b547624f9</p>
-</li>
-</ol>
-<a id="more"></a>
-
-   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clone git:&#x2F;&#x2F;repo.or.cz&#x2F;openocd.git</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>按照 README 安装依赖库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get install libtool pkg-config autoconf automake texinfo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd openocd</span><br><span class="line">$ git checkout 1756f393e45c2a23dd29ff8bc85d188b547624f9</span><br><span class="line">$ .&#x2F;bootstrap</span><br><span class="line">$ .&#x2F;configure --enable-bcm2835gpio</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试</p>
-<p>按 BCM 编码，SWCLK 是 11 脚（排针23），SWDIO 是 25 脚（排针22），连接到 STM32F410 的 SWD 脚上</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd tcl</span><br><span class="line">$ sudo openocd -f interface&#x2F;raspberrypi2-native.cfg -c &quot;transport select swd&quot; -f target&#x2F;stm32f4x.cfg -c init -c &quot;dump_image ram.bin 0x8000000 0x10000&quot;</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-28-14:26)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">adapter speed: 20000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config sysresetreq</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">Info : clock speed 4061 kHz</span><br><span class="line">Info : SWD DPIDR 0x2ba01477</span><br><span class="line">Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints</span><br><span class="line">Info : Listening on port 3333 for gdb connections</span><br><span class="line">dumped 65536 bytes in 0.123247s (519.282 KiB&#x2F;s)</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br></pre></td></tr></table></figure>
-
-<p>速度达到可怕的 519 KiB/s，J-Link 是 103KiB/s，是 J-Link 的 5 倍多！！！</p>
-<p><img src="/2020/12/09/Boards/Raspberry%20Pi/%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%20JTAG%20adapter/image-20201208213734757.png" alt="image-20201208213734757"></p>
-<p><strong>为什么会比 J-Link 要快？</strong></p>
-<p>JTAG 通信速度由 GPIO 和 CPU 速度共同决定，J-Link v9 使用的是 STM32F205，GPIO 速度 60MHz，树莓派3B 的 BCM2837 的 GPIO 速度应该也是这个量级，并且从 log 可以看出，事实上树莓派的 JTAG clock speed 最大是 4MHz，而 J-Link 是 10MHz，这说明了影响 JTAG 速度的主要是 CPU 速度。STM32F205 最大 150 DMIPS，而树莓派是 11040 DMIPS，完全不是一个量级的，这就导致了树莓派虽然 JTAG 频率低，但是超快的协议处理速度还是让其通信速度碾压了 J-Link</p>
-<p><strong>修改 JTAG 引脚</strong></p>
-<p>在 raspberrypi2-native.cfg 内用 bcm2835gpio_swd_nums 来设置 SWD 使用的 GPIO，注意是 BCM 编码</p>
-<p><strong>bit-bang</strong></p>
-<blockquote>
-<p>什么是SPI的bitbang / bit bang / bit-bang / bitbanging</p>
-<p>在了解了基本的SPI之后，在Linux内核源码里面，发现关于SPI来说，有个叫做bitbang的东西，所以有点迷惑，想搞清楚bitbang是啥意思。</p>
-<p>找了点资料，大概看明白了：</p>
-<p>首先，对于多数情况来说，我们所用的SPI，都是有对应的SPI的控制器的，其负责和外部SPI设备进行通信，负责两者通信时候的信号之间的同步，保证信号的timing都符合SPI协议，保证可以正常进行SPI通信。</p>
-<p>但是有些时候，没有此对应的硬件上的SPI控制器，而还想要和SPI设备通信，那么就只能用GPIO端口去模拟对应的SPI接口的对应的pin：片选CS，数据输入Data In，数据输出Data Out，始终Clock，去模拟SPI协议，和对应spi设备进行通信。所以，此时你对每个端口的操作，作为编程者，你自己要去负责信号的同步，保证timing符合协议规定，才能正常进行SPI通信。</p>
-<p>这样的SPI的bit-bang，优点是不需要SPI的控制器了，但是缺点很明显，除了要用户自己负责同步，timing等事情之外，相对来说，即使本身SPI设备支持以很高的频率运行，可以实现很好的性能，但是以bit-bang的方式去使用的话，实际性能往往很差。</p>
-<p>最后，可以用一句话来解释，什么是SPI的bitbang/bit-bang：</p>
-<p>Use software to control serial communication at general-purpose I/O pins</p>
-<p>通过GPIO引脚，用软件来模拟串行通信（SPI/I2C 。。。）。</p>
-</blockquote>
-</li>
-</ol>
-<h2 id="树莓派作-JTAG-的-OpenOCD-权限问题"><a href="#树莓派作-JTAG-的-OpenOCD-权限问题" class="headerlink" title="树莓派作 JTAG 的 OpenOCD 权限问题"></a>树莓派作 JTAG 的 OpenOCD 权限问题</h2><p>pi 用户提示<code>open: Permission denied</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ openocd -s rtl8710_openocd&#x2F; -f rtl8710_openocd&#x2F;interface&#x2F;raspberrypi2-native.cfg -f rtl8710_openocd&#x2F;rtl8710&#x2F;rtl8710.cfg</span><br><span class="line">Open On-Chip Debugger 0.10.0+dev-00364-g1756f393 (2018-03-30-05:45)</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, read</span><br><span class="line">	http:&#x2F;&#x2F;openocd.org&#x2F;doc&#x2F;doxygen&#x2F;bugs.html</span><br><span class="line">BCM2835 GPIO config: tck &#x3D; 11, tms &#x3D; 25, tdi &#x3D; 10, tdo &#x3D; 9</span><br><span class="line">BCM2835 GPIO nums: swclk &#x3D; 11, swdio &#x3D; 25</span><br><span class="line">swd</span><br><span class="line">Warn : Transport &quot;swd&quot; was already selected</span><br><span class="line">adapter speed: 10000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config vectreset</span><br><span class="line">Info : Listening on port 6666 for tcl connections</span><br><span class="line">Info : Listening on port 4444 for telnet connections</span><br><span class="line">Info : BCM2835 GPIO JTAG&#x2F;SWD bitbang driver</span><br><span class="line">Info : JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br></pre></td></tr></table></figure>
-
-<p>打开 -d 查看 debug log：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Info : 261 78 bcm2835gpio.c:438 bcm2835gpio_init(): JTAG and SWD modes enabled</span><br><span class="line">open: Permission denied</span><br><span class="line">Debug: 262 79 command.c:642 run_command(): Command failed with error code -100</span><br></pre></td></tr></table></figure>
-
-<p>到源代码内查看，原来是写 /dev/mem 的权限问题：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (bcm2835gpio_jtag_mode_possible()) &#123;</span><br><span class="line">	if (bcm2835gpio_swd_mode_possible())</span><br><span class="line">		LOG_INFO(&quot;JTAG and SWD modes enabled&quot;);</span><br><span class="line">	else</span><br><span class="line">		LOG_INFO(&quot;JTAG only mode enabled (specify swclk and swdio gpio to add SWD mode)&quot;);</span><br><span class="line">&#125; else if (bcm2835gpio_swd_mode_possible()) &#123;</span><br><span class="line">	LOG_INFO(&quot;SWD only mode enabled (specify tck, tms, tdi and tdo gpios to add JTAG mode)&quot;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">	LOG_ERROR(&quot;Require tck, tms, tdi and tdo gpios for JTAG mode and&#x2F;or swclk and swdio gpio for SWD mode&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dev_mem_fd &#x3D; open(&quot;&#x2F;dev&#x2F;mem&quot;, O_RDWR | O_SYNC);</span><br><span class="line">if (dev_mem_fd &lt; 0) &#123;</span><br><span class="line">	perror(&quot;open&quot;);</span><br><span class="line">	return ERROR_JTAG_INIT_FAILED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>/dev/mem 是 CPU 的内存</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -l &#x2F;dev&#x2F;mem</span><br><span class="line">crw-r----- 1 root kmem 1, 1 Apr  3 03:39 &#x2F;dev&#x2F;mem</span><br></pre></td></tr></table></figure>
-
-<p>把 /dev/mem 换成 /dev/gpiomem，更安全，并且不需要 root 权限</p>
-<h2 id="树莓派上多个-openocd（不同-io）并行运行时的问题"><a href="#树莓派上多个-openocd（不同-io）并行运行时的问题" class="headerlink" title="树莓派上多个 openocd（不同 io）并行运行时的问题"></a>树莓派上多个 openocd（不同 io）并行运行时的问题</h2><p>比如，使用 2,3 脚作为一组 SWD，使用 4,5 脚作为另一组 SWD，那么两组 SWD 同时跑起来时就会互相影响，导致同时只有一组能用，但是，2,3 脚的 SWD 和 10,11 脚的 SWD 就不会冲突。</p>
-<p>原因是：SWDIO 是双向通信口，所以 openocd 要在通信时频繁地切换其方向（输入/输出），配置方向的寄存器是 10 个 io 共用一个寄存器（参考 BCM2835-ARM-Peripherals.pdf），总共有 0 -9 或者 10- 19 或者 20-27 三个寄存器。openocd 内配置某个 io 方向是对寄存器内位或/与来实现的，也就是（读出 - 与/或 - 写回），所以在不同进程内会有临界区风险发生。如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define INP_GPIO(g) do &#123; *(pio_base+((g)&#x2F;10)) &amp;&#x3D; ~(7&lt;&lt;(((g)%10)*3)); &#125; while (0)</span><br></pre></td></tr></table></figure>
-
-<p>即使是不属于同一个 io 方向配置寄存器，如 2,3 和 11,12，在频繁的启动 - 退出 openocd 时也会互相影响，原因是 bcm2835gpio.c 内有个 bug：bcm2835gpio.c 内使用 -1 来表示无效/不用的 io，但是它只对 trst 和 srst 作有效性判断，若使用 SWD 模式，那么 tdo, tdi 和 tck 也是不用的，此时代码内仍会去操作这些 io，就可能会写到其他 io，因为 -1%10 是 -1, -1 &lt;&lt; m 是不确定的。</p>
-<h2 id="ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题"><a href="#ondemand-模式下-CPU-频率变化导致的-SWCLK-变化问题" class="headerlink" title="ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题"></a>ondemand 模式下 CPU 频率变化导致的 SWCLK 变化问题</h2><p>树莓派默认是 ondemand 模式，此模式下 CPU 会动态调整频率。由于 openocd 内是 bitbang 模拟协议，靠 while 循环来延时，所以 SWCLK 频率随之变化，导致了 SWD 连接不稳定。</p>
-<p>修改为 powersave 模式，锁定 CPU 使用最低的 600MHz 频率就好了。</p>
-]]></content>
-      <categories>
-        <category>Raspberry Pi</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hardfault 调试实例</title>
     <url>/2020/12/09/CPU/ARM/Hardfault%20%E8%B0%83%E8%AF%95%E5%AE%9E%E4%BE%8B/</url>
     <content><![CDATA[<h2 id="非对齐的访问"><a href="#非对齐的访问" class="headerlink" title="非对齐的访问"></a>非对齐的访问</h2><p>rf_pin_sleep 函数，在按键长按回调中调用没有异常，但是在 TIM_SLP 定时器回调中就会挂掉，调试发现是触发了 Hardfault。</p>
@@ -960,6 +960,22 @@
 </ul>
 <h3 id="whole-archive的作用"><a href="#whole-archive的作用" class="headerlink" title="--whole-archive的作用"></a><code>--whole-archive</code>的作用</h3><p>在两个文件中分别定义了一个 weak 函数和一个 strong 函数，然后编译打包在一个库，链接此库后生成的可执行程序内却调用了 weak 函数，这是因为 LD 会默认使用 object 文件中找到的第一个函数的地址。若 weak 函数所在 object 文件排在 strong 函数前面，则会产生此问题。</p>
 <p>解决此问题的方法是实用<code>--whole-archive</code>选项，使 LD 遍历所有的 object 文件。</p>
+]]></content>
+      <categories>
+        <category>GCC</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>链接器的“两步链接”</title>
+    <url>/2020/12/09/Complie%20&amp;%20Debug/GCC/%E9%93%BE%E6%8E%A5%E5%99%A8%E7%9A%84%E2%80%9C%E4%B8%A4%E6%AD%A5%E9%93%BE%E6%8E%A5%E2%80%9D/</url>
+    <content><![CDATA[<p>“两部链接”（Two-pass linking），是指链接的过程分为两步：<strong>地址分配 **和 **重定位</strong>。</p>
+<h4 id="地址分配"><a href="#地址分配" class="headerlink" title="地址分配"></a>地址分配</h4><p>扫描输入的目标文件，分配各目标文件内各段的地址，并收集全局符号定义和引用，放入一个全局符号表。完成这一步后，所有的符号地址都被确定了。</p>
+<h4 id="重定位"><a href="#重定位" class="headerlink" title="重定位"></a>重定位</h4><p>重定位各输入文件中引用的全局符号到其实际的地址。<br>在地址分配的过程中，链接器合并各输入的目标文件内相同的段，并为其分配空间和地址。</p>
+<p> 在输入目标文件内有个<strong>重定位表</strong>来保存重定位的相关信息。它由符号信息和偏移组成。重定位时就是根据符号信息去找到其他输入目标文件内定义的符号的地址，再根据符号在本段内的偏移来替换为其实际的地址。</p>
+<p> [1]：目标文件内符号的地址是相对于其所属段段相对地址，所以段的地址被分配后，符号的地址也确定了。</p>
+<p>参考：<em>《程序员的自我修养》，第 4 章 1 ~ 2 节</em>。</p>
+<a id="more"></a>
+
 ]]></content>
       <categories>
         <category>GCC</category>
@@ -1065,22 +1081,6 @@
 ]]></content>
       <categories>
         <category>GDB</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>链接器的“两步链接”</title>
-    <url>/2020/12/09/Complie%20&amp;%20Debug/GCC/%E9%93%BE%E6%8E%A5%E5%99%A8%E7%9A%84%E2%80%9C%E4%B8%A4%E6%AD%A5%E9%93%BE%E6%8E%A5%E2%80%9D/</url>
-    <content><![CDATA[<p>“两部链接”（Two-pass linking），是指链接的过程分为两步：<strong>地址分配 **和 **重定位</strong>。</p>
-<h4 id="地址分配"><a href="#地址分配" class="headerlink" title="地址分配"></a>地址分配</h4><p>扫描输入的目标文件，分配各目标文件内各段的地址，并收集全局符号定义和引用，放入一个全局符号表。完成这一步后，所有的符号地址都被确定了。</p>
-<h4 id="重定位"><a href="#重定位" class="headerlink" title="重定位"></a>重定位</h4><p>重定位各输入文件中引用的全局符号到其实际的地址。<br>在地址分配的过程中，链接器合并各输入的目标文件内相同的段，并为其分配空间和地址。</p>
-<p> 在输入目标文件内有个<strong>重定位表</strong>来保存重定位的相关信息。它由符号信息和偏移组成。重定位时就是根据符号信息去找到其他输入目标文件内定义的符号的地址，再根据符号在本段内的偏移来替换为其实际的地址。</p>
-<p> [1]：目标文件内符号的地址是相对于其所属段段相对地址，所以段的地址被分配后，符号的地址也确定了。</p>
-<p>参考：<em>《程序员的自我修养》，第 4 章 1 ~ 2 节</em>。</p>
-<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>GCC</category>
       </categories>
   </entry>
   <entry>
@@ -1252,6 +1252,31 @@
       </categories>
   </entry>
   <entry>
+    <title>编译 OpenOCD</title>
+    <url>/2020/12/09/Complie%20&amp;%20Debug/OpenOCD/%E7%BC%96%E8%AF%91%20OpenOCD/</url>
+    <content><![CDATA[<h2 id="Download-and-compile-source-code"><a href="#Download-and-compile-source-code" class="headerlink" title="Download and compile source code"></a>Download and compile source code</h2><p><strong>Download：</strong></p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;repo.or.cz&#x2F;openocd.git</span><br></pre></td></tr></table></figure>
+
+<p><strong>Compile：</strong></p>
+<p><em>Reference README 和 README.OSX.</em></p>
+<ol>
+<li><p>Install Dependencies:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install libtool pkg-config autoconf automake texinfo libusb libusb-compat hidapi libftdi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Compiling:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;bootstrap (when building from the git repository)</span><br><span class="line">.&#x2F;configure [options]</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Find src/openocd</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>OpenOCD</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Qt 学习</title>
     <url>/2020/12/09/GUI/Qt/Qt%20%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><h3 id="Qt"><a href="#Qt" class="headerlink" title="Qt"></a>Qt</h3><p> <a href="http://doc.qt.io/">http://doc.qt.io</a></p>
@@ -1284,28 +1309,207 @@
       </categories>
   </entry>
   <entry>
-    <title>编译 OpenOCD</title>
-    <url>/2020/12/09/Complie%20&amp;%20Debug/OpenOCD/%E7%BC%96%E8%AF%91%20OpenOCD/</url>
-    <content><![CDATA[<h2 id="Download-and-compile-source-code"><a href="#Download-and-compile-source-code" class="headerlink" title="Download and compile source code"></a>Download and compile source code</h2><p><strong>Download：</strong></p>
+    <title>AliOS-Things KV</title>
+    <url>/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/</url>
+    <content><![CDATA[<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>block 的头部如下：</p>
 <a id="more"></a>
 
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;repo.or.cz&#x2F;openocd.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Flash block header description *&#x2F;</span><br><span class="line">typedef struct _block_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of block *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of the block *&#x2F;</span><br><span class="line">    uint8_t     reserved[2];</span><br><span class="line">&#125; __attribute__((packed)) block_hdr_t;</span><br></pre></td></tr></table></figure>
 
-<p><strong>Compile：</strong></p>
-<p><em>Reference README 和 README.OSX.</em></p>
-<ol>
-<li><p>Install Dependencies:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install libtool pkg-config autoconf automake texinfo libusb libusb-compat hidapi libftdi</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Compiling:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;bootstrap (when building from the git repository)</span><br><span class="line">.&#x2F;configure [options]</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Find src/openocd</p>
-</li>
-</ol>
+<table>
+<thead>
+<tr>
+<th align="left">magic</th>
+<th align="left">state</th>
+<th align="left">reserved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ASCII ‘K’</td>
+<td align="left">1B</td>
+<td align="left">2B</td>
+</tr>
+</tbody></table>
+<p>magic 是 ASCII 码 ‘K’：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static const uint8_t BLK_MAGIC_NUM  &#x3D; &#39;K&#39;; &#x2F;* The block header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>state 有 3 种：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define BLK_STATE_USED  0xCC &#x2F;* Block state: USED --&gt; block is inused and without dirty data *&#x2F;</span><br><span class="line">#define BLK_STATE_CLEAN 0xEE &#x2F;* Block state: CLEAN --&gt; block is clean, ready for used *&#x2F;</span><br><span class="line">#define BLK_STATE_DIRTY 0x44 &#x2F;* Block state: DIRTY --&gt; block is inused and with dirty data *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h2 id="item"><a href="#item" class="headerlink" title="item"></a>item</h2><p>item 的头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Key-value item header description *&#x2F;</span><br><span class="line">typedef struct _item_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of key-value item *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of key-value item *&#x2F;</span><br><span class="line">    uint8_t     crc;            &#x2F;* The crc-8 value of key-value item *&#x2F;</span><br><span class="line">    uint8_t     key_len;        &#x2F;* The length of the key *&#x2F;</span><br><span class="line">    uint16_t    val_len;        &#x2F;* The length of the value *&#x2F;</span><br><span class="line">    uint16_t    origin_off;     &#x2F;* The origin key-value item offset, it will be used when updating *&#x2F;</span><br><span class="line">&#125; __attribute__((packed)) item_hdr_t;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">magic</th>
+<th align="left">state</th>
+<th align="left">crc</th>
+<th align="left">key_len</th>
+<th align="left">val_len</th>
+<th align="left">origin_off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ASCII ‘I’</td>
+<td align="left">1B</td>
+<td align="left">1B</td>
+<td align="left">1B</td>
+<td align="left">2B</td>
+<td align="left">2B</td>
+</tr>
+</tbody></table>
+<p>magic 是 ASCII 码 ‘I’：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static const uint8_t ITEM_MAGIC_NUM &#x3D; &#39;I&#39;; &#x2F;* The key-value item header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>state 有 2 种：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define ITEM_STATE_NORMAL 0xEE &#x2F;* Key-value item state: NORMAL --&gt; the key-value item is valid *&#x2F;</span><br><span class="line">#define ITEM_STATE_DELETE 0    &#x2F;* Key-value item state: DELETE --&gt; the key-value item is deleted *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>crc 是 key 和 value 的 8 bit 校验码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* CRC-8: the poly is 0x31 (x^8 + x^5 + x^4 + 1) *&#x2F;</span><br><span class="line">static uint8_t utils_crc8(uint8_t *buf, uint16_t length)</span><br><span class="line">&#123;</span><br><span class="line">    uint8_t crc &#x3D; 0x00;</span><br><span class="line">    uint8_t i;</span><br><span class="line"></span><br><span class="line">    while (length--) &#123;</span><br><span class="line">        crc ^&#x3D; *buf++;</span><br><span class="line">        for (i &#x3D; 8; i &gt; 0; i--) &#123;</span><br><span class="line">            if (crc &amp; 0x80) &#123;</span><br><span class="line">                crc &#x3D; (crc &lt;&lt; 1) ^ 0x31;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                crc &lt;&lt;&#x3D; 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return crc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>key_len 是 key 的长度</p>
+<p>val_len 是 value 的长度</p>
+<p>origin_off 是上个旧 item 的 offset</p>
+<p>通过一个实验来理解，例如，我 set name snowyang，然后 set name snowyang-1992，再 set name snowyang-19920202，最后 dump 出来的 binary 如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">00000000h: 4B 44 00 00 49 00 98 04 08 00 00 00 6E 61 6D 65 ; KD..I.......name</span><br><span class="line">00000010h: 73 6E 6F 77 79 61 6E 67 49 00 37 04 0D 00 04 00 ; snowyangI.7.....</span><br><span class="line">00000020h: 6E 61 6D 65 73 6E 6F 77 79 61 6E 67 2D 31 39 39 ; namesnowyang-199</span><br><span class="line">00000030h: 32 00 00 00 49 EE D6 04 11 00 18 00 6E 61 6D 65 ; 2...IîÖ.....name</span><br><span class="line">00000040h: 73 6E 6F 77 79 61 6E 67 2D 31 39 39 32 30 32 30 ; snowyang-1992020</span><br><span class="line">00000050h: 32 00 00 00 FF FF FF FF FF FF FF FF FF FF FF FF ; 2...ÿÿÿÿÿÿÿÿÿÿÿÿ</span><br></pre></td></tr></table></figure>
+
+<p>可见第二个 item 的 <code>origin_off</code> 是 0x04，也就是第一个 item 的地址，同样地，第三个 item 的 <code>origin_off</code> 是第二个 item 的地址 0x18</p>
+<p>具体作用不明</p>
+<h3 id="描述-item-的结构体如下："><a href="#描述-item-的结构体如下：" class="headerlink" title="描述 item 的结构体如下："></a>描述 item 的结构体如下：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Key-value item description *&#x2F;</span><br><span class="line">typedef struct _kv_item_t &#123;</span><br><span class="line">    item_hdr_t  hdr;            &#x2F;* The header of the key-value item, detail see the item_hdr_t structure *&#x2F;</span><br><span class="line">    char       *store;          &#x2F;* The store buffer for key-value *&#x2F;</span><br><span class="line">    uint16_t    len;            &#x2F;* The length of the buffer *&#x2F;</span><br><span class="line">    uint16_t    pos;            &#x2F;* The store position of the key-value item *&#x2F;</span><br><span class="line">&#125; kv_item_t;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意：这个结构体是用来描述一个 item 的，是一个变量，不是描述 item 的存储结构的</p>
+<p>hdr 是上述头部</p>
+<p>store 是实际存储 key 和 value 的 buffer，一般是 malloc 来的</p>
+<p>len 是 header + key + value 的长度，注意是 4 字节对齐</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">len &#x3D; (ITEM_HEADER_SIZE + hdr-&gt;key_len + hdr-&gt;val_len + ~KV_ALIGN_MASK) &amp; KV_ALIGN_MASK;</span><br></pre></td></tr></table></figure>
+
+<p>pos 是 item 在 flash 中的地址</p>
 ]]></content>
       <categories>
-        <category>OpenOCD</category>
+        <category>AliOS-Things</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>FreeRTOS</title>
+    <url>/2020/12/09/OS/FreeRTOS/FreeRTOS/</url>
+    <content><![CDATA[<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><ul>
+<li><p>老版本的 FreeRTOS 如何下载？<br><a href="https://sourceforge.net/p/freertos/code/HEAD/tree/%EF%BC%8C%E7%82%B9%E5%87%BB">https://sourceforge.net/p/freertos/code/HEAD/tree/，点击</a> tags 进入，选择版本然后点击<code>Download Snapshot</code>按钮即可启动下载。</p>
+</li>
+<li><p>FreeRTOS 配置选项<br>FreeRTOSConfig.h 的说明：<a href="https://www.freertos.org/a00110.html">https://www.freertos.org/a00110.html</a></p>
+</li>
+<li><p>如何移植<br><a href="https://www.freertos.org/FreeRTOS-porting-guide.html">https://www.freertos.org/FreeRTOS-porting-guide.html</a></p>
+</li>
+<li><p>中断优先级设置？</p>
+<p>在移植 5062 时遇到了 StartScheduler 函数内执行 SVC 0 指令后触发 Hardfault 的错误，调试发现是 SVC 中断被屏蔽所导致的。FreeRTOS 在 StartScheduler 前会 portDISABLE_INTERRUPTS，Cortex-M 是通过写 BASEPRI 来屏蔽中断的，5062 的BASRPRI 的值被写为 0x20，而 SVC 的优先级恰好也被设置成了 0x20，所以 SVC 中断被屏蔽了。在 SVC 中断被屏蔽时去触发它会产生一个用法错误 - Hardfaut。</p>
+<blockquote>
+<p>configMAX_SYSCALL_INTERRUPT_PRIORITY needs to be a raw priority value as it is written to the NVIC priority registers in the Cortex-M3 device, as documented in the ARM manuals. The priorities of 0..15 are not real Cortex-M3 priorities, and are simplified priorities for use in some library calls (because the real priorities are so complex on Cortex-M devices).</p>
+</blockquote>
+</li>
+</ul>
+<a id="more"></a>
+
+<blockquote>
+<p>If you want a simplified priority of 8, then you need to set configMAX_SYSCALL_INTERRUPT_PRIORITY to 0x8n, where n can be any value, but by convention, and for future proofing in case future STM32 parts implement more priority bits, should be set to f. Therefore, the priority you want is 0x8f.<br>“the code app-faults at “svc 0” in vPortStartFirstTask”<br>Presumably a hard fault because you are attempting a call to effectively a synchronous interrupt while simultaneously having that interrupt masked out.</p>
+</blockquote>
+<ul>
+<li><p>FreeRTOS 只有在任务切换时才会检查栈当前栈是否溢出，所以不是所有的线程的栈溢出都能被检查到的。</p>
+</li>
+<li><p>在移植 STM32L431RC 时遇到了上位机发送数据后，UART 接收线程却没有接收到数据的问题。</p>
+<p>UART 接收大致流程如下：</p>
+<blockquote>
+<p>用户线程：拿 semphr -&gt; 读取数据<br>UART 接收中断：给 semphr</p>
+</blockquote>
+<p>调试发现中断中给了 semphr ，但是线程没有拿到，原来是在拿 semphr 中的临界区出了问题：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">taskENTER_CRITICAL();</span><br><span class="line"><span class="keyword">const</span> UBaseType_t uxMessagesWaiting = pxQueue-&gt;uxMessagesWaiting;</span><br><span class="line"><span class="keyword">if</span>( uxMessagesWaiting &gt; ( UBaseType_t ) <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get data</span></span><br><span class="line">    <span class="comment">// Return</span></span><br><span class="line">&#125;</span><br><span class="line">taskEXIT_CRITICAL();</span><br><span class="line"><span class="comment">// Block current thread untill semphr is gived</span></span><br></pre></td></tr></table></figure>
+
+<p>taskENTER_CRITICAL 是把优先级低于 CORTEX_NVIC_PRIO_BITS 的中断全部屏蔽。</p>
+<p>STM32L431RC 的抢占优先级数是 4，而我把 CORTEX_NVIC_PRIO_BITS 设置成了 3，刚好 UART 中断配的是最高优先级 0，所以 taskENTER_CRITICAL 实际上对 UART 中断不起作用，若在第 2 行后刚好来了一个 UART 接收中断，虽然中断内给了 semphr，但是中断返回后，第 4 行还是认为没有给 semphr，所以出错。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>FreeRTOS</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>sudo</title>
+    <url>/2020/12/09/OS/Linux/sudo/</url>
+    <content><![CDATA[<p><code>sudo</code>就是<code>su do</code>的意思。</p>
+<p><code>su</code>是<code>super user</code>的缩写。</p>
+<p>在 user 账号下 pip install 的库，sudo 是找不到的，必须 sudo pip install，因为 sudo 会切到 root 账号。</p>
+<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>磁盘占用查看工具 - treesize</title>
+    <url>/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/</url>
+    <content><![CDATA[<p>有时候 C 盘红了，不知道哪些大文件吃了硬盘，可以用 treesize 来分析。</p>
+<p><img src="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/image-20201203110215721.png" alt="image-20201203110215721"></p>
+<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Zephyr Primer</title>
+    <url>/2020/12/09/OS/Zephyr/Zephyr%20Primer/</url>
+    <content><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Zephyr 最初是<code>Wind River</code>公司在 2015 年推出的为 IoT 开发的<code>Rocket内核</code>，更早时称为<code>Microkernel Profile for VxWorks</code>。代码移植于2001年并购<code>Eonic Systems</code>得来的<code>Virtuoso DSP RTOS</code>。在2016年，它成为Linux基金会的项目而改称 zephyr。</p>
+<p>参考：<a href="https://zh.wikipedia.org/wiki/Zephyr">Zephyr Wiki</a></p>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p><strong>官网</strong>：<a href="https://zephyrproject.org/">https://zephyrproject.org</a></p>
+<p><strong>文档</strong>：<a href="https://docs.zephyrproject.org/latest">https://docs.zephyrproject.org/latest</a></p>
+<p><strong>源代码</strong>：<a href="https://github.com/zephyrproject-rtos/zephyr">https://github.com/zephyrproject-rtos/zephyr</a></p>
+<p><strong>Wiki</strong>：<a href="https://github.com/zephyrproject-rtos/zephyr/wiki">https://github.com/zephyrproject-rtos/zephyr/wiki</a></p>
+<a id="more"></a>
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>参考<a href="https://docs.zephyrproject.org/latest/getting_started/index.html">Getting Started Guide</a></p>
+<h2 id="配置-Kconfig"><a href="#配置-Kconfig" class="headerlink" title="配置 Kconfig"></a>配置 Kconfig</h2><p>参考<a href="https://docs.zephyrproject.org/latest/guides/kconfig/menuconfig.html">Interactive Kconfig interfaces</a></p>
+<p>有两个交互式配置界面可以配置 Kconfig选项：<code>menuconfig</code>和 <code>guiconfig</code>。<code>menuconfig</code>是在终端中运行的基于curses的界面，<code>guiconfig</code>而是图形配置界面。</p>
+<p>要运行 menuconfig，请执行以下操作：</p>
+<ol>
+<li><p>使用<code>west</code>或者<code>cmake</code>构建您的应用程序：</p>
+<p>使用west</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -b &lt;board&gt;</span><br></pre></td></tr></table></figure>
+
+<p>使用CMake和忍者：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir build &amp;&amp; cd build</span><br><span class="line">cmake -GNinja -DBOARD&#x3D;&lt;board&gt; ..</span><br><span class="line">ninja</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要运行基于终端的<code>menuconfig</code>界面，请使用以下命令之一：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -t menuconfig</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ninja menuconfig</span><br></pre></td></tr></table></figure>
+
+<p>要运行图形<code>guiconfig</code>，请使用以下命令之一：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -t guiconfig</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ninja guiconfig</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -b nrf52dk_nrf52832 samples&#x2F;hello_world</span><br><span class="line">west flash</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Zephyr</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Zephyr UART</title>
+    <url>/2020/12/09/OS/Zephyr/Zephyr%20UART/</url>
+    <content><![CDATA[<p>Demo</p>
+<a id="more"></a>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;zephyr.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;drivers/uart.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cli_uart_isr</span><span class="params">(<span class="keyword">const</span> struct device *uart, <span class="keyword">void</span> *user_data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">int</span> rx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* get all of the data off UART as fast as we can */</span></span><br><span class="line">	<span class="keyword">while</span> (uart_irq_update(uart) &amp;&amp; uart_irq_rx_ready(uart)) &#123;</span><br><span class="line">		rx = uart_fifo_read(uart, &amp;c, <span class="keyword">sizeof</span>(c));</span><br><span class="line">		<span class="keyword">if</span> (rx &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		uart_poll_out(dev, c);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">uart_fifo_flush</span><span class="params">(<span class="keyword">const</span> struct device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">while</span> (uart_fifo_read(dev, &amp;c, <span class="number">1</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">continue</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">device</span> *<span class="title">uart_dev</span> =</span> device_get_binding(CONFIG_UART_CONSOLE_ON_DEV_NAME);    </span><br><span class="line">  </span><br><span class="line">  uart_irq_rx_disable(uart_dev);</span><br><span class="line">	uart_irq_tx_disable(uart_dev);</span><br><span class="line">	uart_fifo_flush(uart_dev);</span><br><span class="line">	uart_irq_callback_set(uart_dev, cli_uart_isr);</span><br><span class="line">	uart_irq_rx_enable(uart_dev);</span><br><span class="line">  </span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		k_sleep(K_SECONDS(<span class="number">1</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Zephyr</category>
       </categories>
   </entry>
   <entry>
@@ -1549,25 +1753,6 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
-    <title>TCPIP Hacking</title>
-    <url>/2020/12/09/Network/TCPIP/TCPIP%20Hacking/</url>
-    <content><![CDATA[<h2 id="ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包"><a href="#ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包" class="headerlink" title="ARP 欺骗：发送伪造的网关 Gratuitous ARP 包"></a>ARP 欺骗：发送伪造的网关 Gratuitous ARP 包</h2><h3 id="无回报-Gratuitous-ARP请求"><a href="#无回报-Gratuitous-ARP请求" class="headerlink" title="无回报 (Gratuitous) ARP请求"></a>无回报 (Gratuitous) ARP请求</h3><p>主机在刚启动后一般会向局域网广播一个自己的<code>&lt;IP : MAC&gt;</code>信息，称为<code>无回报(gratuitous)ARP请求</code>。<br>无回报 ARP 请求其实就是<strong>目的 IP 是自己的 ARP 请求</strong>。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>比如一个局域网的网关地址是<code>192.168.31.1</code>，在此局域网内不停地发送伪造的 Gratuitous ARP 包，那么局域网内的所有的主机 ARP 表中的<code>192.168.31.1</code>就会被更新为伪造的随机 MAC 地址，进而导致主机发送的数据包都到不了网关，也无法与外界通信。</p>
-<p>防御 ARP 欺骗的唯一方法就是在主机上为此网关添加一条静态的ARP映射，但是一般用户不会操作。</p>
-<h3 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h3><p>在linux中提供了PF_PACKET接口可以操作链路层的数据。</p>
-<a id="more"></a>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">socket(PF_PACKET, SOCK_RAW, htons(ETH_P_IP|ETH_P_ARP|ETH_P_ALL))</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>TCPIP</category>
-      </categories>
-  </entry>
-  <entry>
     <title>TCP 协议抓包分析</title>
     <url>/2020/12/09/Network/TCPIP/TCP%20%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="延迟确认"><a href="#延迟确认" class="headerlink" title="延迟确认"></a>延迟确认</h3><p><code>192.168.3.6</code>向<code>192.168.3.10</code>发送了一个数据报，<code>192.168.3.10</code>并没有马上回复 ACK，而是选择先等待一段时间…</p>
@@ -1698,207 +1883,136 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
-    <title>AliOS-Things KV</title>
-    <url>/2020/12/09/OS/AliOS-Things/AliOS-Things%20KV/</url>
-    <content><![CDATA[<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>block 的头部如下：</p>
+    <title>TCPIP Hacking</title>
+    <url>/2020/12/09/Network/TCPIP/TCPIP%20Hacking/</url>
+    <content><![CDATA[<h2 id="ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包"><a href="#ARP-欺骗：发送伪造的网关-Gratuitous-ARP-包" class="headerlink" title="ARP 欺骗：发送伪造的网关 Gratuitous ARP 包"></a>ARP 欺骗：发送伪造的网关 Gratuitous ARP 包</h2><h3 id="无回报-Gratuitous-ARP请求"><a href="#无回报-Gratuitous-ARP请求" class="headerlink" title="无回报 (Gratuitous) ARP请求"></a>无回报 (Gratuitous) ARP请求</h3><p>主机在刚启动后一般会向局域网广播一个自己的<code>&lt;IP : MAC&gt;</code>信息，称为<code>无回报(gratuitous)ARP请求</code>。<br>无回报 ARP 请求其实就是<strong>目的 IP 是自己的 ARP 请求</strong>。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>比如一个局域网的网关地址是<code>192.168.31.1</code>，在此局域网内不停地发送伪造的 Gratuitous ARP 包，那么局域网内的所有的主机 ARP 表中的<code>192.168.31.1</code>就会被更新为伪造的随机 MAC 地址，进而导致主机发送的数据包都到不了网关，也无法与外界通信。</p>
+<p>防御 ARP 欺骗的唯一方法就是在主机上为此网关添加一条静态的ARP映射，但是一般用户不会操作。</p>
+<h3 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h3><p>在linux中提供了PF_PACKET接口可以操作链路层的数据。</p>
 <a id="more"></a>
 
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Flash block header description *&#x2F;</span><br><span class="line">typedef struct _block_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of block *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of the block *&#x2F;</span><br><span class="line">    uint8_t     reserved[2];</span><br><span class="line">&#125; __attribute__((packed)) block_hdr_t;</span><br></pre></td></tr></table></figure>
 
-<table>
-<thead>
-<tr>
-<th align="left">magic</th>
-<th align="left">state</th>
-<th align="left">reserved</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ASCII ‘K’</td>
-<td align="left">1B</td>
-<td align="left">2B</td>
-</tr>
-</tbody></table>
-<p>magic 是 ASCII 码 ‘K’：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static const uint8_t BLK_MAGIC_NUM  &#x3D; &#39;K&#39;; &#x2F;* The block header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">socket(PF_PACKET, SOCK_RAW, htons(ETH_P_IP|ETH_P_ARP|ETH_P_ALL))</span><br></pre></td></tr></table></figure>
 
-<p>state 有 3 种：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define BLK_STATE_USED  0xCC &#x2F;* Block state: USED --&gt; block is inused and without dirty data *&#x2F;</span><br><span class="line">#define BLK_STATE_CLEAN 0xEE &#x2F;* Block state: CLEAN --&gt; block is clean, ready for used *&#x2F;</span><br><span class="line">#define BLK_STATE_DIRTY 0x44 &#x2F;* Block state: DIRTY --&gt; block is inused and with dirty data *&#x2F;</span><br></pre></td></tr></table></figure>
 
-<h2 id="item"><a href="#item" class="headerlink" title="item"></a>item</h2><p>item 的头部如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Key-value item header description *&#x2F;</span><br><span class="line">typedef struct _item_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of key-value item *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of key-value item *&#x2F;</span><br><span class="line">    uint8_t     crc;            &#x2F;* The crc-8 value of key-value item *&#x2F;</span><br><span class="line">    uint8_t     key_len;        &#x2F;* The length of the key *&#x2F;</span><br><span class="line">    uint16_t    val_len;        &#x2F;* The length of the value *&#x2F;</span><br><span class="line">    uint16_t    origin_off;     &#x2F;* The origin key-value item offset, it will be used when updating *&#x2F;</span><br><span class="line">&#125; __attribute__((packed)) item_hdr_t;</span><br></pre></td></tr></table></figure>
 
-<table>
-<thead>
-<tr>
-<th align="left">magic</th>
-<th align="left">state</th>
-<th align="left">crc</th>
-<th align="left">key_len</th>
-<th align="left">val_len</th>
-<th align="left">origin_off</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ASCII ‘I’</td>
-<td align="left">1B</td>
-<td align="left">1B</td>
-<td align="left">1B</td>
-<td align="left">2B</td>
-<td align="left">2B</td>
-</tr>
-</tbody></table>
-<p>magic 是 ASCII 码 ‘I’：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static const uint8_t ITEM_MAGIC_NUM &#x3D; &#39;I&#39;; &#x2F;* The key-value item header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
-
-<p>state 有 2 种：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define ITEM_STATE_NORMAL 0xEE &#x2F;* Key-value item state: NORMAL --&gt; the key-value item is valid *&#x2F;</span><br><span class="line">#define ITEM_STATE_DELETE 0    &#x2F;* Key-value item state: DELETE --&gt; the key-value item is deleted *&#x2F;</span><br></pre></td></tr></table></figure>
-
-<p>crc 是 key 和 value 的 8 bit 校验码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* CRC-8: the poly is 0x31 (x^8 + x^5 + x^4 + 1) *&#x2F;</span><br><span class="line">static uint8_t utils_crc8(uint8_t *buf, uint16_t length)</span><br><span class="line">&#123;</span><br><span class="line">    uint8_t crc &#x3D; 0x00;</span><br><span class="line">    uint8_t i;</span><br><span class="line"></span><br><span class="line">    while (length--) &#123;</span><br><span class="line">        crc ^&#x3D; *buf++;</span><br><span class="line">        for (i &#x3D; 8; i &gt; 0; i--) &#123;</span><br><span class="line">            if (crc &amp; 0x80) &#123;</span><br><span class="line">                crc &#x3D; (crc &lt;&lt; 1) ^ 0x31;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                crc &lt;&lt;&#x3D; 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return crc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>key_len 是 key 的长度</p>
-<p>val_len 是 value 的长度</p>
-<p>origin_off 是上个旧 item 的 offset</p>
-<p>通过一个实验来理解，例如，我 set name snowyang，然后 set name snowyang-1992，再 set name snowyang-19920202，最后 dump 出来的 binary 如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">00000000h: 4B 44 00 00 49 00 98 04 08 00 00 00 6E 61 6D 65 ; KD..I.......name</span><br><span class="line">00000010h: 73 6E 6F 77 79 61 6E 67 49 00 37 04 0D 00 04 00 ; snowyangI.7.....</span><br><span class="line">00000020h: 6E 61 6D 65 73 6E 6F 77 79 61 6E 67 2D 31 39 39 ; namesnowyang-199</span><br><span class="line">00000030h: 32 00 00 00 49 EE D6 04 11 00 18 00 6E 61 6D 65 ; 2...IîÖ.....name</span><br><span class="line">00000040h: 73 6E 6F 77 79 61 6E 67 2D 31 39 39 32 30 32 30 ; snowyang-1992020</span><br><span class="line">00000050h: 32 00 00 00 FF FF FF FF FF FF FF FF FF FF FF FF ; 2...ÿÿÿÿÿÿÿÿÿÿÿÿ</span><br></pre></td></tr></table></figure>
-
-<p>可见第二个 item 的 <code>origin_off</code> 是 0x04，也就是第一个 item 的地址，同样地，第三个 item 的 <code>origin_off</code> 是第二个 item 的地址 0x18</p>
-<p>具体作用不明</p>
-<h3 id="描述-item-的结构体如下："><a href="#描述-item-的结构体如下：" class="headerlink" title="描述 item 的结构体如下："></a>描述 item 的结构体如下：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* Key-value item description *&#x2F;</span><br><span class="line">typedef struct _kv_item_t &#123;</span><br><span class="line">    item_hdr_t  hdr;            &#x2F;* The header of the key-value item, detail see the item_hdr_t structure *&#x2F;</span><br><span class="line">    char       *store;          &#x2F;* The store buffer for key-value *&#x2F;</span><br><span class="line">    uint16_t    len;            &#x2F;* The length of the buffer *&#x2F;</span><br><span class="line">    uint16_t    pos;            &#x2F;* The store position of the key-value item *&#x2F;</span><br><span class="line">&#125; kv_item_t;</span><br></pre></td></tr></table></figure>
-
-<p>需要注意：这个结构体是用来描述一个 item 的，是一个变量，不是描述 item 的存储结构的</p>
-<p>hdr 是上述头部</p>
-<p>store 是实际存储 key 和 value 的 buffer，一般是 malloc 来的</p>
-<p>len 是 header + key + value 的长度，注意是 4 字节对齐</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">len &#x3D; (ITEM_HEADER_SIZE + hdr-&gt;key_len + hdr-&gt;val_len + ~KV_ALIGN_MASK) &amp; KV_ALIGN_MASK;</span><br></pre></td></tr></table></figure>
-
-<p>pos 是 item 在 flash 中的地址</p>
 ]]></content>
       <categories>
-        <category>AliOS-Things</category>
+        <category>TCPIP</category>
       </categories>
   </entry>
   <entry>
-    <title>FreeRTOS</title>
-    <url>/2020/12/09/OS/FreeRTOS/FreeRTOS/</url>
-    <content><![CDATA[<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a>FreeRTOS</h2><ul>
-<li><p>老版本的 FreeRTOS 如何下载？<br><a href="https://sourceforge.net/p/freertos/code/HEAD/tree/%EF%BC%8C%E7%82%B9%E5%87%BB">https://sourceforge.net/p/freertos/code/HEAD/tree/，点击</a> tags 进入，选择版本然后点击<code>Download Snapshot</code>按钮即可启动下载。</p>
-</li>
-<li><p>FreeRTOS 配置选项<br>FreeRTOSConfig.h 的说明：<a href="https://www.freertos.org/a00110.html">https://www.freertos.org/a00110.html</a></p>
-</li>
-<li><p>如何移植<br><a href="https://www.freertos.org/FreeRTOS-porting-guide.html">https://www.freertos.org/FreeRTOS-porting-guide.html</a></p>
-</li>
-<li><p>中断优先级设置？</p>
-<p>在移植 5062 时遇到了 StartScheduler 函数内执行 SVC 0 指令后触发 Hardfault 的错误，调试发现是 SVC 中断被屏蔽所导致的。FreeRTOS 在 StartScheduler 前会 portDISABLE_INTERRUPTS，Cortex-M 是通过写 BASEPRI 来屏蔽中断的，5062 的BASRPRI 的值被写为 0x20，而 SVC 的优先级恰好也被设置成了 0x20，所以 SVC 中断被屏蔽了。在 SVC 中断被屏蔽时去触发它会产生一个用法错误 - Hardfaut。</p>
-<blockquote>
-<p>configMAX_SYSCALL_INTERRUPT_PRIORITY needs to be a raw priority value as it is written to the NVIC priority registers in the Cortex-M3 device, as documented in the ARM manuals. The priorities of 0..15 are not real Cortex-M3 priorities, and are simplified priorities for use in some library calls (because the real priorities are so complex on Cortex-M devices).</p>
-</blockquote>
-</li>
-</ul>
-<a id="more"></a>
-
-<blockquote>
-<p>If you want a simplified priority of 8, then you need to set configMAX_SYSCALL_INTERRUPT_PRIORITY to 0x8n, where n can be any value, but by convention, and for future proofing in case future STM32 parts implement more priority bits, should be set to f. Therefore, the priority you want is 0x8f.<br>“the code app-faults at “svc 0” in vPortStartFirstTask”<br>Presumably a hard fault because you are attempting a call to effectively a synchronous interrupt while simultaneously having that interrupt masked out.</p>
-</blockquote>
+    <title>OpenSSL</title>
+    <url>/2020/12/09/Security/TLS/OpenSSL/</url>
+    <content><![CDATA[<h2 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h2><p>OpenSSL 是个<code>实现了 TLS 协议</code>的开源的商业级的<code>开发套件</code>。</p>
+<p>OpenSSL toolkit 包含：</p>
 <ul>
-<li><p>FreeRTOS 只有在任务切换时才会检查栈当前栈是否溢出，所以不是所有的线程的栈溢出都能被检查到的。</p>
-</li>
-<li><p>在移植 STM32L431RC 时遇到了上位机发送数据后，UART 接收线程却没有接收到数据的问题。</p>
-<p>UART 接收大致流程如下：</p>
-<blockquote>
-<p>用户线程：拿 semphr -&gt; 读取数据<br>UART 接收中断：给 semphr</p>
-</blockquote>
-<p>调试发现中断中给了 semphr ，但是线程没有拿到，原来是在拿 semphr 中的临界区出了问题：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">taskENTER_CRITICAL();</span><br><span class="line"><span class="keyword">const</span> UBaseType_t uxMessagesWaiting = pxQueue-&gt;uxMessagesWaiting;</span><br><span class="line"><span class="keyword">if</span>( uxMessagesWaiting &gt; ( UBaseType_t ) <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get data</span></span><br><span class="line">    <span class="comment">// Return</span></span><br><span class="line">&#125;</span><br><span class="line">taskEXIT_CRITICAL();</span><br><span class="line"><span class="comment">// Block current thread untill semphr is gived</span></span><br></pre></td></tr></table></figure>
-
-<p>taskENTER_CRITICAL 是把优先级低于 CORTEX_NVIC_PRIO_BITS 的中断全部屏蔽。</p>
-<p>STM32L431RC 的抢占优先级数是 4，而我把 CORTEX_NVIC_PRIO_BITS 设置成了 3，刚好 UART 中断配的是最高优先级 0，所以 taskENTER_CRITICAL 实际上对 UART 中断不起作用，若在第 2 行后刚好来了一个 UART 接收中断，虽然中断内给了 semphr，但是中断返回后，第 4 行还是认为没有给 semphr，所以出错。</p>
-</li>
+<li>TLS 协议</li>
+<li>加密算法库</li>
+<li>命令行工具</li>
 </ul>
+<h2 id="下载，编译和安装"><a href="#下载，编译和安装" class="headerlink" title="下载，编译和安装"></a>下载，编译和安装</h2><p>OpenSSL 官网：<a href="https://www.openssl.org/">https://www.openssl.org</a></p>
+<h4 id="下载："><a href="#下载：" class="headerlink" title="下载："></a>下载：</h4><a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clone git:&#x2F;&#x2F;git.openssl.org&#x2F;openssl.git</span><br></pre></td></tr></table></figure>
+
+<h4 id="编译和安装："><a href="#编译和安装：" class="headerlink" title="编译和安装："></a>编译和安装：</h4><p>参考源码下的：README, INSTALL。</p>
+<p><strong>OS X[^1]</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ .&#x2F;config</span><br><span class="line">$ make</span><br><span class="line">$ make test</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>[^1]: OS X 下安装需要 root 权限</p>
 ]]></content>
       <categories>
-        <category>FreeRTOS</category>
+        <category>TLS</category>
       </categories>
   </entry>
   <entry>
-    <title>sudo</title>
-    <url>/2020/12/09/OS/Linux/sudo/</url>
-    <content><![CDATA[<p><code>sudo</code>就是<code>su do</code>的意思。</p>
-<p><code>su</code>是<code>super user</code>的缩写。</p>
-<p>在 user 账号下 pip install 的库，sudo 是找不到的，必须 sudo pip install，因为 sudo 会切到 root 账号。</p>
-<a id="more"></a>
+    <title>TLS 学习</title>
+    <url>/2020/12/09/Security/TLS/TLS%20%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h2 id="初次了解："><a href="#初次了解：" class="headerlink" title="初次了解："></a>初次了解：</h2><p><a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html">SSL/TLS协议运行机制的概述</a> - ==强烈推荐==<br><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议</a></p>
+<h2 id="进一步了解SSL-handshake的过程和细节："><a href="#进一步了解SSL-handshake的过程和细节：" class="headerlink" title="进一步了解SSL handshake的过程和细节："></a>进一步了解SSL handshake的过程和细节：</h2><p><a href="http://www.cnblogs.com/piyeyong/archive/2010/07/02/1770208.html">证书的应用之一 —— TCP&amp;SSL通信实例及协议分析(中)</a><br><a href="http://www.cnblogs.com/afarmer/archive/2009/11/25/1610884.html">SSL握手协议</a></p>
+<h2 id="有关数字证书知识："><a href="#有关数字证书知识：" class="headerlink" title="有关数字证书知识："></a>有关数字证书知识：</h2><p><a href="http://www.linuxde.net/2012/03/8301.html">SSL 与 数字证书 的基本概念和工作原理</a> - ==强烈推荐==<br><a href="http://www.cnblogs.com/guogangj/p/4118605.html">那些证书相关的玩意儿(SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12等)</a><br><a href="http://www.cnblogs.com/aLittleBitCool/archive/2011/09/22/2185418.html">利用openssl进行RSA加密解密</a></p>
+<h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><p><a href="https://tools.ietf.org/html/rfc5246#page-37">RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2</a></p>
+<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><a id="more"></a>
 
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Zephyr Primer</title>
-    <url>/2020/12/09/OS/Zephyr/Zephyr%20Primer/</url>
-    <content><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Zephyr 最初是<code>Wind River</code>公司在 2015 年推出的为 IoT 开发的<code>Rocket内核</code>，更早时称为<code>Microkernel Profile for VxWorks</code>。代码移植于2001年并购<code>Eonic Systems</code>得来的<code>Virtuoso DSP RTOS</code>。在2016年，它成为Linux基金会的项目而改称 zephyr。</p>
-<p>参考：<a href="https://zh.wikipedia.org/wiki/Zephyr">Zephyr Wiki</a></p>
-<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p><strong>官网</strong>：<a href="https://zephyrproject.org/">https://zephyrproject.org</a></p>
-<p><strong>文档</strong>：<a href="https://docs.zephyrproject.org/latest">https://docs.zephyrproject.org/latest</a></p>
-<p><strong>源代码</strong>：<a href="https://github.com/zephyrproject-rtos/zephyr">https://github.com/zephyrproject-rtos/zephyr</a></p>
-<p><strong>Wiki</strong>：<a href="https://github.com/zephyrproject-rtos/zephyr/wiki">https://github.com/zephyrproject-rtos/zephyr/wiki</a></p>
-<a id="more"></a>
-
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>参考<a href="https://docs.zephyrproject.org/latest/getting_started/index.html">Getting Started Guide</a></p>
-<h2 id="配置-Kconfig"><a href="#配置-Kconfig" class="headerlink" title="配置 Kconfig"></a>配置 Kconfig</h2><p>参考<a href="https://docs.zephyrproject.org/latest/guides/kconfig/menuconfig.html">Interactive Kconfig interfaces</a></p>
-<p>有两个交互式配置界面可以配置 Kconfig选项：<code>menuconfig</code>和 <code>guiconfig</code>。<code>menuconfig</code>是在终端中运行的基于curses的界面，<code>guiconfig</code>而是图形配置界面。</p>
-<p>要运行 menuconfig，请执行以下操作：</p>
+<h3 id="网络风险"><a href="#网络风险" class="headerlink" title="网络风险"></a>网络风险</h3><p>不使用SSL/TLS的HTTP通信，就是不加密的通信。所有信息明文传播，带来了三大风险。</p>
+<blockquote>
+<p>（1） <strong>窃听风险</strong>（eavesdropping）：第三方可以获知通信内容。</p>
+<p>（2） <strong>篡改风险</strong>（tampering）：第三方可以修改通信内容。</p>
+<p>（3） <strong>冒充风险</strong>（pretending）：第三方可以冒充他人身份参与通信。</p>
+</blockquote>
+<p>SSL/TLS协议是为了解决这三大风险而设计的，希望达到：</p>
+<blockquote>
+<p>（1） 所有信息都是<strong>加密传播</strong>，第三方无法窃听。</p>
+<p>（2） 具有<strong>校验机制</strong>，一旦被篡改，通信双方会立刻发现。</p>
+<p>（3） 配备<strong>身份证书</strong>（包含数字签名），防止身份被冒充。</p>
+</blockquote>
+<h3 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h3><p>通过私钥可以计算出公钥，反之则不行。<br>公钥加密：公钥加密的内容可以用私钥来解密——只有私钥持有者才能解密。<br>私钥签名：私钥签名的内容可以用公钥验证。公钥能验证的签名均可视为私钥持有人所签署。</p>
+<h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p>签名方对一段明文使用私钥加密，并把密文（称为<code>数字签名</code>）附在明文后。验证方使用签名方的公钥把数字签名解密出来，如果和明文相同，就可以确定这段明文是签名方认证的。</p>
+<p>考虑到非对称加密非常耗时，所以通常把明文的 hash 值用私钥加密作为数字签名。</p>
+<p>数字签名的作用是对一段明文进行认证，本质是这段明文的密文。</p>
+<h3 id="RSA-和-ECDSA-的区别"><a href="#RSA-和-ECDSA-的区别" class="headerlink" title="RSA 和 ECDSA 的区别"></a>RSA 和 ECDSA 的区别</h3><p><a href="http://zhiqiang.org/blog/it/das-and-ecdsa-rsa.html">签名算法DSA和ECDSA﻿﻿</a></p>
+<blockquote>
+<p>比特币协议里使用了ECDSA（椭圆曲线签名算法），我之前以为它和基于大数分解的RSA公钥密码体系差不多。这两天看了下维基百科，才发现它们之间的差异挺大。最本质的区别是，DSA和ECDSA都只是签名算法，它用来确保信息发布人的身份和信息的完整性，不能用来做加密传输，为了实现这个功能，信息的原文（或者<a href="http://zhiqiang.org/blog/science/computer-science/preliminary-computer-theory-xiao-yun-wang-from-the-hash-function-to-crack-md5.html">HASH摘要</a>）必须随着签名一起传输和公布才能被验证。而RSA是公钥加密体系，它可以用来加密传输（即信息原文在传输中加密，到达对方后解密），它也可以实现签名验证。</p>
+<p>DSA和ECSDA的基本架构和RSA一样，签名者持有私钥，对应公钥向全世界公开。当需要对信息签名时，签名者用私钥对信息签名，然后将签名信息和信息原文发给对方（RSA协议中，信息原文不需要发给对方，签名信息解密后就是信息原文），验证者可用签名者公开的公钥对签名信息和信息原文验证签名。由于信息长度可能比较长，在实际操作中，大家通常在信息的HASH摘要上进行签名。</p>
+</blockquote>
+<p>RSA 可以使用<code>公钥</code>由<code>密文</code>解出明文，而 ECDSA 不能，它只能通过<code>公钥</code>，<code>密文</code>和<code>明文</code>来验证此密文是否是私钥加密的，所以 ECDSA 是个纯粹的签名算法。</p>
+<p><a href="http://blog.csdn.net/jiangwlee/article/details/11817579">用Openssl计算ECDSA签名</a></p>
+<blockquote>
+<p>ECDSA的全名是Elliptic Curve DSA，即椭圆曲线DSA。它是Digital Signature Algorithm (DSA)应用了椭圆曲线加密算法的变种。椭圆曲线算法的原理很复杂，但是具有很好的公开密钥算法特性，通过公钥无法逆向获得私钥。</p>
+<p><strong>第一部分 ： DSA的签名和验证过程</strong></p>
+<p>要了解ECDSA，首先要了解DSA签名的过程和验证过程。为了理解的方便，这里省去诸多DSA算法的细节，仅就重要的几个点进行讨论。</p>
 <ol>
-<li><p>使用<code>west</code>或者<code>cmake</code>构建您的应用程序：</p>
-<p>使用west</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -b &lt;board&gt;</span><br></pre></td></tr></table></figure>
-
-<p>使用CMake和忍者：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir build &amp;&amp; cd build</span><br><span class="line">cmake -GNinja -DBOARD&#x3D;&lt;board&gt; ..</span><br><span class="line">ninja</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>要运行基于终端的<code>menuconfig</code>界面，请使用以下命令之一：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -t menuconfig</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ninja menuconfig</span><br></pre></td></tr></table></figure>
-
-<p>要运行图形<code>guiconfig</code>，请使用以下命令之一：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -t guiconfig</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ninja guiconfig</span><br></pre></td></tr></table></figure>
-
-</li>
+<li>签名过程</li>
 </ol>
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">west build -b nrf52dk_nrf52832 samples&#x2F;hello_world</span><br><span class="line">west flash</span><br></pre></td></tr></table></figure>
+<p>​    假设要签名的消息是一个字符串：“Hello World!”。DSA签名的第一个步骤是对待签名的消息生成一个消息摘要。不同的签名算法使用不同的消息摘要算法。比如，DSS使用SHA1来生成160比特的摘要，而ECDSA256使用SHA256生成256比特的摘要。</p>
+<p>​        摘要生成结束后，应用签名算法对摘要进行签名：</p>
+<p>​    1. 产生一个随机数k</p>
+<p>​    2. 利用随机数k，计算出两个大数r和s。将r和s拼在一起就构成了对消息摘要的签名。</p>
+<p>这里需要注意的是，因为随机数k的存在，对于同一条消息，使用同一个算法，产生的签名是不一样的。从函数的角度来理解，签名函数对同样的输入会产生不同的输出。因为函数内部会将随机值混入签名的过程。</p>
+<ol start="2">
+<li>验证过程</li>
+</ol>
+<p>​    关于验证过程，这里不讨论它的算法细节。从宏观上看，消息的接收方从签名中分离出r和s，然后利用公开的密钥信息和s计算出r。如果计算出的r和接收到的r值相同，则表示验证成功。否则，表示验证失败。</p>
+</blockquote>
+<h3 id="创建和查看证书"><a href="#创建和查看证书" class="headerlink" title="创建和查看证书"></a>创建和查看证书</h3><p><strong>创建根私钥和根证书</strong></p>
+<p>根私钥就是所谓的 Certificate Authority (CA) 机构用来签名服务器证书的私钥，根证书就是客户端用来验证服务器证书的证书。</p>
+<p>Generate root private key：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out ca.key 2048</span><br></pre></td></tr></table></figure>
+
+<p>Generate self-signed<a href="%E5%9B%A0%E4%B8%BA%E6%A0%B9%E8%AF%81%E4%B9%A6%E6%B2%A1%E6%9C%89%E4%B8%8A%E7%BA%A7%E4%BA%86%EF%BC%8C%E6%89%80%E4%BB%A5%E5%8F%AA%E8%83%BD%E8%87%AA%E5%B7%B1%E7%BB%99%E8%87%AA%E5%B7%B1%E7%AD%BE%E5%90%8D%E3%80%82">^自签名</a> X.509 digital root certificate:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt</span><br></pre></td></tr></table></figure>
+
+<p>Display the details for the certificate:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -in ca.crt -noout -text</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建服务器证书</strong></p>
+<p>Generate server private key：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out server.key 2048</span><br></pre></td></tr></table></figure>
+
+<p>Generate a certificate signing request, also known as CSR.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl req -new -key server.key -out server.csr</span><br></pre></td></tr></table></figure>
+
+<p>Generate X.509 digital certificate:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3650 -sha256</span><br></pre></td></tr></table></figure>
+
+<p>Display the details for the certificate:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -in server.crt -noout -text</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
-        <category>Zephyr</category>
+        <category>TLS</category>
       </categories>
   </entry>
   <entry>
-    <title>磁盘占用查看工具 - treesize</title>
-    <url>/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/</url>
-    <content><![CDATA[<p>有时候 C 盘红了，不知道哪些大文件吃了硬盘，可以用 treesize 来分析。</p>
-<p><img src="/2020/12/09/OS/Windows/%E7%A3%81%E7%9B%98%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%20-%20treesize/image-20201203110215721.png" alt="image-20201203110215721"></p>
+    <title>Mermaid 画图</title>
+    <url>/2020/12/09/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/</url>
+    <content><![CDATA[<p><a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a>（美人鱼）通过代码来表示画图。</p>
 <a id="more"></a>
 
 ]]></content>
       <categories>
-        <category>Windows</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Zephyr UART</title>
-    <url>/2020/12/09/OS/Zephyr/Zephyr%20UART/</url>
-    <content><![CDATA[<p>Demo</p>
-<a id="more"></a>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;zephyr.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;drivers/uart.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cli_uart_isr</span><span class="params">(<span class="keyword">const</span> struct device *uart, <span class="keyword">void</span> *user_data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">int</span> rx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* get all of the data off UART as fast as we can */</span></span><br><span class="line">	<span class="keyword">while</span> (uart_irq_update(uart) &amp;&amp; uart_irq_rx_ready(uart)) &#123;</span><br><span class="line">		rx = uart_fifo_read(uart, &amp;c, <span class="keyword">sizeof</span>(c));</span><br><span class="line">		<span class="keyword">if</span> (rx &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		uart_poll_out(dev, c);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">uart_fifo_flush</span><span class="params">(<span class="keyword">const</span> struct device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> c;</span><br><span class="line">	<span class="keyword">while</span> (uart_fifo_read(dev, &amp;c, <span class="number">1</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">continue</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">device</span> *<span class="title">uart_dev</span> =</span> device_get_binding(CONFIG_UART_CONSOLE_ON_DEV_NAME);    </span><br><span class="line">  </span><br><span class="line">  uart_irq_rx_disable(uart_dev);</span><br><span class="line">	uart_irq_tx_disable(uart_dev);</span><br><span class="line">	uart_fifo_flush(uart_dev);</span><br><span class="line">	uart_irq_callback_set(uart_dev, cli_uart_isr);</span><br><span class="line">	uart_irq_rx_enable(uart_dev);</span><br><span class="line">  </span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		k_sleep(K_SECONDS(<span class="number">1</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Zephyr</category>
+        <category>Markdown</category>
       </categories>
   </entry>
   <entry>
@@ -1927,6 +2041,24 @@ Secure Sockets Layer
 <p>将任何整数转换为带符号类型时，如果它可以在新的类型中表示出来，则其值保持不变，否则它的值同具体的实现有关。</p>
 <p>其中<code>以该无符号数类型能够表示的最大值加1为模，找出与此整数同余的最小的非负值</code>，我觉得太拗口，下面那段才比较好理解<code>在对二的补码表示中，如果该无符号类型的位模式较窄，这就相当于左截取；如果该符号类型的位模式较宽，这就相当于对带符号的值进行符号扩展和对无符号的值进行0填充。</code></p>
 <p>比如把 0x1234 放到一个 uint8_t 类型变量 x 中，那么高 8 位就被截掉，低 8 位被放到变量中，最终 x 的值为 0x34。<br>比如把 -1 放到 x 中，因为 -1 的二进制码是 0xFFFFFFFF，那么 x 的值就等于 0xFF。</p>
+]]></content>
+      <categories>
+        <category>C</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>C 整形提升</title>
+    <url>/2020/12/09/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/</url>
+    <content><![CDATA[<p>摘自<a href="https://zh.wikipedia.org/wiki/%E6%95%B4%E5%9E%8B%E6%8F%90%E5%8D%87">维基百科</a>：</p>
+<p>整型提升是C程序设计语言中的一项规定：在表达式计算时，各种整形首先要提升为int类型，如果int类型不足以表示则要提升为unsigned int类型；然后执行表达式的运算。[1]</p>
+<p>这一规则是由C语言的发明人丹尼斯·里奇与肯·汤普逊创设的：[2]</p>
+<blockquote>
+<p>A character, a short integer, or an integer bit-field, all either signed or not, or an object of enumeration type, may be used in an expression wherever an integer maybe used. If an int can represent all the values of the original type, then the value is converted to int; otherwise the value is converted to unsigned int. This process is called integral promotion.</p>
+</blockquote>
+<p>这段话的大意是：表达式中可以使用整数的地方，就可以使用枚举类型，或有符号或无符号的字符、短整数、整数位域。如果一个int可以表示上述类型，则该值被转化为int类型的值；否则，该值被转化为unsigned int类型的值。这一过程被称作integral promotion。</p>
+<p>整型提升的意义在于：表达式的整型运算要在CPU的相应运算器件内执行，CPU内整型运算器(ALU)的操作数的字节长度一般就是int的字节长度，同时也是CPU的通用寄存器的长度。因此，即使两个char类型的相加，在CPU执行时实际上也要先转换为CPU内整型操作数的标准长度。通用CPU（general-purpose CPU）是难以直接实现两个8比特字节直接相加运算（虽然机器指令中可能有这种字节相加指令）。所以，表达式中各种长度可能小于int长度的整型值，都必须先转换为int或unsigned int，然后才能送入CPU去执行运算。</p>
+<a id="more"></a>
+
 ]]></content>
       <categories>
         <category>C</category>
@@ -1966,24 +2098,6 @@ Secure Sockets Layer
 <p><a href="https://zh.wikipedia.org/wiki/%E6%95%B4%E5%9E%8B%E6%8F%90%E5%8D%87">整型提升</a></p>
 <p><a href="https://my.oschina.net/Ccx371161810/blog/293941">C的隐式类型转换</a></p>
 <p><a href="http://www.embedu.org/Column/5653.html">关于C语言的隐式类型转换</a></p>
-]]></content>
-      <categories>
-        <category>C</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>C 整形提升</title>
-    <url>/2020/12/09/Programing%20Language/C/C%20%E6%95%B4%E5%BD%A2%E6%8F%90%E5%8D%87/</url>
-    <content><![CDATA[<p>摘自<a href="https://zh.wikipedia.org/wiki/%E6%95%B4%E5%9E%8B%E6%8F%90%E5%8D%87">维基百科</a>：</p>
-<p>整型提升是C程序设计语言中的一项规定：在表达式计算时，各种整形首先要提升为int类型，如果int类型不足以表示则要提升为unsigned int类型；然后执行表达式的运算。[1]</p>
-<p>这一规则是由C语言的发明人丹尼斯·里奇与肯·汤普逊创设的：[2]</p>
-<blockquote>
-<p>A character, a short integer, or an integer bit-field, all either signed or not, or an object of enumeration type, may be used in an expression wherever an integer maybe used. If an int can represent all the values of the original type, then the value is converted to int; otherwise the value is converted to unsigned int. This process is called integral promotion.</p>
-</blockquote>
-<p>这段话的大意是：表达式中可以使用整数的地方，就可以使用枚举类型，或有符号或无符号的字符、短整数、整数位域。如果一个int可以表示上述类型，则该值被转化为int类型的值；否则，该值被转化为unsigned int类型的值。这一过程被称作integral promotion。</p>
-<p>整型提升的意义在于：表达式的整型运算要在CPU的相应运算器件内执行，CPU内整型运算器(ALU)的操作数的字节长度一般就是int的字节长度，同时也是CPU的通用寄存器的长度。因此，即使两个char类型的相加，在CPU执行时实际上也要先转换为CPU内整型操作数的标准长度。通用CPU（general-purpose CPU）是难以直接实现两个8比特字节直接相加运算（虽然机器指令中可能有这种字节相加指令）。所以，表达式中各种长度可能小于int长度的整型值，都必须先转换为int或unsigned int，然后才能送入CPU去执行运算。</p>
-<a id="more"></a>
-
 ]]></content>
       <categories>
         <category>C</category>
@@ -2043,32 +2157,6 @@ Secure Sockets Layer
 ]]></content>
       <categories>
         <category>C</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Mermaid 画图</title>
-    <url>/2020/12/09/Programing%20Language/Markdown/Mermaid%20%E7%94%BB%E5%9B%BE/</url>
-    <content><![CDATA[<p><a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a>（美人鱼）通过代码来表示画图。</p>
-<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>Markdown</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Python Static variable</title>
-    <url>/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/</url>
-    <content><![CDATA[<h2 id="How-to-declare-a-static-variable-in-a-function-in-Python"><a href="#How-to-declare-a-static-variable-in-a-function-in-Python" class="headerlink" title="How to declare a static variable in a function in Python"></a>How to declare a static variable in a function in Python</h2><p>Use a variable <code>func.var</code>, where <code>func</code> is the name of the function and <code>var</code> is the name of a variable as a static variable in <code>func</code>. Either initialize the variable outside of the function or in the function, call <a href="https://kite.com/python/docs/builtins.hasattr"><code>hasattr(fun, var)</code></a> to test if <code>func.var</code> has been initialized. If it has not, initialize it to the appropriate value, otherwise continue with the function.</p>
-<a id="more"></a>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myfunc</span>():</span></span><br><span class="line">    myfunc.counter += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> myfunc.counter</span><br><span class="line"></span><br><span class="line">myfunc.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">count1 = myfunc()</span><br><span class="line">print(count1)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def myfunc():</span><br><span class="line">    if not hasattr(myfunc, &quot;counter&quot;):</span><br><span class="line">         myfunc.counter &#x3D; 0</span><br><span class="line">    myfunc.counter +&#x3D; 1</span><br><span class="line">    return myfunc.counter</span><br><span class="line"></span><br><span class="line">count1 &#x3D; myfunc()</span><br><span class="line">print(count1)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Python</category>
       </categories>
   </entry>
   <entry>
@@ -2232,6 +2320,21 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
+    <title>Python Static variable</title>
+    <url>/2020/12/09/Programing%20Language/Python/Python%20Static%20variable/</url>
+    <content><![CDATA[<h2 id="How-to-declare-a-static-variable-in-a-function-in-Python"><a href="#How-to-declare-a-static-variable-in-a-function-in-Python" class="headerlink" title="How to declare a static variable in a function in Python"></a>How to declare a static variable in a function in Python</h2><p>Use a variable <code>func.var</code>, where <code>func</code> is the name of the function and <code>var</code> is the name of a variable as a static variable in <code>func</code>. Either initialize the variable outside of the function or in the function, call <a href="https://kite.com/python/docs/builtins.hasattr"><code>hasattr(fun, var)</code></a> to test if <code>func.var</code> has been initialized. If it has not, initialize it to the appropriate value, otherwise continue with the function.</p>
+<a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myfunc</span>():</span></span><br><span class="line">    myfunc.counter += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> myfunc.counter</span><br><span class="line"></span><br><span class="line">myfunc.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">count1 = myfunc()</span><br><span class="line">print(count1)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def myfunc():</span><br><span class="line">    if not hasattr(myfunc, &quot;counter&quot;):</span><br><span class="line">         myfunc.counter &#x3D; 0</span><br><span class="line">    myfunc.counter +&#x3D; 1</span><br><span class="line">    return myfunc.counter</span><br><span class="line"></span><br><span class="line">count1 &#x3D; myfunc()</span><br><span class="line">print(count1)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+  </entry>
+  <entry>
     <title>pypi 镜像使用帮助</title>
     <url>/2020/12/09/Programing%20Language/Python/pypi%20%E9%95%9C%E5%83%8F%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/</url>
     <content><![CDATA[<h2 id="清华大学开源软件镜像站"><a href="#清华大学开源软件镜像站" class="headerlink" title="清华大学开源软件镜像站"></a>清华大学开源软件镜像站</h2><p>pypi 镜像每 5 分钟同步一次。</p>
@@ -2318,31 +2421,6 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
-    <title>OpenSSL</title>
-    <url>/2020/12/09/Security/TLS/OpenSSL/</url>
-    <content><![CDATA[<h2 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h2><p>OpenSSL 是个<code>实现了 TLS 协议</code>的开源的商业级的<code>开发套件</code>。</p>
-<p>OpenSSL toolkit 包含：</p>
-<ul>
-<li>TLS 协议</li>
-<li>加密算法库</li>
-<li>命令行工具</li>
-</ul>
-<h2 id="下载，编译和安装"><a href="#下载，编译和安装" class="headerlink" title="下载，编译和安装"></a>下载，编译和安装</h2><p>OpenSSL 官网：<a href="https://www.openssl.org/">https://www.openssl.org</a></p>
-<h4 id="下载："><a href="#下载：" class="headerlink" title="下载："></a>下载：</h4><a id="more"></a>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clone git:&#x2F;&#x2F;git.openssl.org&#x2F;openssl.git</span><br></pre></td></tr></table></figure>
-
-<h4 id="编译和安装："><a href="#编译和安装：" class="headerlink" title="编译和安装："></a>编译和安装：</h4><p>参考源码下的：README, INSTALL。</p>
-<p><strong>OS X[^1]</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ .&#x2F;config</span><br><span class="line">$ make</span><br><span class="line">$ make test</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
-
-<p>[^1]: OS X 下安装需要 root 权限</p>
-]]></content>
-      <categories>
-        <category>TLS</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Ruby Install</title>
     <url>/2020/12/09/Programing%20Language/Ruby/Ruby%20Install/</url>
     <content><![CDATA[<h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><p>macOS 自带 ruby，但是千万不要用，因为自带的 ruby 是给系统用，搞乱了会出问题。</p>
@@ -2359,84 +2437,6 @@ Secure Sockets Layer
 ]]></content>
       <categories>
         <category>Ruby</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>TLS 学习</title>
-    <url>/2020/12/09/Security/TLS/TLS%20%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h2 id="初次了解："><a href="#初次了解：" class="headerlink" title="初次了解："></a>初次了解：</h2><p><a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html">SSL/TLS协议运行机制的概述</a> - ==强烈推荐==<br><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议</a></p>
-<h2 id="进一步了解SSL-handshake的过程和细节："><a href="#进一步了解SSL-handshake的过程和细节：" class="headerlink" title="进一步了解SSL handshake的过程和细节："></a>进一步了解SSL handshake的过程和细节：</h2><p><a href="http://www.cnblogs.com/piyeyong/archive/2010/07/02/1770208.html">证书的应用之一 —— TCP&amp;SSL通信实例及协议分析(中)</a><br><a href="http://www.cnblogs.com/afarmer/archive/2009/11/25/1610884.html">SSL握手协议</a></p>
-<h2 id="有关数字证书知识："><a href="#有关数字证书知识：" class="headerlink" title="有关数字证书知识："></a>有关数字证书知识：</h2><p><a href="http://www.linuxde.net/2012/03/8301.html">SSL 与 数字证书 的基本概念和工作原理</a> - ==强烈推荐==<br><a href="http://www.cnblogs.com/guogangj/p/4118605.html">那些证书相关的玩意儿(SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12等)</a><br><a href="http://www.cnblogs.com/aLittleBitCool/archive/2011/09/22/2185418.html">利用openssl进行RSA加密解密</a></p>
-<h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><p><a href="https://tools.ietf.org/html/rfc5246#page-37">RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2</a></p>
-<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><a id="more"></a>
-
-<h3 id="网络风险"><a href="#网络风险" class="headerlink" title="网络风险"></a>网络风险</h3><p>不使用SSL/TLS的HTTP通信，就是不加密的通信。所有信息明文传播，带来了三大风险。</p>
-<blockquote>
-<p>（1） <strong>窃听风险</strong>（eavesdropping）：第三方可以获知通信内容。</p>
-<p>（2） <strong>篡改风险</strong>（tampering）：第三方可以修改通信内容。</p>
-<p>（3） <strong>冒充风险</strong>（pretending）：第三方可以冒充他人身份参与通信。</p>
-</blockquote>
-<p>SSL/TLS协议是为了解决这三大风险而设计的，希望达到：</p>
-<blockquote>
-<p>（1） 所有信息都是<strong>加密传播</strong>，第三方无法窃听。</p>
-<p>（2） 具有<strong>校验机制</strong>，一旦被篡改，通信双方会立刻发现。</p>
-<p>（3） 配备<strong>身份证书</strong>（包含数字签名），防止身份被冒充。</p>
-</blockquote>
-<h3 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h3><p>通过私钥可以计算出公钥，反之则不行。<br>公钥加密：公钥加密的内容可以用私钥来解密——只有私钥持有者才能解密。<br>私钥签名：私钥签名的内容可以用公钥验证。公钥能验证的签名均可视为私钥持有人所签署。</p>
-<h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p>签名方对一段明文使用私钥加密，并把密文（称为<code>数字签名</code>）附在明文后。验证方使用签名方的公钥把数字签名解密出来，如果和明文相同，就可以确定这段明文是签名方认证的。</p>
-<p>考虑到非对称加密非常耗时，所以通常把明文的 hash 值用私钥加密作为数字签名。</p>
-<p>数字签名的作用是对一段明文进行认证，本质是这段明文的密文。</p>
-<h3 id="RSA-和-ECDSA-的区别"><a href="#RSA-和-ECDSA-的区别" class="headerlink" title="RSA 和 ECDSA 的区别"></a>RSA 和 ECDSA 的区别</h3><p><a href="http://zhiqiang.org/blog/it/das-and-ecdsa-rsa.html">签名算法DSA和ECDSA﻿﻿</a></p>
-<blockquote>
-<p>比特币协议里使用了ECDSA（椭圆曲线签名算法），我之前以为它和基于大数分解的RSA公钥密码体系差不多。这两天看了下维基百科，才发现它们之间的差异挺大。最本质的区别是，DSA和ECDSA都只是签名算法，它用来确保信息发布人的身份和信息的完整性，不能用来做加密传输，为了实现这个功能，信息的原文（或者<a href="http://zhiqiang.org/blog/science/computer-science/preliminary-computer-theory-xiao-yun-wang-from-the-hash-function-to-crack-md5.html">HASH摘要</a>）必须随着签名一起传输和公布才能被验证。而RSA是公钥加密体系，它可以用来加密传输（即信息原文在传输中加密，到达对方后解密），它也可以实现签名验证。</p>
-<p>DSA和ECSDA的基本架构和RSA一样，签名者持有私钥，对应公钥向全世界公开。当需要对信息签名时，签名者用私钥对信息签名，然后将签名信息和信息原文发给对方（RSA协议中，信息原文不需要发给对方，签名信息解密后就是信息原文），验证者可用签名者公开的公钥对签名信息和信息原文验证签名。由于信息长度可能比较长，在实际操作中，大家通常在信息的HASH摘要上进行签名。</p>
-</blockquote>
-<p>RSA 可以使用<code>公钥</code>由<code>密文</code>解出明文，而 ECDSA 不能，它只能通过<code>公钥</code>，<code>密文</code>和<code>明文</code>来验证此密文是否是私钥加密的，所以 ECDSA 是个纯粹的签名算法。</p>
-<p><a href="http://blog.csdn.net/jiangwlee/article/details/11817579">用Openssl计算ECDSA签名</a></p>
-<blockquote>
-<p>ECDSA的全名是Elliptic Curve DSA，即椭圆曲线DSA。它是Digital Signature Algorithm (DSA)应用了椭圆曲线加密算法的变种。椭圆曲线算法的原理很复杂，但是具有很好的公开密钥算法特性，通过公钥无法逆向获得私钥。</p>
-<p><strong>第一部分 ： DSA的签名和验证过程</strong></p>
-<p>要了解ECDSA，首先要了解DSA签名的过程和验证过程。为了理解的方便，这里省去诸多DSA算法的细节，仅就重要的几个点进行讨论。</p>
-<ol>
-<li>签名过程</li>
-</ol>
-<p>​    假设要签名的消息是一个字符串：“Hello World!”。DSA签名的第一个步骤是对待签名的消息生成一个消息摘要。不同的签名算法使用不同的消息摘要算法。比如，DSS使用SHA1来生成160比特的摘要，而ECDSA256使用SHA256生成256比特的摘要。</p>
-<p>​        摘要生成结束后，应用签名算法对摘要进行签名：</p>
-<p>​    1. 产生一个随机数k</p>
-<p>​    2. 利用随机数k，计算出两个大数r和s。将r和s拼在一起就构成了对消息摘要的签名。</p>
-<p>这里需要注意的是，因为随机数k的存在，对于同一条消息，使用同一个算法，产生的签名是不一样的。从函数的角度来理解，签名函数对同样的输入会产生不同的输出。因为函数内部会将随机值混入签名的过程。</p>
-<ol start="2">
-<li>验证过程</li>
-</ol>
-<p>​    关于验证过程，这里不讨论它的算法细节。从宏观上看，消息的接收方从签名中分离出r和s，然后利用公开的密钥信息和s计算出r。如果计算出的r和接收到的r值相同，则表示验证成功。否则，表示验证失败。</p>
-</blockquote>
-<h3 id="创建和查看证书"><a href="#创建和查看证书" class="headerlink" title="创建和查看证书"></a>创建和查看证书</h3><p><strong>创建根私钥和根证书</strong></p>
-<p>根私钥就是所谓的 Certificate Authority (CA) 机构用来签名服务器证书的私钥，根证书就是客户端用来验证服务器证书的证书。</p>
-<p>Generate root private key：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out ca.key 2048</span><br></pre></td></tr></table></figure>
-
-<p>Generate self-signed<a href="%E5%9B%A0%E4%B8%BA%E6%A0%B9%E8%AF%81%E4%B9%A6%E6%B2%A1%E6%9C%89%E4%B8%8A%E7%BA%A7%E4%BA%86%EF%BC%8C%E6%89%80%E4%BB%A5%E5%8F%AA%E8%83%BD%E8%87%AA%E5%B7%B1%E7%BB%99%E8%87%AA%E5%B7%B1%E7%AD%BE%E5%90%8D%E3%80%82">^自签名</a> X.509 digital root certificate:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt</span><br></pre></td></tr></table></figure>
-
-<p>Display the details for the certificate:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -in ca.crt -noout -text</span><br></pre></td></tr></table></figure>
-
-<p><strong>创建服务器证书</strong></p>
-<p>Generate server private key：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out server.key 2048</span><br></pre></td></tr></table></figure>
-
-<p>Generate a certificate signing request, also known as CSR.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl req -new -key server.key -out server.csr</span><br></pre></td></tr></table></figure>
-
-<p>Generate X.509 digital certificate:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3650 -sha256</span><br></pre></td></tr></table></figure>
-
-<p>Display the details for the certificate:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">openssl x509 -in server.crt -noout -text</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>TLS</category>
       </categories>
   </entry>
   <entry>
@@ -3022,6 +3022,30 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
+    <title>基础知识</title>
+    <url>/2020/12/09/Wireless/Wi-Fi/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<h2 id="Wi-Fi-和-802-11"><a href="#Wi-Fi-和-802-11" class="headerlink" title="Wi-Fi 和 802.11"></a>Wi-Fi 和 802.11</h2><ul>
+<li>IEEE 802.11 是 IEEE 802 局域网（LAN）协议集的一部分。</li>
+<li>它指定了用于实现无线局域网（WLAN）计算机通信的媒体访问控制（MAC）和物理层（PHY）协议集。</li>
+<li>包含但不限于 2.4 GHz，5 GHz，6 GHz 和 60 GHz 频段。</li>
+<li>Wi-Fi 是遵从 IEEE 802.11 标准的一种通信技术。</li>
+</ul>
+<h2 id="协议-a-b-g-n-ac-ax"><a href="#协议-a-b-g-n-ac-ax" class="headerlink" title="协议 a, b, g, n, ac, ax"></a>协议 a, b, g, n, ac, ax</h2><p><img src="https://img2018.cnblogs.com/blog/652919/201907/652919-20190702212051215-617241579.png" alt="img"></p>
+<p><img src="/.%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86.assets/image-20201119212844381.png" alt="image-20201119212844381"></p>
+<h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><a id="more"></a>
+
+
+<h3 id="SSID，BSSID，ESSID"><a href="#SSID，BSSID，ESSID" class="headerlink" title="SSID，BSSID，ESSID"></a>SSID，BSSID，ESSID</h3><p>SSID = Service Set IDentifier </p>
+<p>BSSID = Basic Service Set IDentifier </p>
+<p>ESSID = Extended Service Set IDentifier</p>
+<p>举个例子，一家公司面积比较大，安装了若干台无线接入点（AP或者无线路由器），公司员工只需要知道一个 SSID 就可以在公司范围内任意地方接入无线网络。<strong>BSSID其实就是每个无线接入点的MAC地址</strong>。当员工在公司内部移动的时候，SSID是不变的。但BSSID随着你切换到不同的无线接入点，是在不停变化的。</p>
+<p>ESS包括了网络中所有的BSS，一般ESSID就是SSID。</p>
+]]></content>
+      <categories>
+        <category>Wi-Fi</category>
+      </categories>
+  </entry>
+  <entry>
     <title>a,b,g,n,ac,ax 协议</title>
     <url>/2020/12/09/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[<p><img src="/2020/12/09/Wireless/Wi-Fi/a,b,g,n,ac,ax%20%E5%8D%8F%E8%AE%AE/image-20201119224849711.png" alt="image-20201119224849711"></p>
@@ -3065,30 +3089,6 @@ Secure Sockets Layer
 <li><strong>802.11ac的优点</strong>–通过同时连接支持提供了改进的带宽和更大的灵活性；向后兼容允许使用现有技术</li>
 <li><strong>802.11ac的缺点–</strong>双频意味着成本增加；在2.4GHz频率上仍然容易受到干扰</li>
 </ul>
-]]></content>
-      <categories>
-        <category>Wi-Fi</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>基础知识</title>
-    <url>/2020/12/09/Wireless/Wi-Fi/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
-    <content><![CDATA[<h2 id="Wi-Fi-和-802-11"><a href="#Wi-Fi-和-802-11" class="headerlink" title="Wi-Fi 和 802.11"></a>Wi-Fi 和 802.11</h2><ul>
-<li>IEEE 802.11 是 IEEE 802 局域网（LAN）协议集的一部分。</li>
-<li>它指定了用于实现无线局域网（WLAN）计算机通信的媒体访问控制（MAC）和物理层（PHY）协议集。</li>
-<li>包含但不限于 2.4 GHz，5 GHz，6 GHz 和 60 GHz 频段。</li>
-<li>Wi-Fi 是遵从 IEEE 802.11 标准的一种通信技术。</li>
-</ul>
-<h2 id="协议-a-b-g-n-ac-ax"><a href="#协议-a-b-g-n-ac-ax" class="headerlink" title="协议 a, b, g, n, ac, ax"></a>协议 a, b, g, n, ac, ax</h2><p><img src="https://img2018.cnblogs.com/blog/652919/201907/652919-20190702212051215-617241579.png" alt="img"></p>
-<p><img src="/.%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86.assets/image-20201119212844381.png" alt="image-20201119212844381"></p>
-<h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><a id="more"></a>
-
-
-<h3 id="SSID，BSSID，ESSID"><a href="#SSID，BSSID，ESSID" class="headerlink" title="SSID，BSSID，ESSID"></a>SSID，BSSID，ESSID</h3><p>SSID = Service Set IDentifier </p>
-<p>BSSID = Basic Service Set IDentifier </p>
-<p>ESSID = Extended Service Set IDentifier</p>
-<p>举个例子，一家公司面积比较大，安装了若干台无线接入点（AP或者无线路由器），公司员工只需要知道一个 SSID 就可以在公司范围内任意地方接入无线网络。<strong>BSSID其实就是每个无线接入点的MAC地址</strong>。当员工在公司内部移动的时候，SSID是不变的。但BSSID随着你切换到不同的无线接入点，是在不停变化的。</p>
-<p>ESS包括了网络中所有的BSS，一般ESSID就是SSID。</p>
 ]]></content>
       <categories>
         <category>Wi-Fi</category>
