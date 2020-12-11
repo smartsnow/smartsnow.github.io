@@ -1797,6 +1797,16 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
+    <title>C 入口函数分析</title>
+    <url>/2020/12/11/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
+<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。</p>
+]]></content>
+      <categories>
+        <category>C</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Zephyr Primer</title>
     <url>/2020/12/11/OS/Zephyr/Zephyr%20Primer/</url>
     <content><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Zephyr 最初是<code>Wind River</code>公司在 2015 年推出的为 IoT 开发的<code>Rocket内核</code>，更早时称为<code>Microkernel Profile for VxWorks</code>。代码移植于2001年并购<code>Eonic Systems</code>得来的<code>Virtuoso DSP RTOS</code>。在2016年，它成为Linux基金会的项目而改称 zephyr。</p>
@@ -1836,16 +1846,6 @@ Secure Sockets Layer
 ]]></content>
       <categories>
         <category>Zephyr</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>C 入口函数分析</title>
-    <url>/2020/12/11/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
-<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。</p>
-]]></content>
-      <categories>
-        <category>C</category>
       </categories>
   </entry>
   <entry>
