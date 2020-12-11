@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"snowyang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="AliOS-Things 中 KV 代码分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AliOS-Things KV">
+<meta property="og:url" content="https://snowyang.com/2020/12/11/OS/AliOS-Things/AliOS-Things%20KV/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="AliOS-Things 中 KV 代码分析。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-11T12:01:33.012Z">
+<meta property="article:modified_time" content="2020-12-11T12:01:33.012Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://snowyang.com/2020/12/11/OS/AliOS-Things/AliOS-Things%20KV/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AliOS-Things KV | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://snowyang.com/2020/12/11/OS/AliOS-Things/AliOS-Things%20KV/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="千古风流今在此，万里功名莫放休">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AliOS-Things KV
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-11 20:01:33" itemprop="dateCreated datePublished" datetime="2020-12-11T20:01:33+08:00">2020-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AliOS-Things/" itemprop="url" rel="index"><span itemprop="name">AliOS-Things</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/11/OS/AliOS-Things/AliOS-Things%20KV/" class="post-meta-item leancloud_visitors" data-flag-title="AliOS-Things KV" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>AliOS-Things 中 KV 代码分析。</p>
+<a id="more"></a>
+
+<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>block 的头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Flash block header description *&#x2F;</span><br><span class="line">typedef struct _block_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of block *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of the block *&#x2F;</span><br><span class="line">    uint8_t     reserved[2];</span><br><span class="line">&#125; __attribute__((packed)) block_hdr_t;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">magic</th>
+<th align="left">state</th>
+<th align="left">reserved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ASCII ‘K’</td>
+<td align="left">1B</td>
+<td align="left">2B</td>
+</tr>
+</tbody></table>
+<p>magic 是 ASCII 码 ‘K’：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static const uint8_t BLK_MAGIC_NUM  &#x3D; &#39;K&#39;; &#x2F;* The block header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>state 有 3 种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define BLK_STATE_USED  0xCC &#x2F;* Block state: USED --&gt; block is inused and without dirty data *&#x2F;</span><br><span class="line">#define BLK_STATE_CLEAN 0xEE &#x2F;* Block state: CLEAN --&gt; block is clean, ready for used *&#x2F;</span><br><span class="line">#define BLK_STATE_DIRTY 0x44 &#x2F;* Block state: DIRTY --&gt; block is inused and with dirty data *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h2 id="item"><a href="#item" class="headerlink" title="item"></a>item</h2><p>item 的头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Key-value item header description *&#x2F;</span><br><span class="line">typedef struct _item_header_t &#123;</span><br><span class="line">    uint8_t     magic;          &#x2F;* The magic number of key-value item *&#x2F;</span><br><span class="line">    uint8_t     state;          &#x2F;* The state of key-value item *&#x2F;</span><br><span class="line">    uint8_t     crc;            &#x2F;* The crc-8 value of key-value item *&#x2F;</span><br><span class="line">    uint8_t     key_len;        &#x2F;* The length of the key *&#x2F;</span><br><span class="line">    uint16_t    val_len;        &#x2F;* The length of the value *&#x2F;</span><br><span class="line">    uint16_t    origin_off;     &#x2F;* The origin key-value item offset, it will be used when updating *&#x2F;</span><br><span class="line">&#125; __attribute__((packed)) item_hdr_t;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">magic</th>
+<th align="left">state</th>
+<th align="left">crc</th>
+<th align="left">key_len</th>
+<th align="left">val_len</th>
+<th align="left">origin_off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ASCII ‘I’</td>
+<td align="left">1B</td>
+<td align="left">1B</td>
+<td align="left">1B</td>
+<td align="left">2B</td>
+<td align="left">2B</td>
+</tr>
+</tbody></table>
+<p>magic 是 ASCII 码 ‘I’：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static const uint8_t ITEM_MAGIC_NUM &#x3D; &#39;I&#39;; &#x2F;* The key-value item header magic number *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>state 有 2 种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#define ITEM_STATE_NORMAL 0xEE &#x2F;* Key-value item state: NORMAL --&gt; the key-value item is valid *&#x2F;</span><br><span class="line">#define ITEM_STATE_DELETE 0    &#x2F;* Key-value item state: DELETE --&gt; the key-value item is deleted *&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>crc 是 key 和 value 的 8 bit 校验码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* CRC-8: the poly is 0x31 (x^8 + x^5 + x^4 + 1) *&#x2F;</span><br><span class="line">static uint8_t utils_crc8(uint8_t *buf, uint16_t length)</span><br><span class="line">&#123;</span><br><span class="line">    uint8_t crc &#x3D; 0x00;</span><br><span class="line">    uint8_t i;</span><br><span class="line"></span><br><span class="line">    while (length--) &#123;</span><br><span class="line">        crc ^&#x3D; *buf++;</span><br><span class="line">        for (i &#x3D; 8; i &gt; 0; i--) &#123;</span><br><span class="line">            if (crc &amp; 0x80) &#123;</span><br><span class="line">                crc &#x3D; (crc &lt;&lt; 1) ^ 0x31;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                crc &lt;&lt;&#x3D; 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return crc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>key_len 是 key 的长度</p>
+<p>val_len 是 value 的长度</p>
+<p>origin_off 是上个旧 item 的 offset</p>
+<p>通过一个实验来理解，例如，我 set name snowyang，然后 set name snowyang-1992，再 set name snowyang-19920202，最后 dump 出来的 binary 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">00000000h: 4B 44 00 00 49 00 98 04 08 00 00 00 6E 61 6D 65 ; KD..I.......name</span><br><span class="line">00000010h: 73 6E 6F 77 79 61 6E 67 49 00 37 04 0D 00 04 00 ; snowyangI.7.....</span><br><span class="line">00000020h: 6E 61 6D 65 73 6E 6F 77 79 61 6E 67 2D 31 39 39 ; namesnowyang-199</span><br><span class="line">00000030h: 32 00 00 00 49 EE D6 04 11 00 18 00 6E 61 6D 65 ; 2...IîÖ.....name</span><br><span class="line">00000040h: 73 6E 6F 77 79 61 6E 67 2D 31 39 39 32 30 32 30 ; snowyang-1992020</span><br><span class="line">00000050h: 32 00 00 00 FF FF FF FF FF FF FF FF FF FF FF FF ; 2...ÿÿÿÿÿÿÿÿÿÿÿÿ</span><br></pre></td></tr></table></figure>
+
+<p>可见第二个 item 的 <code>origin_off</code> 是 0x04，也就是第一个 item 的地址，同样地，第三个 item 的 <code>origin_off</code> 是第二个 item 的地址 0x18</p>
+<p>具体作用不明</p>
+<h3 id="描述-item-的结构体如下："><a href="#描述-item-的结构体如下：" class="headerlink" title="描述 item 的结构体如下："></a>描述 item 的结构体如下：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Key-value item description *&#x2F;</span><br><span class="line">typedef struct _kv_item_t &#123;</span><br><span class="line">    item_hdr_t  hdr;            &#x2F;* The header of the key-value item, detail see the item_hdr_t structure *&#x2F;</span><br><span class="line">    char       *store;          &#x2F;* The store buffer for key-value *&#x2F;</span><br><span class="line">    uint16_t    len;            &#x2F;* The length of the buffer *&#x2F;</span><br><span class="line">    uint16_t    pos;            &#x2F;* The store position of the key-value item *&#x2F;</span><br><span class="line">&#125; kv_item_t;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意：这个结构体是用来描述一个 item 的，是一个变量，不是描述 item 的存储结构的</p>
+<p>hdr 是上述头部</p>
+<p>store 是实际存储 key 和 value 的 buffer，一般是 malloc 来的</p>
+<p>len 是 header + key + value 的长度，注意是 4 字节对齐</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len &#x3D; (ITEM_HEADER_SIZE + hdr-&gt;key_len + hdr-&gt;val_len + ~KV_ALIGN_MASK) &amp; KV_ALIGN_MASK;</span><br></pre></td></tr></table></figure>
+
+<p>pos 是 item 在 flash 中的地址</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E8%AE%B0%E5%BD%95/" rel="prev" title="FreeRTOS 记录">
+      <i class="fa fa-chevron-left"></i> FreeRTOS 记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/11/OS/Zephyr/Zephyr%20Primer/" rel="next" title="Zephyr Primer">
+      Zephyr Primer <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#block"><span class="nav-number">1.</span> <span class="nav-text">block</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item"><span class="nav-number">2.</span> <span class="nav-text">item</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-item-%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">描述 item 的结构体如下：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">千古风流今在此，万里功名莫放休</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

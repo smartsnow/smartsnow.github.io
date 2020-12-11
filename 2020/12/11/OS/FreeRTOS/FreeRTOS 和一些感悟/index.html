@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"snowyang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这是我在 2012 年刚刚使用 FreeRTOS 时写的笔记，转眼八年过去了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FreeRTOS 和一些感悟">
+<meta property="og:url" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/index.html">
+<meta property="og:site_name" content="冷香小筑">
+<meta property="og:description" content="这是我在 2012 年刚刚使用 FreeRTOS 时写的笔记，转眼八年过去了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wps4jx5Sx.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wps8QFHVH.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsGa3njS.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsXaI1nY.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsZs6F7l.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsTHTLmu.png">
+<meta property="og:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsirLf7N.png">
+<meta property="article:published_time" content="2020-12-11T12:01:32.941Z">
+<meta property="article:modified_time" content="2020-12-11T12:01:32.941Z">
+<meta property="article:author" content="Snow Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wps4jx5Sx.png">
+
+<link rel="canonical" href="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FreeRTOS 和一些感悟 | 冷香小筑</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c946d75c051cf3fd9b2873d44f7a553e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">冷香小筑</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Snow Yang 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://snowyang.com/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Snow Yang">
+      <meta itemprop="description" content="千古风流今在此，万里功名莫放休">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冷香小筑">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FreeRTOS 和一些感悟
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-11 20:01:32" itemprop="dateCreated datePublished" datetime="2020-12-11T20:01:32+08:00">2020-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FreeRTOS/" itemprop="url" rel="index"><span itemprop="name">FreeRTOS</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/" class="post-meta-item leancloud_visitors" data-flag-title="FreeRTOS 和一些感悟" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这是我在 2012 年刚刚使用 FreeRTOS 时写的笔记，转眼八年过去了。</p>
+<a id="more"></a>
+
+<h2 id="用“WWH”方法分析FreeRTOS中的链表"><a href="#用“WWH”方法分析FreeRTOS中的链表" class="headerlink" title="用“WWH”方法分析FreeRTOS中的链表"></a>用“WWH”方法分析FreeRTOS中的链表</h2><h3 id="What？FreeRTOS的链表结构是什么样的？"><a href="#What？FreeRTOS的链表结构是什么样的？" class="headerlink" title="What？FreeRTOS的链表结构是什么样的？"></a>What？FreeRTOS的链表结构是什么样的？</h3><p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wps4jx5Sx.png" alt="img"></p>
+<p>如上图所示，FreeRTOS的链表由list item和list组成。</p>
+<p>List item有4个指针， 分别指向前，后，owner和container。</p>
+<p>List只有3个指针，分别指向前，后和index。</p>
+<h3 id="Why-这样的结构有什么用处？"><a href="#Why-这样的结构有什么用处？" class="headerlink" title="Why? 这样的结构有什么用处？"></a>Why? 这样的结构有什么用处？</h3><p>List item：</p>
+<p>前，后指针用来插入和移出某个链表。</p>
+<p>owner指针用来寻找其属于的TCB。</p>
+<p>container指针用来寻找其所在的链表。</p>
+<p>List:</p>
+<p>前，后指针用来寻找前后的list item，方便查找有序链表的表头。</p>
+<p>Index用来遍历链表，实现同一优先级的任务时间片调度机制。</p>
+<h2 id="链表的insert和insert-end"><a href="#链表的insert和insert-end" class="headerlink" title="链表的insert和insert end"></a>链表的insert和insert end</h2><p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wps8QFHVH.png" alt="img"></p>
+<p>感悟：学习最忌讳一开始就一头扎进去。古人云：不是庐山真面目，只缘身在此山中。如果揪住一个细节不放，很容易陷入困境，应该跳出来看全局，看框架，然后再分步细细分析。</p>
+<p>经常会看一段代码，看完后好像懂了，但如果问自己，这段代码作什么用的？什么时候会用到？却是一脸茫然，这是个很不好的习惯。</p>
+<h2 id="Start-scheduler，面向对象分析法"><a href="#Start-scheduler，面向对象分析法" class="headerlink" title="Start scheduler，面向对象分析法"></a>Start scheduler，面向对象分析法</h2><p>经典的程序分析方法是面向过程，也就是所谓的“流程图“，这样的方法很详细，但往往让人眼花头晕，经常是看完后好像懂了，但是一问，又是一脸茫然，陷入繁文细节中，只记得一个个if else。</p>
+<p>如下图所示，是面向对象分析法，将程序中操作的对象一个个抽象出来，这样一看就一目了然，知道这段程序是对什么操作，有什么用处。</p>
+<p>程序 ＝ 对象 ＋ 对象</p>
+<p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsGa3njS.png" alt="img"></p>
+<h3 id="Create-task"><a href="#Create-task" class="headerlink" title="Create task"></a>Create task</h3><p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsXaI1nY.png" alt="img"></p>
+<h3 id="RTOS-＝-scheduler-ITC-timer-tasks"><a href="#RTOS-＝-scheduler-ITC-timer-tasks" class="headerlink" title="RTOS ＝ scheduler + ITC + timer + tasks"></a>RTOS ＝ scheduler + ITC + timer + tasks</h3><p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsZs6F7l.png" alt="img"></p>
+<p>简单的来说，RTOS就是实现任务调度和通信的软件。</p>
+<p>感悟：面向对象思想就是， 一切都由“对象”和“操作”组成。对象是实体，操作是动作。</p>
+<p>用面向对象的思想来看，</p>
+<p>函数 ＝ 变量 ＋ … + 变量。语句是“操作”。</p>
+<p>任务 ＝ 函数 ＋ 栈 ＋ TCB。</p>
+<p>RTOS ＝ Scheduler + Task + ITC + Timer</p>
+<p>RTOS是一种系统设计思想（就好比面向对象是一种思想），而不是一门技术。</p>
+<p>感悟：程序是对实体的抽象，是为了实现某种事物，所以在写程序或者看程序时，要用面向对象的方法。</p>
+<p>比如实现LED闪烁的一个函数，可以把它看作LED闪烁器。实现按键处理的函数，将其看作键盘。</p>
+<p>扩展思考：人类创作的一切东西，都是来自于真实生活，都是有实体对象的，电子界也是如此，比如以前学习I2C协议，用面向对象法就是，起始检测器，传输器，ACK器，结束检测器，这也更符合实际的实现电路。</p>
+<p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsTHTLmu.png" alt="img"></p>
+<p>嵌入式系统 ＝ 线程 ＋ 事件 ＋ 硬件，如下图</p>
+<p><img src="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E5%92%8C%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/wpsirLf7N.png" alt="img"></p>
+<p>重新定义RTOS：</p>
+<p>RTOS = 任务管理器 + 任务</p>
+<p>任务管理器 ＝ 调度器 + 通信器 + 定时器</p>
+<p>任务 = 任务函数 + 任务栈 + 任务控制块</p>
+<p>为什么要用RTOS，原因有两点：</p>
+<p>一. 有些应用需要硬实时性，而传统的前后台系统无法实现，必须用RTOS。</p>
+<p>二. 有些应用只需软实时，用前后台系统也可以实现，但是依然推荐RTOS，因为其两大优点 -&gt; 模块性和规范性。</p>
+<p>模块性: 独立，易维护和易扩展。</p>
+<p>规范性: 系统模型统一 -&gt; 硬件产生事件，事件驱动线程，线程控制硬件，线程之间互相通信。</p>
+<p>感悟：诺基亚920光荣退居二线了，筹备着新机，预算定在千元内，细细甄选后相中了魅蓝note2，799元，性价比极高，准备定下，忽然想到，既然换就换一个好的，能用个两三年，于是放弃魅蓝note2，左挑右选后看中乐1，1499元的价格，性能堪比旗舰，敲定，付money，一天后，又发现魅族MX5，1799元，比乐1多了指纹识别，全金属机身，2070万相机，激光对焦，CPU也更好，但价钱上只多了300元，心动，不如多花点钱买这个？想退款重买，又忽然发现了小米note，1999元，号称安卓机皇，性能怪兽，屏幕更大，价格上只比MX5多了200元，哇，就它了。</p>
+<p>忽然想起来，本来我要花的钱是799元，为何最后变成了1999元？</p>
+<p>“反正才多了几百元，但是性能强大了这么多，还是很值的。”</p>
+<p>就是这个心理，让我的预算一而再的向上翻。</p>
+<p>（未完待续）</p>
+<p>做一个WIFI智能插座，嵌入式工程师会觉得难，因为他要考虑硬件选型， 画原理图，画PCB，测试天线，继电器性能，然后要考虑底层驱动编写，TCP/IP协议栈移植，RTOS移植，稳定性测试等等。</p>
+<p>但是软件工程师会说，啊，很简单啊，WIFI模块＋控制模块就OK了。</p>
+<p>软件工程师已经在不知觉中使用了面向对象的思考方法。</p>
+<p>而嵌入式工程师正在用面向过程的方法思考同样的问题。</p>
+<p>面向对象是简单易解的，因为它是最直观的。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Snow Yang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Snow Yang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/11/OS/EasyOS/EasyOs/" rel="prev" title="EasyOs">
+      <i class="fa fa-chevron-left"></i> EasyOs
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/11/OS/FreeRTOS/FreeRTOS%20%E8%AE%B0%E5%BD%95/" rel="next" title="FreeRTOS 记录">
+      FreeRTOS 记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E2%80%9CWWH%E2%80%9D%E6%96%B9%E6%B3%95%E5%88%86%E6%9E%90FreeRTOS%E4%B8%AD%E7%9A%84%E9%93%BE%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">用“WWH”方法分析FreeRTOS中的链表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What%EF%BC%9FFreeRTOS%E7%9A%84%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">What？FreeRTOS的链表结构是什么样的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-%E8%BF%99%E6%A0%B7%E7%9A%84%E7%BB%93%E6%9E%84%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%E5%A4%84%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">Why? 这样的结构有什么用处？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E7%9A%84insert%E5%92%8Cinsert-end"><span class="nav-number">2.</span> <span class="nav-text">链表的insert和insert end</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Start-scheduler%EF%BC%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%88%86%E6%9E%90%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">Start scheduler，面向对象分析法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-task"><span class="nav-number">3.1.</span> <span class="nav-text">Create task</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RTOS-%EF%BC%9D-scheduler-ITC-timer-tasks"><span class="nav-number">3.2.</span> <span class="nav-text">RTOS ＝ scheduler + ITC + timer + tasks</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow Yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Snow Yang</p>
+  <div class="site-description" itemprop="description">千古风流今在此，万里功名莫放休</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smartsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smartsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow Yang</span>
+</div>
+  <!-- <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  -->
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"PV6nn46hGfP8NYx7WwzusM8C-9Nh9j0Va","app_key":"icEREPKf8nKewGksI1Nw6KrM","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
