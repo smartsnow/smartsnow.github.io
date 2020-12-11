@@ -27,10 +27,12 @@
 <meta property="og:site_name" content="冷香小筑">
 <meta property="og:description" content="ARM968E-S 架构非常古老，不支持中断向量重定向，所以此功能需要用户自己在代码中实现，也即在固定的中断向量函数内跳转到 RAM 那的用户向量地址。 由于此架构不会在中断时自动保存寄存器，所以必须由用户手动把寄存器入栈出栈。但是从 RAM 中取值需要用到寄存器 Rn，把这个值赋给 PC 也需要寄存器 Rn，所以就无法避免的会修改到 Rn 的值。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://snowyang.com/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png">
 <meta property="article:published_time" content="2020-12-11T16:04:42.631Z">
-<meta property="article:modified_time" content="2020-12-11T16:08:49.485Z">
+<meta property="article:modified_time" content="2020-12-11T16:21:08.368Z">
 <meta property="article:author" content="Snow Yang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://snowyang.com/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png">
 
 <link rel="canonical" href="https://snowyang.com/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/">
 
@@ -217,7 +219,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-12-12 00:04:42 / 修改时间：00:08:49" itemprop="dateCreated datePublished" datetime="2020-12-12T00:04:42+08:00">2020-12-12</time>
+              <time title="创建时间：2020-12-12 00:04:42 / 修改时间：00:21:08" itemprop="dateCreated datePublished" datetime="2020-12-12T00:04:42+08:00">2020-12-12</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +261,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0, &#x3D; 0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">ADD SP, SP, #8</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">POP &#123;PC&#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
 
 <p>流程图如下</p>
-<p>![](一种在 ARM968E-S 上重定向中断向量表的方法未命名图片.png)</p>
+<p><img src="/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png"></p>
 
     </div>
 

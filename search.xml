@@ -2931,7 +2931,7 @@ Secure Sockets Layer
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0, &#x3D; 0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">ADD SP, SP, #8</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">POP &#123;PC&#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
 
 <p>流程图如下</p>
-<p>![](一种在 ARM968E-S 上重定向中断向量表的方法未命名图片.png)</p>
+<p><img src="/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png"></p>
 ]]></content>
       <categories>
         <category>ARM</category>
