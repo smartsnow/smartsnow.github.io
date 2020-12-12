@@ -830,6 +830,27 @@
       </categories>
   </entry>
   <entry>
+    <title>一种在 ARM968E-S 上重定向中断向量表的方法</title>
+    <url>/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>ARM968E-S 架构非常古老，不支持中断向量重定向，所以此功能需要用户自己在代码中实现，也即在固定的中断向量函数内跳转到 RAM 那的用户向量地址。</p>
+<p>由于此架构不会在中断时自动保存寄存器，所以必须由用户手动把寄存器入栈出栈。但是从 RAM 中取值需要用到寄存器 Rn，把这个值赋给 PC 也需要寄存器 Rn，所以就无法避免的会修改到 Rn 的值。</p>
+<a id="more"></a>
+
+<p>之前的做法是在进 boot 中断后先把 Rn 入栈，跳转到 APP 中断后再把 Rn 出栈，但这样用户的中断处理程序就比较奇怪（一开始就要把 Rn 出栈）并且不注意就容易出错。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0,&#x3D;0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">LDR PC, R0</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>其实给 PC 赋值除了LDR PC, Rn之外，还可以使用 POP 指令POP {PC}把栈内的值弹到 PC 中来变相实现跳转。</p>
+<p>先把中断地址从 RAM 中 LOAD 到当前栈内，并把 SP 递增，然后使用POP {PC}来跳转。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0, &#x3D; 0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">ADD SP, SP, #8</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">POP &#123;PC&#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>流程图如下</p>
+<p><img src="/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png"></p>
+]]></content>
+      <categories>
+        <category>ARM</category>
+      </categories>
+  </entry>
+  <entry>
     <title>GCC 实用方法</title>
     <url>/2020/12/11/Complie%20&amp;%20Debug/GCC/GCC%20%E5%AE%9E%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>GCC 的一些实用的方法。</p>
@@ -1797,16 +1818,6 @@ Secure Sockets Layer
       </categories>
   </entry>
   <entry>
-    <title>C 入口函数分析</title>
-    <url>/2020/12/11/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
-<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。</p>
-]]></content>
-      <categories>
-        <category>C</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Zephyr Primer</title>
     <url>/2020/12/11/OS/Zephyr/Zephyr%20Primer/</url>
     <content><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Zephyr 最初是<code>Wind River</code>公司在 2015 年推出的为 IoT 开发的<code>Rocket内核</code>，更早时称为<code>Microkernel Profile for VxWorks</code>。代码移植于2001年并购<code>Eonic Systems</code>得来的<code>Virtuoso DSP RTOS</code>。在2016年，它成为Linux基金会的项目而改称 zephyr。</p>
@@ -1846,6 +1857,16 @@ Secure Sockets Layer
 ]]></content>
       <categories>
         <category>Zephyr</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>C 入口函数分析</title>
+    <url>/2020/12/11/Programing%20Language/C/C%20%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>Linux系统下一般程序的入口是<code>_start</code>，这个函数是Linux系统库（Glibc）的一部分。同样地，newlib等C库也是以<code>_start</code>作为入口函数。</p>
+<p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。</p>
+]]></content>
+      <categories>
+        <category>C</category>
       </categories>
   </entry>
   <entry>
@@ -2914,27 +2935,6 @@ Secure Sockets Layer
 ]]></content>
       <categories>
         <category>LwIP</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>一种在 ARM968E-S 上重定向中断向量表的方法</title>
-    <url>/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>ARM968E-S 架构非常古老，不支持中断向量重定向，所以此功能需要用户自己在代码中实现，也即在固定的中断向量函数内跳转到 RAM 那的用户向量地址。</p>
-<p>由于此架构不会在中断时自动保存寄存器，所以必须由用户手动把寄存器入栈出栈。但是从 RAM 中取值需要用到寄存器 Rn，把这个值赋给 PC 也需要寄存器 Rn，所以就无法避免的会修改到 Rn 的值。</p>
-<a id="more"></a>
-
-<p>之前的做法是在进 boot 中断后先把 Rn 入栈，跳转到 APP 中断后再把 Rn 出栈，但这样用户的中断处理程序就比较奇怪（一开始就要把 Rn 出栈）并且不注意就容易出错。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0,&#x3D;0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">LDR PC, R0</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<p>其实给 PC 赋值除了LDR PC, Rn之外，还可以使用 POP 指令POP {PC}把栈内的值弹到 PC 中来变相实现跳转。</p>
-<p>先把中断地址从 RAM 中 LOAD 到当前栈内，并把 SP 递增，然后使用POP {PC}来跳转。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; Bootloader</span><br><span class="line">boot_iqr:</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">LDR R0, &#x3D; 0x400018</span><br><span class="line">LDR R0, [R0]</span><br><span class="line">ADD SP, SP, #8</span><br><span class="line">PUSH &#123;R0&#125;</span><br><span class="line">SUB SP, SP, #4</span><br><span class="line">POP &#123;R0&#125;</span><br><span class="line">POP &#123;PC&#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;Application</span><br><span class="line">app_irq:</span><br><span class="line">user process</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<p>流程图如下</p>
-<p><img src="/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png"></p>
-]]></content>
-      <categories>
-        <category>ARM</category>
       </categories>
   </entry>
   <entry>
