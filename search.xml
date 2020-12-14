@@ -223,6 +223,7 @@
 <p>JTAG 排线中这两根线之间是间隔了一根地线的，事实上 JTAG 的定义中所有的信号线之间有间隔有一根地线。</p>
 ]]></content>
       <categories>
+        <category>BSP</category>
         <category>SWD</category>
       </categories>
   </entry>
@@ -235,6 +236,7 @@
 <p><img src="/2020/12/11/BSP/USB/USB%20%E5%AD%A6%E4%B9%A0/wps8LnXIJ.png" alt="img"></p>
 ]]></content>
       <categories>
+        <category>BSP</category>
         <category>USB</category>
       </categories>
   </entry>
@@ -258,6 +260,7 @@
 <p>在MAC打开搜索，几秒后你就能在共享面板中看到树莓派。</p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -275,6 +278,7 @@
 <p>参考：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/raspbian/">https://mirrors.tuna.tsinghua.edu.cn/help/raspbian/</a></p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -303,6 +307,7 @@
 
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -316,6 +321,7 @@
 <p>raspbian-backup.img 就是备份的树莓派镜像，可用以批量克隆生产树莓派系统。建议都使用相同的 SD 卡型号。</p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -381,9 +387,7 @@
 <p>This is an unofficial port of Gordon’s WiringPi library. Please do not email Gordon if you have issues, he will not be able to help.</p>
 <p>For support, comments, questions, etc please join the WiringPi Discord channel: <a href="https://discord.gg/SM4WUVG">https://discord.gg/SM4WUVG</a></p>
 </blockquote>
-<p>所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</p>
-<hr>
-<p>2018-04-06 更新</p>
+<h2 id="所以，在官方移植-Python之前，还是不要用这个坑爹的仓库了。"><a href="#所以，在官方移植-Python之前，还是不要用这个坑爹的仓库了。" class="headerlink" title="所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。"></a>所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</h2><p>2018-04-06 更新</p>
 <p>看来我是冤枉 Gadgetoid 这位大神了，wiringpi 中 SPI 一次发送的数据本来就最大只有 4K。</p>
 <p>不过实际测试下来，读取 2M 的 SPI Flash，python 用 2.9s, C 用了 1.5s，几乎是 C 的 2 倍多时间，所以还是 C 的效率快。</p>
 <h2 id="SPI-Flash"><a href="#SPI-Flash" class="headerlink" title="SPI Flash"></a>SPI Flash</h2><p><a href="https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c">https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c</a></p>
@@ -441,6 +445,7 @@
 </ul>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -543,6 +548,7 @@
 </ul>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -569,6 +575,7 @@
 <p>注意：如果没有 expand filesystem，可能会比较卡顿。</p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -619,6 +626,7 @@
 <p>In layman’s terms <code>/dev/rdisk</code> goes almost directly to disk and <code>/dev/disk</code> goes via a longer more expensive route</p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -687,6 +695,7 @@
 <p>修改为 powersave 模式，锁定 CPU 使用最低的 600MHz 频率就好了。</p>
 ]]></content>
       <categories>
+        <category>Boards</category>
         <category>Raspberry Pi</category>
       </categories>
   </entry>
@@ -804,6 +813,7 @@
 <p>而 Cortex-M3 则可以直接入栈 R4 ~ R11：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void xPortPendSVHandler( void )</span><br><span class="line">&#123;</span><br><span class="line">	&#x2F;* This is a naked function. *&#x2F;</span><br><span class="line"></span><br><span class="line">	__asm volatile</span><br><span class="line">	(</span><br><span class="line">	&quot;	mrs r0, psp							\n&quot;</span><br><span class="line">	&quot;	isb									\n&quot;</span><br><span class="line">	&quot;										\n&quot;</span><br><span class="line">	&quot;	ldr	r3, pxCurrentTCBConst			\n&quot; &#x2F;* Get the location of the current TCB. *&#x2F;</span><br><span class="line">	&quot;	ldr	r2, [r3]						\n&quot;</span><br><span class="line">	&quot;										\n&quot;</span><br><span class="line">	&quot;	stmdb r0!, &#123;r4-r11&#125;					\n&quot; &#x2F;* Save the remaining registers. *&#x2F;</span><br><span class="line">	&quot;	str r0, [r2]						\n&quot; &#x2F;* Save the new top of stack into the first member of the TCB. *&#x2F;</span><br><span class="line">	&quot;										\n&quot;</span><br><span class="line">	&quot;	stmdb sp!, &#123;r3, r14&#125;				\n&quot;</span><br><span class="line">	&quot;	mov r0, %0							\n&quot;</span><br><span class="line">	&quot;	msr basepri, r0						\n&quot;</span><br><span class="line">	&quot;	bl vTaskSwitchContext				\n&quot;</span><br><span class="line">	&quot;	mov r0, #0							\n&quot;</span><br><span class="line">	&quot;	msr basepri, r0						\n&quot;</span><br><span class="line">	&quot;	ldmia sp!, &#123;r3, r14&#125;				\n&quot;</span><br><span class="line">	&quot;										\n&quot;	&#x2F;* Restore the context, including the critical nesting count. *&#x2F;</span><br><span class="line">	&quot;	ldr r1, [r3]						\n&quot;</span><br><span class="line">	&quot;	ldr r0, [r1]						\n&quot; &#x2F;* The first item in pxCurrentTCB is the task top of stack. *&#x2F;</span><br><span class="line">	&quot;	ldmia r0!, &#123;r4-r11&#125;					\n&quot; &#x2F;* Pop the registers. *&#x2F;</span><br><span class="line">	&quot;	msr psp, r0							\n&quot;</span><br><span class="line">	&quot;	isb									\n&quot;</span><br><span class="line">	&quot;	bx r14								\n&quot;</span><br><span class="line">	&quot;										\n&quot;</span><br><span class="line">	&quot;	.align 4							\n&quot;</span><br><span class="line">	&quot;pxCurrentTCBConst: .word pxCurrentTCB	\n&quot;</span><br><span class="line">	::&quot;i&quot;(configMAX_SYSCALL_INTERRUPT_PRIORITY)</span><br><span class="line">	);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
+        <category>CPU</category>
         <category>ARM</category>
       </categories>
   </entry>
@@ -826,6 +836,7 @@
 <p>故而在不同的函数中调用此函数表现不一，若 EXTI_Mode 的值刚好不对齐 word，那么就会导致 Hardfault。</p>
 ]]></content>
       <categories>
+        <category>CPU</category>
         <category>ARM</category>
       </categories>
   </entry>
@@ -847,6 +858,7 @@
 <p><img src="/2020/12/12/CPU/ARM/%E4%B8%80%E7%A7%8D%E5%9C%A8%20ARM968E-S%20%E4%B8%8A%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E7%9A%84%E6%96%B9%E6%B3%95/%E6%9C%AA%E5%91%BD%E5%90%8D%E5%9B%BE%E7%89%87.png"></p>
 ]]></content>
       <categories>
+        <category>CPU</category>
         <category>ARM</category>
       </categories>
   </entry>
@@ -894,6 +906,7 @@
 <p><code>t</code> - 列出库中所有的目标文件</p>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>GCC</category>
       </categories>
   </entry>
@@ -923,6 +936,7 @@
 <p>解决此问题的方法是实用<code>--whole-archive</code>选项，使 LD 遍历所有的 object 文件。</p>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>GCC</category>
       </categories>
   </entry>
@@ -939,6 +953,7 @@
 <p>参考：<em>《程序员的自我修养》，第 4 章 1 ~ 2 节</em>。</p>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>GCC</category>
       </categories>
   </entry>
@@ -1042,6 +1057,7 @@
 </ol>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>GDB</category>
       </categories>
   </entry>
@@ -1154,6 +1170,7 @@
 </ol>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>OpenOCD</category>
       </categories>
   </entry>
@@ -1194,6 +1211,7 @@
 <p>然后 OpenOCD 查询 <code>uxCurrentNumberOfTasks</code>，gdb 回复中的 sym_value 的值是 20000b6c，即 <code>uxCurrentNumberOfTasks</code> 的地址。</p>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>OpenOCD</category>
       </categories>
   </entry>
@@ -1220,6 +1238,7 @@
 </ol>
 ]]></content>
       <categories>
+        <category>Complie &amp; Debug</category>
         <category>OpenOCD</category>
       </categories>
   </entry>
@@ -1275,6 +1294,7 @@
 
 ]]></content>
       <categories>
+        <category>Network</category>
         <category>MQTT</category>
       </categories>
   </entry>
@@ -1350,6 +1370,7 @@ Secure Sockets Layer
 </blockquote>
 ]]></content>
       <categories>
+        <category>Network</category>
         <category>MQTT</category>
       </categories>
   </entry>
@@ -1461,6 +1482,7 @@ Secure Sockets Layer
 
 ]]></content>
       <categories>
+        <category>Network</category>
         <category>TCPIP</category>
       </categories>
   </entry>
@@ -1592,6 +1614,7 @@ Secure Sockets Layer
 <p>这个现象只能通过DHCP server上面的优化，目前该现象与WLAN网络和有线网络都没有关系，WLAN设备没有问题。由于DHCP服务器管理了很多的接入服务，需要仔细考虑如何进行优化。</p>
 ]]></content>
       <categories>
+        <category>Network</category>
         <category>TCPIP</category>
       </categories>
   </entry>
@@ -1611,6 +1634,7 @@ Secure Sockets Layer
 
 ]]></content>
       <categories>
+        <category>Network</category>
         <category>TCPIP</category>
       </categories>
   </entry>
@@ -1694,6 +1718,7 @@ Secure Sockets Layer
 <p>pos 是 item 在 flash 中的地址</p>
 ]]></content>
       <categories>
+        <category>OS</category>
         <category>AliOS-Things</category>
       </categories>
   </entry>
@@ -1713,6 +1738,7 @@ Secure Sockets Layer
 <p><img src="/2020/12/11/OS/EasyOS/EasyOs/wpsmUQc0O.png" alt="img"></p>
 ]]></content>
       <categories>
+        <category>OS</category>
         <category>EasyOS</category>
       </categories>
   </entry>
@@ -1776,6 +1802,7 @@ Secure Sockets Layer
 <p>面向对象是简单易解的，因为它是最直观的。</p>
 ]]></content>
       <categories>
+        <category>OS</category>
         <category>FreeRTOS</category>
       </categories>
   </entry>
@@ -1814,6 +1841,7 @@ Secure Sockets Layer
 </ul>
 ]]></content>
       <categories>
+        <category>OS</category>
         <category>FreeRTOS</category>
       </categories>
   </entry>
@@ -1856,6 +1884,7 @@ Secure Sockets Layer
 
 ]]></content>
       <categories>
+        <category>OS</category>
         <category>Zephyr</category>
       </categories>
   </entry>
@@ -1866,6 +1895,7 @@ Secure Sockets Layer
 <p>对于C++程序，有两个特殊的段：<code>.init</code> 和 <code>.fini</code>。这两个段.init和.fini的存在有着特别的目的，如果一个函数放到.init段，在main函数执行前系统就会执行它。同理，假如一个函数放到.fint段，在main函数返回后该函数就会被执行。利用这两个特性，C++的全局构造和析构函数就由此实现。</p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>C</category>
       </categories>
   </entry>
@@ -1883,6 +1913,7 @@ Secure Sockets Layer
 <p>比如把 0x1234 放到一个 uint8_t 类型变量 x 中，那么高 8 位就被截掉，低 8 位被放到变量中，最终 x 的值为 0x34。<br>比如把 -1 放到 x 中，因为 -1 的二进制码是 0xFFFFFFFF，那么 x 的值就等于 0xFF。</p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>C</category>
       </categories>
   </entry>
@@ -1899,6 +1930,7 @@ Secure Sockets Layer
 <p>整型提升的意义在于：表达式的整型运算要在CPU的相应运算器件内执行，CPU内整型运算器(ALU)的操作数的字节长度一般就是int的字节长度，同时也是CPU的通用寄存器的长度。因此，即使两个char类型的相加，在CPU执行时实际上也要先转换为CPU内整型操作数的标准长度。通用CPU（general-purpose CPU）是难以直接实现两个8比特字节直接相加运算（虽然机器指令中可能有这种字节相加指令）。所以，表达式中各种长度可能小于int长度的整型值，都必须先转换为int或unsigned int，然后才能送入CPU去执行运算。</p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>C</category>
       </categories>
   </entry>
@@ -1936,6 +1968,7 @@ Secure Sockets Layer
 <p><a href="http://www.embedu.org/Column/5653.html">关于C语言的隐式类型转换</a></p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>C</category>
       </categories>
   </entry>
@@ -1966,6 +1999,7 @@ Secure Sockets Layer
 <p>aiexit，exit，_init 和 _fini 一般是和 C++ 的全局构造和析构有关，这个放在下一节来分析。</p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>C</category>
       </categories>
   </entry>
@@ -1988,6 +2022,7 @@ Secure Sockets Layer
 <p>参考：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">https://mirrors.tuna.tsinghua.edu.cn/help/pypi/</a></p>
 ]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>Python</category>
       </categories>
   </entry>
@@ -2007,6 +2042,7 @@ Secure Sockets Layer
 </ul>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2025,6 +2061,7 @@ Secure Sockets Layer
 
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2141,6 +2178,7 @@ Secure Sockets Layer
 <p>随着 Wi-Fi&amp;BT combo 模组的推广，GATT CLI 会极大的方便整机产品的调试和生产。</p>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2177,6 +2215,7 @@ Secure Sockets Layer
 <p>一开始在 BLE 4.0 中只有<code>Connection Update Procedure</code>，只能由 master 主动发起，slave 只能请求 master 发起更新，可能后来有 slave 主动发起更新的需求，又为了向后兼容，于是定义了新的<code>Connection Parameters Request procedure</code>，支持 slave 主动发起更新。</p>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2211,6 +2250,7 @@ Secure Sockets Layer
 <p>抓包数据：<a href="MTU.pcapng">MTU.pcapng</a></p>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2246,13 +2286,14 @@ Secure Sockets Layer
 <li><code>getCharacteristics</code>会返回所连接设备的特征值。</li>
 </ul>
 <p>运行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Service &lt;uuid&#x3D;feb3 handleStart&#x3D;1 handleEnd&#x3D;13&gt;</span><br><span class="line">Service &lt;uuid&#x3D;1828 handleStart&#x3D;14 handleEnd&#x3D;20&gt;</span><br><span class="line">Handle   UUID                                Properties</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">  0x03   0000fed4-0000-1000-8000-00805f9b34fb READ </span><br><span class="line">  0x05   0000fed5-0000-1000-8000-00805f9b34fb READ WRITE </span><br><span class="line">  0x07   0000fed6-0000-1000-8000-00805f9b34fb READ INDICATE </span><br><span class="line">  0x09   0000fed7-0000-1000-8000-00805f9b34fb READ WRITE NO RESPONSE </span><br><span class="line">  0x0B   0000fed8-0000-1000-8000-00805f9b34fb READ NOTIFY </span><br><span class="line">  0x10   00002add-0000-1000-8000-00805f9b34fb WRITE NO RESPONSE </span><br><span class="line">  0x12   00002ade-0000-1000-8000-00805f9b34fb NOTIFY</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Service &lt;uuid&#x3D;feb3 handleStart&#x3D;1 handleEnd&#x3D;13&gt;</span><br><span class="line">Service &lt;uuid&#x3D;1828 handleStart&#x3D;14 handleEnd&#x3D;20&gt;</span><br><span class="line">Handle   UUID                                Properties-------------------------------------------------------</span><br><span class="line">  0x03   0000fed4-0000-1000-8000-00805f9b34fb READ </span><br><span class="line">  0x05   0000fed5-0000-1000-8000-00805f9b34fb READ WRITE </span><br><span class="line">  0x07   0000fed6-0000-1000-8000-00805f9b34fb READ INDICATE </span><br><span class="line">  0x09   0000fed7-0000-1000-8000-00805f9b34fb READ WRITE NO RESPONSE </span><br><span class="line">  0x0B   0000fed8-0000-1000-8000-00805f9b34fb READ NOTIFY </span><br><span class="line">  0x10   00002add-0000-1000-8000-00805f9b34fb WRITE NO RESPONSE </span><br><span class="line">  0x12   00002ade-0000-1000-8000-00805f9b34fb NOTIFY</span><br></pre></td></tr></table></figure>
 
 <h4 id="Notification"><a href="#Notification" class="headerlink" title="Notification"></a>Notification</h4><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>[<a href="https://www.cnblogs.com/zjutlitao/p/10171913.html">python] bluepy 一款python封装的BLE利器</a></li>
 </ul>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2296,6 +2337,7 @@ Secure Sockets Layer
 <p><img src="/2020/12/11/Wireless/BLE/%E6%9C%80%E5%A4%A7%E5%8C%85%E9%95%BF%E7%9A%84%E5%8F%98%E5%8C%96/image-20201201232417478.png"></p>
 ]]></content>
       <categories>
+        <category>Wireless</category>
         <category>BLE</category>
       </categories>
   </entry>
@@ -2315,6 +2357,8 @@ Secure Sockets Layer
 <p>比如 A 线程调用 write，将自己的 apimsg(A) 的<code>指针</code>发送给<code>tcpip_mbox</code>（注意，是<code>指针</code>），然后 B 线程也调用 write，将自己的 apimsg(B) 的<code>指针</code>发送给<code>tcpip_mbox</code>，<code>tcpip_thread</code>从<code>tcpip_mbox</code>中取出<code>apimsg(A)</code>的指针，执行发送后，给出 semaphore，结果唤醒了 B 线程，B 线程的 write 函数退出后， msg_B 被释放。然后 tcipip_thread 又 pop 出 msg_B 的指针，此时 msg_B 已经内容不对了。</p>
 ]]></content>
       <categories>
+        <category>Network</category>
+        <category>TCPIP</category>
         <category>LwIP</category>
       </categories>
   </entry>
@@ -2353,9 +2397,7 @@ Secure Sockets Layer
 <p>解决方法为只要在文件开头加入<code># -*- coding: UTF-8 —</code>或者<code>#coding=utf-8</code>就行了。</p>
 <h2 id="获取命令行执行结果（成功-失败）"><a href="#获取命令行执行结果（成功-失败）" class="headerlink" title="获取命令行执行结果（成功/失败）"></a>获取命令行执行结果（成功/失败）</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line">proc &#x3D; subprocess.Popen(&#39;ps aux&#39;, shell&#x3D;True, stdout&#x3D;subprocess.PIPE)</span><br><span class="line">ret &#x3D; proc.wait()</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
 
-<p>proc.wait() 返回 0 代表成功，返回 1 代表失败</p>
-<hr>
-<p>2018-04-06 更新</p>
+<h2 id="proc-wait-返回-0-代表成功，返回-1-代表失败"><a href="#proc-wait-返回-0-代表成功，返回-1-代表失败" class="headerlink" title="proc.wait() 返回 0 代表成功，返回 1 代表失败"></a>proc.wait() 返回 0 代表成功，返回 1 代表失败</h2><p>2018-04-06 更新</p>
 <h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>关于 wait，官网文档描述如下：</p>
 <blockquote>
 <p>Popen.wait(<em>timeout=None</em>)</p>
@@ -2578,6 +2620,7 @@ Secure Sockets Layer
 <h2 id="十六进制字符串转为十六进制数组。"><a href="#十六进制字符串转为十六进制数组。" class="headerlink" title="十六进制字符串转为十六进制数组。"></a>十六进制字符串转为十六进制数组。</h2><p>   比如把字符串 “ABCDEF” 转为 0xAB, 0xCD, 0xEF。</p>
    <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">usr&#x2F;bin&#x2F;python</span><br><span class="line"></span><br><span class="line">arr &#x3D; &quot;ABCDEF&quot;.decode(&#39;hex&#39;)</span><br><span class="line">f &#x3D; open(&#39;hex.bin&#39;, &#39;wb&#39;)</span><br><span class="line">f.write(arr)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
+        <category>Programing Language</category>
         <category>Python</category>
       </categories>
   </entry>
@@ -2923,7 +2966,7 @@ Secure Sockets Layer
 
 <p>SO_BINDTODEVICE</p>
 <h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>用户调用 gethostbyname 后，发送 callback 消息给 tcpip_thread，先查询缓存内是否已经有了此项，若有则直接返回给用户，若无则发送 dns query 请求。在底层递交一个 UDP 包后，若是 DNS response，则解析并返回给用户。同时维护了一个 timer 以处理超时错误。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user</span><br><span class="line">⇩</span><br><span class="line">lwip_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">netconn_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">tcpip_callback(lwip_netconn_do_gethostbyname)</span><br><span class="line">⇩                    ⇣</span><br><span class="line">sys_sem_wait          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">return                ⇣</span><br><span class="line">---------------------------------------- query -------------------------------------------</span><br><span class="line">                      ⇣</span><br><span class="line">tcpip_thread          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">lwip_netconn_do_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">dns_gethostbyname_addrtype</span><br><span class="line">⇩</span><br><span class="line">dns_lookup ⇨(on found) sys_sem_signal</span><br><span class="line">⇩</span><br><span class="line">dns_enqueue</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">dns_send</span><br><span class="line">⇩</span><br><span class="line">udp_sendto</span><br><span class="line">------------------------------------- response -------------------------------------------</span><br><span class="line">udp_input</span><br><span class="line">⇩</span><br><span class="line">dns_recv</span><br><span class="line">⇩</span><br><span class="line">dns_correct_response</span><br><span class="line">⇩</span><br><span class="line">dns_call_found</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal</span><br><span class="line">-------------------------------------- timeout -------------------------------------------</span><br><span class="line">tcpip_thread</span><br><span class="line">⇩</span><br><span class="line">(on timer expired)</span><br><span class="line">dns_timer</span><br><span class="line">⇩</span><br><span class="line">dns_tmr</span><br><span class="line">⇩</span><br><span class="line">dns_check_entries</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">(on maxium retries)</span><br><span class="line">dns_call_found(NULL)</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user</span><br><span class="line">⇩</span><br><span class="line">lwip_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">netconn_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">tcpip_callback(lwip_netconn_do_gethostbyname)</span><br><span class="line">⇩                    ⇣</span><br><span class="line">sys_sem_wait          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">return                ⇣---------------------------------------- query -------------------------------------------</span><br><span class="line">                      ⇣</span><br><span class="line">tcpip_thread          ⇣</span><br><span class="line">⇩                    ⇣</span><br><span class="line">lwip_netconn_do_gethostbyname</span><br><span class="line">⇩</span><br><span class="line">dns_gethostbyname_addrtype</span><br><span class="line">⇩</span><br><span class="line">dns_lookup ⇨(on found) sys_sem_signal</span><br><span class="line">⇩</span><br><span class="line">dns_enqueue</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">dns_send</span><br><span class="line">⇩</span><br><span class="line">udp_sendto------------------------------------- response -------------------------------------------</span><br><span class="line">udp_input</span><br><span class="line">⇩</span><br><span class="line">dns_recv</span><br><span class="line">⇩</span><br><span class="line">dns_correct_response</span><br><span class="line">⇩</span><br><span class="line">dns_call_found</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal-------------------------------------- timeout -------------------------------------------</span><br><span class="line">tcpip_thread</span><br><span class="line">⇩</span><br><span class="line">(on timer expired)</span><br><span class="line">dns_timer</span><br><span class="line">⇩</span><br><span class="line">dns_tmr</span><br><span class="line">⇩</span><br><span class="line">dns_check_entries</span><br><span class="line">⇩</span><br><span class="line">dns_check_entry</span><br><span class="line">⇩</span><br><span class="line">(on maxium retries)</span><br><span class="line">dns_call_found(NULL)</span><br><span class="line">⇩</span><br><span class="line">lwip_netconn_do_dns_found</span><br><span class="line">⇩</span><br><span class="line">sys_sem_signal</span><br></pre></td></tr></table></figure>
 
 <h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><p>用户线程在调用 gethostbyname 后，就阻塞在一个信号量上。有 3 种情况会 give 信号量：</p>
 <ol>
@@ -2934,6 +2977,8 @@ Secure Sockets Layer
 <h3 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h3><p>其中，dns timer 是 DNS_TMR_INTERVAL，lwip 2.0.2 版本是 1000ms，重试次数是 DNS_MAX_RETRIES，默认是 4，num_dns 默认是 1，所以 dns 超时是 4 秒。</p>
 ]]></content>
       <categories>
+        <category>Network</category>
+        <category>TCPIP</category>
         <category>LwIP</category>
       </categories>
   </entry>

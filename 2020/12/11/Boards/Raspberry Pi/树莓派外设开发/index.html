@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://snowyang.com/2020/12/11/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_02.png">
 <meta property="og:image" content="https://snowyang.com/2020/12/11/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/ds3231_rtc_module_03.png">
 <meta property="article:published_time" content="2020-12-11T12:01:32.907Z">
-<meta property="article:modified_time" content="2020-12-11T12:01:32.907Z">
+<meta property="article:modified_time" content="2020-12-14T13:50:56.837Z">
 <meta property="article:author" content="Snow Yang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://snowyang.com/2020/12/11/Boards/Raspberry%20Pi/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%A4%96%E8%AE%BE%E5%BC%80%E5%8F%91/image-20201208213936798.png">
@@ -136,7 +136,7 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">21</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">29</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -225,13 +225,24 @@
 
               <time title="创建时间：2020-12-11 20:01:32" itemprop="dateCreated datePublished" datetime="2020-12-11T20:01:32+08:00">2020-12-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-14 21:50:56" itemprop="dateModified" datetime="2020-12-14T21:50:56+08:00">2020-12-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
+                  <a href="/categories/Boards/" itemprop="url" rel="index"><span itemprop="name">Boards</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Boards/Raspberry-Pi/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi</span></a>
                 </span>
             </span>
 
@@ -326,9 +337,7 @@
 <p>This is an unofficial port of Gordon’s WiringPi library. Please do not email Gordon if you have issues, he will not be able to help.</p>
 <p>For support, comments, questions, etc please join the WiringPi Discord channel: <a target="_blank" rel="noopener" href="https://discord.gg/SM4WUVG">https://discord.gg/SM4WUVG</a></p>
 </blockquote>
-<p>所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</p>
-<hr>
-<p>2018-04-06 更新</p>
+<h2 id="所以，在官方移植-Python之前，还是不要用这个坑爹的仓库了。"><a href="#所以，在官方移植-Python之前，还是不要用这个坑爹的仓库了。" class="headerlink" title="所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。"></a>所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</h2><p>2018-04-06 更新</p>
 <p>看来我是冤枉 Gadgetoid 这位大神了，wiringpi 中 SPI 一次发送的数据本来就最大只有 4K。</p>
 <p>不过实际测试下来，读取 2M 的 SPI Flash，python 用 2.9s, C 用了 1.5s，几乎是 C 的 2 倍多时间，所以还是 C 的效率快。</p>
 <h2 id="SPI-Flash"><a href="#SPI-Flash" class="headerlink" title="SPI Flash"></a>SPI Flash</h2><p><a target="_blank" rel="noopener" href="https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c">https://github.com/nopnop2002/Raspberry-W25Q64/blob/master/W25Q64.c</a></p>
@@ -485,7 +494,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-%E6%93%8D%E4%BD%9C-IO-%E7%9A%84%E5%90%8C%E6%AD%A5%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">mmap 操作 IO 的同步问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-%E5%8F%8D%E8%BD%AC%E9%80%9F%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">IO 反转速度问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WiringPi"><span class="nav-number">3.</span> <span class="nav-text">WiringPi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO"><span class="nav-number">4.</span> <span class="nav-text">GPIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI"><span class="nav-number">5.</span> <span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI-Flash"><span class="nav-number">6.</span> <span class="nav-text">SPI Flash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%89%E8%A3%85-RTC-%E6%97%B6%E9%92%9F"><span class="nav-number">7.</span> <span class="nav-text">树莓派安装 RTC 时钟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DS1307-or-DS3231"><span class="nav-number">7.1.</span> <span class="nav-text">DS1307 or DS3231?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Setup"><span class="nav-number">7.2.</span> <span class="nav-text">I2C Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DS3231-Module-Setup"><span class="nav-number">7.3.</span> <span class="nav-text">DS3231 Module Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interface-Test"><span class="nav-number">7.4.</span> <span class="nav-text">Interface Test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Device-Setup"><span class="nav-number">7.5.</span> <span class="nav-text">I2C Device Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reading-The-Date-And-Time"><span class="nav-number">7.6.</span> <span class="nav-text">Reading The Date And Time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Final-Test"><span class="nav-number">7.7.</span> <span class="nav-text">The Final Test</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-%E6%93%8D%E4%BD%9C-IO-%E7%9A%84%E5%90%8C%E6%AD%A5%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">mmap 操作 IO 的同步问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-%E5%8F%8D%E8%BD%AC%E9%80%9F%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">IO 反转速度问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WiringPi"><span class="nav-number">3.</span> <span class="nav-text">WiringPi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO"><span class="nav-number">4.</span> <span class="nav-text">GPIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI"><span class="nav-number">5.</span> <span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%80%E4%BB%A5%EF%BC%8C%E5%9C%A8%E5%AE%98%E6%96%B9%E7%A7%BB%E6%A4%8D-Python%E4%B9%8B%E5%89%8D%EF%BC%8C%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A6%81%E7%94%A8%E8%BF%99%E4%B8%AA%E5%9D%91%E7%88%B9%E7%9A%84%E4%BB%93%E5%BA%93%E4%BA%86%E3%80%82"><span class="nav-number">6.</span> <span class="nav-text">所以，在官方移植 Python之前，还是不要用这个坑爹的仓库了。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI-Flash"><span class="nav-number">7.</span> <span class="nav-text">SPI Flash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%89%E8%A3%85-RTC-%E6%97%B6%E9%92%9F"><span class="nav-number">8.</span> <span class="nav-text">树莓派安装 RTC 时钟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DS1307-or-DS3231"><span class="nav-number">8.1.</span> <span class="nav-text">DS1307 or DS3231?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Setup"><span class="nav-number">8.2.</span> <span class="nav-text">I2C Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DS3231-Module-Setup"><span class="nav-number">8.3.</span> <span class="nav-text">DS3231 Module Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interface-Test"><span class="nav-number">8.4.</span> <span class="nav-text">Interface Test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C-Device-Setup"><span class="nav-number">8.5.</span> <span class="nav-text">I2C Device Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reading-The-Date-And-Time"><span class="nav-number">8.6.</span> <span class="nav-text">Reading The Date And Time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Final-Test"><span class="nav-number">8.7.</span> <span class="nav-text">The Final Test</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -507,7 +516,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
