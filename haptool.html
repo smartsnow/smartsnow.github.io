@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAP Client Tool</title>
+    <!-- 引入Bootstrap CSS文件 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- IP 输入框 -->
+                <div class="mb-2">
+                    <label for="ipInput" class="form-label">IP Address</label>
+                    <input type="text" class="form-control" id="ipInput" placeholder="Enter IP Address">
+                </div>
+                <!-- 密码输入框 -->
+                <div class="mb-2">
+                    <label for="passwordInput" class="form-label">Password</label>
+                    <input type="text" class="form-control" id="passwordInput" placeholder="Enter Password">
+                </div>
+                <!-- 连接按钮 -->
+                <button type="button" class="btn btn-primary mb-2" onclick="connect()" id="connect">Connect</button>
+                <!-- 多行文本输入框 -->
+                <div class="mb-2">
+                    <label for="sendInput" class="form-label">Message</label>
+                    <textarea class="form-control" id="sendInput" rows="3" placeholder="Enter your message"></textarea>
+                </div>
+                <!-- 发送按钮 -->
+                <button type="button" class="btn btn-success mb-2" onclick="sendMessage()" id="send">Send</button>
+                <!-- 多行日志显示框 -->
+                <ul id="logDisplay">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入Bootstrap JavaScript文件（可选，根据需要） -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        document.getElementById('ipInput').value = '192.168.31.114';
+        document.getElementById('passwordInput').value = 'mxhaspwd';
+        document.getElementById('sendInput').value = '{"method":"get-home"}';
+
+        // 获取文本输入框
+        var sendInput = document.getElementById('sendInput');
+
+        // 添加粘贴事件监听器
+        sendInput.addEventListener('paste', function (event) {
+            // 取消默认粘贴行为
+            event.preventDefault();
+
+            // 获取粘贴的文本
+            var pastedData = event.clipboardData.getData('text/plain');
+
+            // 尝试解析粘贴的文本为JSON格式
+            try {
+                var parsedData = JSON.parse(pastedData);
+                var compressedData = JSON.stringify(parsedData);
+                sendInput.value = compressedData;
+            } catch (error) {
+                console.error('Invalid JSON format:', error.message);
+            }
+        });
+
+        let defaultPwd = 'mxhaspwd';
+        let ws;
+        let a;
+        let b;
+        let authKey;
+        let sessionKey;
+        let hmacKey;
+        let sendSeq = 0;
+        let recvSeq = 0;
+        let isEstablished = false;
+
+        let sendIv = new Uint8Array(16);
+        let recvIv = new Uint8Array(16);
+
+        const messageQueue = [];
+        let isProcessingMessage = false;
+
+        let recvedMessage = new Uint8Array(0);
+
+        function dumpHex(str, array) {
+            console.log(str, Array.from(array).map(byte => byte.toString(16).padStart(2, '0')).join(''));
+        }
+
+        function concatenateUint8Arrays(array1, array2) {
+            const concatenatedArray = new Uint8Array(array1.length + array2.length);
+
+            concatenatedArray.set(array1, 0);
+            concatenatedArray.set(array2, array1.length);
+
+            return concatenatedArray;
+        }
+
+        function intToLittleEndianUint8Array(value, byteLength) {
+            const buffer = new ArrayBuffer(byteLength);
+            const view = new DataView(buffer);
+
+            // 写入整数值到 DataView 中，根据小端序写入
+            for (let i = 0; i < byteLength; i++) {
+                view.setUint8(i, value & 0xFF);
+                value >>= 8;
+            }
+
+            // 将 DataView 转换为 Uint8Array
+            return new Uint8Array(buffer);
+        }
+
+        function generateNextIV(iv) {
+            const nextIV = new Uint8Array(iv);
+            for (let i = nextIV.length - 1; i >= 0; i--) {
+                if (nextIV[i] < 255) {
+                    nextIV[i]++;
+                    break;
+                } else {
+                    nextIV[i] = 0;
+                }
+            }
+            return nextIV;
+        }
+
+        async function blobToUint8Array(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                // 监听load事件，在读取完成时触发
+                reader.onload = function (event) {
+                    // 获取读取的数据，即ArrayBuffer
+                    const arrayBuffer = event.target.result;
+
+                    // 将ArrayBuffer转换为Uint8Array
+                    const uint8Array = new Uint8Array(arrayBuffer);
+
+                    // 解析Promise，将Uint8Array作为结果传递
+                    resolve(uint8Array);
+                };
+
+                // 监听error事件，在读取过程中发生错误时触发
+                reader.onerror = function (error) {
+                    reject(error);
+                };
+
+                // 以ArrayBuffer格式读取Blob
+                reader.readAsArrayBuffer(blob);
+            });
+        }
+
+        function isUint8ArraysEqual(array1, array2) {
+            // 如果两个数组长度不同，则它们不相等
+            if (array1.length !== array2.length) {
+                return false;
+            }
+
+            // 逐个比较每个元素
+            for (let i = 0; i < array1.length; i++) {
+                if (array1[i] !== array2[i]) {
+                    // 如果任何一个元素不相等，则数组不相等
+                    return false;
+                }
+            }
+
+            // 如果所有元素都相等，则数组相等
+            return true;
+        }
+
+        // 添加消息到队列中
+        function enqueueMessage(message) {
+            messageQueue.push(message);
+            processMessageQueue();
+        }
+
+        // 处理消息队列中的消息
+        function processMessageQueue() {
+            if (!isProcessingMessage && messageQueue.length > 0) {
+                isProcessingMessage = true;
+                const message = messageQueue.shift();
+                handleMessage(message).then(() => {
+                    isProcessingMessage = false;
+                    processMessageQueue(); // 处理下一条消息
+                }).catch(error => {
+                    console.error('Error processing message:', error);
+                    isProcessingMessage = false;
+                    processMessageQueue(); // 处理下一条消息
+                });
+            }
+        }
+
+        async function handleMessage(message) {
+            const uint8Array = await blobToUint8Array(message);
+            const encryptedData = uint8Array.slice(0, uint8Array.length - 8);
+            const mic = uint8Array.slice(uint8Array.length - 8, uint8Array.length);
+
+            const signature = await crypto.subtle.sign(
+                { name: 'HMAC' },
+                hmacKey,
+                encryptedData
+            );
+            const calculatedMic = new Uint8Array(signature).slice(0, 8);
+
+            if (isUint8ArraysEqual(mic, calculatedMic)) {
+                const decryptedData = await crypto.subtle.decrypt(
+                    {
+                        name: 'AES-CTR',
+                        counter: recvIv,
+                        length: 128
+                    },
+                    sessionKey,
+                    encryptedData);
+
+                const view = new DataView(decryptedData);
+                seq = view.getUint32(0, true);
+                fin = view.getUint8(4);
+                if (seq === recvSeq) {
+                    const payload = decryptedData.slice(5);
+                    recvedMessage = concatenateUint8Arrays(recvedMessage, new Uint8Array(payload));
+                    if (fin === 1) {
+                        jsonStr = new TextDecoder().decode(recvedMessage);
+                        recvedMessage = new Uint8Array(0);
+
+                        // message = JSON.parse(jsonStr);
+                        // if (message.method == 'response')
+                        //     document.getElementById('responseDisplay').innerText = jsonStr;
+                        // else
+                        //     document.getElementById('eventDisplay').innerText = jsonStr;
+
+                        const logDisplay = document.getElementById('logDisplay');
+                        const newLogItem = document.createElement('li');
+                        newLogItem.innerHTML = new Date().toLocaleString() + "<br>" + jsonStr + "<hr>";
+                        logDisplay.insertBefore(newLogItem, logDisplay.firstChild);
+                    }
+                    recvSeq++;
+                    recvIv = generateNextIV(recvIv);
+                } else {
+                    console.warn('Sequence number mismatch, expected:', recvSeq, 'received:', seq);
+                }
+            } else {
+                console.warn('MIC mismatch');
+            }
+        }
+
+        async function connect() {
+            const ip = document.getElementById('ipInput').value;
+            const pwd = document.getElementById('passwordInput').value;
+
+            ws = new WebSocket('ws://' + ip + ':53248/ws');
+
+            ws.addEventListener('open', async function () {
+                console.log('Connected to server');
+
+                a = new Uint8Array(16);
+                window.crypto.getRandomValues(a);
+
+                try {
+                    const prk = await crypto.subtle.importKey(
+                        'raw',
+                        new TextEncoder().encode(pwd),
+                        { name: 'HKDF' },
+                        false,
+                        ['deriveBits']);
+                    const derivedKey = await crypto.subtle.deriveBits(
+                        {
+                            name: 'HKDF',
+                            hash: 'SHA-256',
+                            salt: new Uint8Array(0),
+                            info: new Uint8Array(0)
+                        },
+                        prk,
+                        16 * 8);
+
+                    keyMaterial = new Uint8Array(derivedKey);
+                    dumpHex('AuthKey:', keyMaterial);
+
+                    authKey = await crypto.subtle.importKey(
+                        'raw', // 密钥材料的格式
+                        keyMaterial, // Uint8Array 类型的密钥材料
+                        { name: 'AES-CTR', length: 128 }, // 密钥算法参数
+                        false, // 是否可导出
+                        ['encrypt', 'decrypt'] // 密钥用途
+                    );
+                } catch (error) {
+                    console.error(error);
+                }
+
+                ws.send(a);
+            });
+
+
+            ws.addEventListener('message', async function (event) {
+                if (event.data.length < 32) return;
+                if (!isEstablished) {
+
+                    const uint8Array = await blobToUint8Array(event.data);
+
+                    A = uint8Array.slice(0, 16);
+                    b = uint8Array.slice(16, 32);
+
+                    try {
+                        decryptedData = await crypto.subtle.decrypt(
+                            {
+                                name: 'AES-CTR',
+                                counter: sendIv,
+                                length: 128
+                            },
+                            authKey,
+                            A);
+                        const isEqual = isUint8ArraysEqual(new Uint8Array(decryptedData), a);
+                        if (isEqual) {
+                            encryptedData = await crypto.subtle.encrypt(
+                                {
+                                    name: 'AES-CTR',
+                                    counter: sendIv,
+                                    length: 128
+                                },
+                                authKey,
+                                b);
+                            ws.send(encryptedData);
+
+                            try {
+                                const prk = await crypto.subtle.importKey(
+                                    'raw',
+                                    new TextEncoder().encode(pwd),
+                                    { name: 'HKDF' },
+                                    false,
+                                    ['deriveBits']);
+                                const derivedKey = await crypto.subtle.deriveBits(
+                                    {
+                                        name: 'HKDF',
+                                        hash: 'SHA-256',
+                                        salt: concatenateUint8Arrays(a, b),
+                                        info: new Uint8Array(0)
+                                    },
+                                    prk,
+                                    16 * 8);
+
+                                keyMaterial = new Uint8Array(derivedKey);
+                                dumpHex('SessionKey:', keyMaterial);
+
+                                sessionKey = await crypto.subtle.importKey(
+                                    'raw', // 密钥材料的格式
+                                    keyMaterial, // Uint8Array 类型的密钥材料
+                                    { name: 'AES-CTR', length: 128 }, // 密钥算法参数
+                                    false, // 是否可导出
+                                    ['encrypt', 'decrypt'] // 密钥用途
+                                );
+
+                                hmacKey = await crypto.subtle.importKey(
+                                    'raw', // 密钥材料的格式
+                                    keyMaterial, // 密钥材料
+                                    { name: 'HMAC', hash: { name: 'SHA-256' } }, // 密钥算法参数
+                                    false, // 是否可导出
+                                    ['sign'] // 密钥用途
+                                );
+
+                                isEstablished = true;
+
+                                var connect = document.getElementById('connect');
+                                connect.disabled = true;
+                                connect.textContent = 'Connected'
+                                document.getElementById("send").disabled = false;
+                            } catch (error) {
+                                console.error(error);
+                            }
+                        } else {
+                            console.log('Authentication failed');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else {
+                    enqueueMessage(event.data);
+                }
+            });
+
+            ws.addEventListener('close', () => {
+                console.log('Disconnected from server');
+            });
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        async function sendMessage() {
+            const message = document.getElementById('sendInput').value;
+
+            if (ws && message.trim() !== '') {
+                messageData = concatenateUint8Arrays(intToLittleEndianUint8Array(sendSeq, 4), intToLittleEndianUint8Array(1, 1));
+                messageData = concatenateUint8Arrays(messageData, new TextEncoder().encode(message));
+
+                const encryptedData = await crypto.subtle.encrypt(
+                    {
+                        name: 'AES-CTR',
+                        counter: sendIv,
+                        length: 128
+                    },
+                    sessionKey,
+                    messageData);
+
+                const signature = await crypto.subtle.sign(
+                    { name: 'HMAC' },
+                    hmacKey,
+                    encryptedData
+                );
+                mic = new Uint8Array(signature).slice(0, 8);
+
+                ws.send(concatenateUint8Arrays(new Uint8Array(encryptedData), mic));
+
+                sendSeq++;
+                sendIv = generateNextIV(sendIv);
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById("send").disabled = true;
+        };
+    </script>
+</body>
+
+</html>
